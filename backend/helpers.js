@@ -26,8 +26,15 @@ const validate_string = (username,len) => {
 const validate_password = username => validate_string(username,4);
 const validate_username = password => validate_string(password,6);
 
+const is_same_day = (date1,date2) => !(
+    date1.getDate() !== date2.getDate() ||
+    date1.getMonth() !== date2.getMonth() ||
+    date1.getYear() !== date2.getYear()
+);
+
 module.exports = {
     isAlphaNumeric,
     validate_password,
-    validate_username
+    validate_username,
+    is_same_day
 }

@@ -2,23 +2,11 @@ const router = require('express').Router();
 const AnimalData = require('../models/animal_data');
 const Animal = require('../models/animal');
 const { is_logged_in } = require('../middelware/authMiddleware');
+const {get_animal} = require('../middelware/animalMiddleware');
 const { FS_Animal, generate_gv_set } = require('../game_methods/animal_stats');
 
-router.get('/data', is_logged_in(), async (req,res) => {
-    const id = req.query.id;
-    try
-    {
-        let animal_data = await AnimalData.findOne({_id: id});
-        if (!animal_data) throw new Error('Invalid id.');
-        let animal = await Animal.findOne({species: animal_data.species});
-        if (!animal) throw new Error('invalid species.');
-        return res.status(200).json(new FS_Animal(animal_data,animal));
-    }
-    catch (err)
-    {
-        console.log(err);
-        return res.status(500).json(err);
-    }
+router.post('/data', is_logged_in(), get_animal(), async (req,res) => {
+    res.status(200).json(new FS_Animal(res.locals.data,res.locals.base));
 });
 
 router.post('/new_team', is_logged_in(), async (req,res) => {
@@ -35,20 +23,22 @@ router.post('/new_team', is_logged_in(), async (req,res) => {
         {
             let base = base_arr[i];
             insert_arr.push({
+                species: base.species,
                 owner_id: req.user._id,
                 gv: generate_gv_set(),
-                protein: base.protein,
-                carbs: base.carbs,
-                fat: base.fat,
+                protein: base.diet.protein,
+                carbs: base.diet.carbs,
+                fat: base.diet.fat,
                 position: i * 2
             })
         }
-        AnimalData.insertMany(insert_arr);
+        res.status(200).json(await AnimalData.insertMany(insert_arr));
+
     }
     catch(err)
     {
         console.log(err);
-        return res.status(200).json(err);
+        return res.status(500).json(err);
     }
 })
 

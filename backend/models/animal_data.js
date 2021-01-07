@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const AnimalDataSchema = mongoose.Schema({
     owner_id: {type: mongoose.Types.ObjectId, required: true},
+    species: {type: String, required: true},
     gv: {
         health:         {type: Number, required: true},
         attack:         {type: Number, required: true},
@@ -11,14 +12,14 @@ const AnimalDataSchema = mongoose.Schema({
         intelligence:   {type: Number, required: true},
         mobility:       {type: Number, required: true},
     },
-    protein:    {type: Number, default: 100},
-    carbs:      {type: Number, default: 100},
-    fat:        {type: Number, default: 100},
+    protein:    {type: Number, required: true},
+    carbs:      {type: Number, required: true},
+    fat:        {type: Number, required: true},
     position:   {type: Number, required: true}
 },
 {
     timestamps: {
-        createAt: 'created_at',
+        createdAt: 'created_at',
         updatedAt: 'updated_at',
     }
 });

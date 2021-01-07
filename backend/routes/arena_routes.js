@@ -4,6 +4,7 @@ const AnimalData = require('../models/animal_data');
 const { is_logged_in } = require('../middelware/authMiddleware');
 const {CombatStatRecorder,build_team} = require('../game_methods/animal_stats');
 const BattleRecordSchema = require('../models/battle_record');
+const { get_teams } = require('../middelware/animalMiddleware');
 router.get('/get_opponents', is_logged_in(), async (req,res) => {
     try
     {
@@ -21,12 +22,12 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
     }
 })
 
-router.post('/battle', is_logged_in(), async (req,res) => {
+router.post('/battle', is_logged_in(), get_teams(), async (req,res) => {
     const id = req.body.id;
     const _id = req.user._id;
     try {
-        let enemy_team = await build_team(await AnimalData.find({owner_id: id}));
-        let team = await build_team(await AnimalData.find({owner_id: _id}));
+        let enemy_team = req.locals.team_2;
+        let team = res.locals.team_1;
 
         let battle_record = simulate_combat(team,enemy_team);
         

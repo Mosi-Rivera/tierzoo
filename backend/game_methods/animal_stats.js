@@ -1,5 +1,6 @@
 const Animal = require("../models/animal");
-
+const AnimalData = require('../models/animal_data');
+const {is_same_day} = require('../helpers');
 class Stats
 {
     health = 0;
@@ -26,12 +27,12 @@ class CombatStatRecorder
     constructor(team1,team2)
     {
         this.winner = null;
-        this.team1 = [];
-        this.team2 = [];
+        this.team1 = {user_id: team1[0].owner_id, animals: []};
+        this.team2 = {user_id: team2[0].owner_id, animals: []};
         for (let i = team1.length; i--;)
-            this.team1[i] = new AnimalCombatStats(team1[i]);
+            this.team1.animals[i] = new AnimalCombatStats(team1[i]);
         for (let i = team2.length; i--;)
-            this.team2[i] = new AnimalCombatStats(team2[i]);    
+            this.team2.animals[i] = new AnimalCombatStats(team2[i]);    
     }
 }
 
@@ -40,36 +41,37 @@ class FS_Animal
     stats = new Stats();
     constructor(data,base)
     {
-        let protein = Math.floor(data.protein / base.protein) * 100;
-        let carbs = Math.floor(data.carbs / base.carbs) * 100;
-        let fat = Math.floor(data.fat / base.fat) * 100;
+        let protein = Math.floor(data.protein / base.diet.protein) * 100;
+        let carbs = Math.floor(data.carbs / base.diet.carbs) * 100;
+        let fat = Math.floor(data.fat / base.diet.fat) * 100;
         let protein_mod = FS_Animal.get_nutrient_mod(protein);
         let carb_mod    = FS_Animal.get_nutrient_mod(carbs);
         let fat_mod     = FS_Animal.get_nutrient_mod(fat);
         let curve       = base.level.curve;
         let death       = base.level.death;
         let fertility   = base.fertility;
-        let level_raw   = Math.floor( (Date.now() - data.created_at.getTime()) / 86400000 ) + 1;
+        let level_raw   = get_level(data.created_at);
         let level;
         if (level_raw < curve)
-            level = (level_raw / curve) * 100;
+            level = ((level_raw / curve) * 100) + 1;
         else
-            level = 100 - ( ( ( level_raw - curve ) / curve ) * 100)
+            level = (100 - ( ( ( level_raw - curve ) / curve ) * 100)) + 1
+        level_raw += 1;
         
         this.stats.health       = FS_Animal.calculate_stat(data,base,level,fat_mod,'health');
         this.stats.attack       = FS_Animal.calculate_stat(data,base,level,(carb_mod + protein_mod) / 2,'attack');
         this.stats.defence      = FS_Animal.calculate_stat(data,base,level,(protein_mod + fat_mod) / 2,'defence');
         this.stats.intelligence = FS_Animal.calculate_stat(data,base,level,carb_mod,'intelligence');
         this.stats.stealth      = FS_Animal.calculate_stat(data,base,level,1,'stealth');
-        this.stats.mobility     = FS_Animal.calculate_stat(data,base,level,(card_mod + protein_mod + fat_mod) / 3,'mobility');
-
+        this.stats.mobility     = FS_Animal.calculate_stat(data,base,level,(carb_mod + protein_mod + fat_mod) / 3,'mobility');
+        this.gv                 = data.gv;
         this.can_reproduce = level_raw >= fertility.min && level_raw <= fertility.max;
 
-        this.old_age = level_raw >= death.min;
-
-        this.protein = protein;
-        this.carbs = carbs;
-        this.fat = fat;
+        this.old_age    = level_raw >= death.min;
+        this.level      = level;
+        this.protein    = protein;
+        this.carbs      = carbs;
+        this.fat        = fat;
     }
     static get_nutrient_mod(nutrient)
     {
@@ -128,9 +130,79 @@ const build_team = async (team)  => {
     }
 }
 
+const get_level = (date) => {
+    return Math.floor( (Date.now() - date.getTime()) / 86400000 )
+}
+
 const simulate_combat = (team,enemy_team) => {
     //TODO: Finish simulate combat logic;
     let battle_record = new CombatStatRecorder(team,enemy_team);
+    let _team = [...team];
+    let _enemy_team = [...enemy_team];
+    for (let i = 30; i--;)
+    {
+
+    }
+    if (_team.length == 0)
+        battle_record.winner = battle_record.team2.user_id;
+    else if (_enemy_team.length == 0)
+        battle_record.winner = battle_record.team1.user_id;
+    else
+    {
+        let t1_sum = 0;
+        let t2_sum = 0;
+        let animals;
+        {
+            animals = battle_record.team1.animals;
+            for (let i = animals.length; i--;)
+                t1_sum += animals[i].dealt;
+        }
+        {
+            animals = battle_record.team2.animals;
+            for (let i = animals.length; i--;)
+                t2_sum += animals[i].dealt;
+        }
+        if (t1_sum > t2_sum)
+            battle_record.winner = battle_record.team1.user_id;
+        else if (t2_sum > t1_sum)
+            battle_record.winner = battle_record.team2.user_id;
+    }
+    return battle_record;
+}
+
+const check_dead = async (data,base) => {
+    try
+    {
+        if (!is_same_day(data.updated_at,new Date()))
+        {
+            let level = get_level(data.created_at) + 1;
+            if (
+                level > base.level.death.max || (
+                    level > base.level.death.min && Math.floor(Math.random() * 100) < (level - base.level.death.min) * base.level.death.scaling
+                )
+                )
+            {
+                await AnimalData.deleteOne({_id: data._id});
+                return true;
+            }
+            else
+                await AnimalData.updateOne({_id: data._id}, {protein: data.protein});
+        }
+        return false;
+    }
+    catch(err)
+    {
+        console.log(err);
+        return true;
+    }
+}
+
+const get_base = async (data) => {
+    let base = await Animal.findOne({species: data.species});
+    if (!base) return null;
+    if (await check_dead(data,base))
+        return null;
+    return base;
 }
 
 module.exports = {
@@ -139,5 +211,8 @@ module.exports = {
     generate_gv_set,
     build_team,
     CombatStatRecorder,
-    simulate_combat
+    simulate_combat,
+    get_level,
+    check_dead,
+    get_base
 }
