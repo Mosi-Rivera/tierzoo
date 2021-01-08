@@ -14,13 +14,10 @@ router.post('/signup',async (req,res,next) => {
         return res.status(500).json({message: 'Invlaid username or password.'});
     try {
         let user = await User.findOne({username});
-        console.log(user);
         if (user)
             return res.status(500).json({message: "Invalid username or password!"});
         let salt = await bcrypt.genSalt(saltrounds);
-        console.log(salt);
         let hash = await bcrypt.hash(password,salt);
-        console.log(hash);
         await User.create({
             username,
             password: hash,

@@ -6,6 +6,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth_routes');
 const userRoutes = require('./routes/user_routes');
 const animalRoutes = require('./routes/animal_routes');
+const arenaRoutes = require('./routes/arena_routes');
 require('./configs/db');
 var app = express();
 require('./configs/passport')(app);
@@ -20,5 +21,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth',authRoutes);
 app.use('/user',userRoutes);
 app.use('/animal',animalRoutes);
+app.use('/arena',arenaRoutes);
 
 module.exports = app;

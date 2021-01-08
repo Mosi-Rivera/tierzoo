@@ -1,6 +1,8 @@
 const Animal = require("../models/animal");
 const AnimalData = require('../models/animal_data');
+const Offspring = require('../models/offspring');
 const {is_same_day} = require('../helpers');
+const abilities = require('./abilities');
 class Stats
 {
     health = 0;
@@ -18,6 +20,7 @@ class AnimalCombatStats
         this.species    = data.species;
         this.dealt      = 0;
         this.healing    = 0;
+        this.healed     = 0;
         this.taken      = 0;
     }
 }
@@ -53,9 +56,9 @@ class FS_Animal
         let level_raw   = get_level(data.created_at);
         let level;
         if (level_raw < curve)
-            level = ((level_raw / curve) * 100) + 1;
+            level = Math.floor((level_raw / curve) * 100) + 1;
         else
-            level = (100 - ( ( ( level_raw - curve ) / curve ) * 100)) + 1
+            level = Math.floor(100 - ( ( ( level_raw - curve ) / curve ) * 100)) + 1
         level_raw += 1;
         
         this.stats.health       = FS_Animal.calculate_stat(data,base,level,fat_mod,'health');
@@ -68,6 +71,7 @@ class FS_Animal
         this.can_reproduce = level_raw >= fertility.min && level_raw <= fertility.max;
 
         this.old_age    = level_raw >= death.min;
+        this.declining  = level_raw > curve;
         this.level      = level;
         this.protein    = protein;
         this.carbs      = carbs;
@@ -95,14 +99,18 @@ class FS_Animal
     }
 }
 
-const generate_gv_set = () => {
+const generate_gv_set = (perfect_gvs = 1) => {
     let result = new Stats();
     let keys = Object.keys(result);
-    let random = Math.floor(Math.random() * (keys.length - 1));
+    let keys_cpy = [...keys];
+    let perfect_arr = []; 
+    for (let i = perfect_gvs; i--;)
+        perfect_arr.push(keys_cpy.splice(Math.floor(Math.random() * (keys_cpy.length - 1)),1)[0]);
     for (let i = keys.length; i--;)
     {
-        if (i == random)
-            result[keys[i]] = 60;
+        let key = keys[i];
+        if (perfect_arr.includes(key))
+            result[key] = 60;
         else
             result[keys[i]] = Math.floor(Math.random() * 60);
     }
@@ -135,13 +143,36 @@ const get_level = (date) => {
 }
 
 const simulate_combat = (team,enemy_team) => {
-    //TODO: Finish simulate combat logic;
     let battle_record = new CombatStatRecorder(team,enemy_team);
-    let _team = [...team];
-    let _enemy_team = [...enemy_team];
+    let _team = team.map(
+        data => ({
+            data,
+            record: new AnimalCombatStats(data)
+        })
+    );
+    let _enemy_team = enemy_team.map(
+        data => ({
+            data,
+            record: new AnimalCombatStats(data)
+        })
+    );
+    for (let i = Math.max(_team.length,_enemy_team.length); i--;)
+    {
+        let _obj = _team[i];
+        if (_obj)
+            _obj.attack = abilities[_obj.data.species].attack_obj(_team,_enemy_team,_obj);
+        _obj = _enemy_team[i];
+        if (_obj)
+            _obj.attack = abilities[_obj.data.species].attack_obj(_enemy_team,_team,_obj);
+    }
     for (let i = 30; i--;)
     {
-
+        if (_team.length == 0 || _enemy_team.length == 0)
+            break;
+        for (let j = _team.length; j--;)
+            _team[j].attack();
+        for (let j = _enemy_team.length; j--;)
+            _enemy_team[j].attack();
     }
     if (_team.length == 0)
         battle_record.winner = battle_record.team2.user_id;
@@ -203,6 +234,10 @@ const get_base = async (data) => {
     if (await check_dead(data,base))
         return null;
     return base;
+}
+
+const create_offspring = async (data) => {
+    return await Offspring.create(data);
 }
 
 module.exports = {

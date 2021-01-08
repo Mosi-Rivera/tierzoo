@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require('../models/user');
 const AnimalData = require('../models/animal_data');
 const {is_logged_in} = require('../middelware/authMiddleware');
+const { get_base } = require('../game_methods/animal_stats');
+const {get_prizes,get_offspring} = require('../game_methods/idle');
 
 router.get('/',is_logged_in(), async (req,res) => {
     try
@@ -96,6 +98,7 @@ router.get('/collect',is_logged_in(), async (req,res) => {
     {
         let user = await user.findOne({_id: req.user._id},{_id: 0, 'idle.last_collect': 1});
         let prizes = get_prizes( Math.floor( ( Date.now() - user.idle.last_collect.getTime() ) / 1000 ) );
+        let offspring = await get_offspring(req.user._id);
         let keys = Object.keys(prizes);
         let update = { 'idle.last_collect': new Date(), $inc: {} };
         for (let i = keys.length; i--;)
@@ -104,7 +107,7 @@ router.get('/collect',is_logged_in(), async (req,res) => {
             update.$inc['inventory.' + key] = prizes[key];
         }
         await User.updateOne({_id: req.user._id},update);
-        return res.status(200).json({prizes});
+        return res.status(200).json({prizes, offspring});
     }
     catch(err)
     {

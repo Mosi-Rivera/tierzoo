@@ -12,6 +12,7 @@ const AnimalDataSchema = mongoose.Schema({
         intelligence:   {type: Number, required: true},
         mobility:       {type: Number, required: true},
     },
+    perfect_gv_count: {type: Number, required: true},
     protein:    {type: Number, required: true},
     carbs:      {type: Number, required: true},
     fat:        {type: Number, required: true},
