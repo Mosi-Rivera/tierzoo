@@ -96,7 +96,7 @@ router.get('/wild_records', is_logged_in(), async (req,res) => {
 router.get('/collect',is_logged_in(), async (req,res) => {
     try
     {
-        let user = await user.findOne({_id: req.user._id},{_id: 0, 'idle.last_collect': 1});
+        let user = await User.findOne({_id: req.user._id},{_id: 0, 'idle.last_collect': 1});
         let prizes = get_prizes( Math.floor( ( Date.now() - user.idle.last_collect.getTime() ) / 1000 ) );
         let offspring = await get_offspring(req.user._id);
         let keys = Object.keys(prizes);

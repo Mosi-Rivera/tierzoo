@@ -17,7 +17,7 @@ class AnimalCombatStats
 {
     constructor(data)
     {
-        this.species    = data.species;
+        this.species    = data.animal.species;
         this.dealt      = 0;
         this.healing    = 0;
         this.healed     = 0;
@@ -30,6 +30,7 @@ class CombatStatRecorder
     constructor(team1,team2)
     {
         this.winner = null;
+        this.rounds = 0;
         this.team1 = {user_id: team1[0].owner_id, animals: []};
         this.team2 = {user_id: team2[0].owner_id, animals: []};
         for (let i = team1.length; i--;)
@@ -42,11 +43,13 @@ class CombatStatRecorder
 class FS_Animal
 {
     stats = new Stats();
-    constructor(data,base)
+    constructor(data)
     {
-        let protein = Math.floor(data.protein / base.diet.protein) * 100;
-        let carbs = Math.floor(data.carbs / base.diet.carbs) * 100;
-        let fat = Math.floor(data.fat / base.diet.fat) * 100;
+        let base = data.animal;
+        let diet = base.diet;
+        let protein = Math.floor(data.protein / diet.protein) * 100;
+        let carbs = Math.floor(data.carbs / diet.carbs) * 100;
+        let fat = Math.floor(data.fat / diet.fat) * 100;
         let protein_mod = FS_Animal.get_nutrient_mod(protein);
         let carb_mod    = FS_Animal.get_nutrient_mod(carbs);
         let fat_mod     = FS_Animal.get_nutrient_mod(fat);
@@ -70,6 +73,8 @@ class FS_Animal
         this.gv                 = data.gv;
         this.can_reproduce = level_raw >= fertility.min && level_raw <= fertility.max;
 
+        this.owner_id   = data.owner_id;
+        this.species    = base.species;
         this.old_age    = level_raw >= death.min;
         this.declining  = level_raw > curve;
         this.level      = level;
@@ -117,66 +122,42 @@ const generate_gv_set = (perfect_gvs = 1) => {
     return result;
 }
 
-const build_team = async (team)  => {
-    try
-    {
-        let result = [];
-        for (let i = team.length; i--;)
-        {
-            let data = team[i];
-            let base = await Animal.findOne({species: data.species});
-            if (!base)
-                throw new Error('Invalid animal species.');
-            result.push(new FS_Animal(data,base));
-        }
-        return result;
-    }
-    catch(err)
-    {
-        console.log(err);
-        throw new Error(err);
-    }
-}
-
 const get_level = (date) => {
     return Math.floor( (Date.now() - date.getTime()) / 86400000 )
 }
 
 const simulate_combat = (team,enemy_team) => {
     let battle_record = new CombatStatRecorder(team,enemy_team);
-    let _team = team.map(
-        data => ({
-            data,
-            record: new AnimalCombatStats(data)
-        })
-    );
-    let _enemy_team = enemy_team.map(
-        data => ({
-            data,
-            record: new AnimalCombatStats(data)
-        })
-    );
-    for (let i = Math.max(_team.length,_enemy_team.length); i--;)
+    team = team.map( (data,i) => ({ data: new FS_Animal(data), record: battle_record.team1.animals[i] }) );
+    enemy_team = enemy_team.map( (data,i) => ({ data: new FS_Animal(data), record: battle_record.team2.animals[i] }) );
+    for (let i = Math.max(team.length,enemy_team.length); i--;)
     {
-        let _obj = _team[i];
+        let _obj = team[i];
         if (_obj)
-            _obj.attack = abilities[_obj.data.species].attack_obj(_team,_enemy_team,_obj);
-        _obj = _enemy_team[i];
+        {
+            _obj.attack = abilities[_obj.data.species].attack_obj(team,enemy_team,_obj);
+        }
+            _obj = enemy_team[i];
         if (_obj)
-            _obj.attack = abilities[_obj.data.species].attack_obj(_enemy_team,_team,_obj);
+        {
+            _obj.attack = abilities[_obj.data.species].attack_obj(enemy_team,team,_obj);
+        }
     }
-    for (let i = 30; i--;)
+    for (let i = 15; i--;)
     {
-        if (_team.length == 0 || _enemy_team.length == 0)
+        if (enemy_team.length == 0)
             break;
-        for (let j = _team.length; j--;)
-            _team[j].attack();
-        for (let j = _enemy_team.length; j--;)
-            _enemy_team[j].attack();
+        for (let j = team.length; j--;)
+            team[j].attack();
+        if (team.length == 0)
+            break;
+        for (let j = enemy_team.length; j--;)
+            enemy_team[j].attack();
+        battle_record.rounds++;
     }
-    if (_team.length == 0)
+    if (team.length == 0)
         battle_record.winner = battle_record.team2.user_id;
-    else if (_enemy_team.length == 0)
+    else if (enemy_team.length == 0)
         battle_record.winner = battle_record.team1.user_id;
     else
     {
@@ -201,15 +182,16 @@ const simulate_combat = (team,enemy_team) => {
     return battle_record;
 }
 
-const check_dead = async (data,base) => {
+const check_dead = async (data) => {
     try
     {
         if (!is_same_day(data.updated_at,new Date()))
         {
             let level = get_level(data.created_at) + 1;
+            let death = data.animal.level.death;
             if (
-                level > base.level.death.max || (
-                    level > base.level.death.min && Math.floor(Math.random() * 100) < (level - base.level.death.min) * base.level.death.scaling
+                level > death.max || (
+                    level > death.min && Math.floor(Math.random() * 100) < (level - death.min) * death.scaling
                 )
                 )
             {
@@ -244,7 +226,6 @@ module.exports = {
     FS_Animal,
     Stats,
     generate_gv_set,
-    build_team,
     CombatStatRecorder,
     simulate_combat,
     get_level,

@@ -6,8 +6,8 @@ const {get_animal} = require('../middelware/animalMiddleware');
 const { FS_Animal, generate_gv_set } = require('../game_methods/animal_stats');
 const Offspring = require('../models/offspring');
 
-router.post('/data', is_logged_in(), get_animal(), async (req,res) => {
-    res.status(200).json(new FS_Animal(res.locals.data,res.locals.base));
+router.post('/data', is_logged_in(), async (req,res) => {
+    res.status(200).json(new FS_Animal(await get_animal(req.body.id)));
 });
 
 router.post('/offspring_to_team',is_logged_in(), async (req,res) => {
@@ -17,7 +17,7 @@ router.post('/offspring_to_team',is_logged_in(), async (req,res) => {
         const os = Offsrping.findOne({_id: id, owner_id: req.user.id});
         if (!os)
             throw new Error('Invalid id.');
-        let base = Animal.findOne({species: is.species});
+        let base = Animal.findOne({species: os.species});
         if (!base)
             throw new Error('Invalid data');
         let replacing = await AnimalData.findOne({_id: replace_id});
@@ -25,7 +25,7 @@ router.post('/offspring_to_team',is_logged_in(), async (req,res) => {
             throw new Error('Invalid replace_id.');
         let position = replacing.position;
         let result = await AnimalData.create({
-            species: base.species,
+            animal: base._id,
             owner_id: req.user._id,
             gv: generate_gv_set(os.perfect_gv_count),
             perfect_gv_count: os.perfect_gv_count,
@@ -72,7 +72,7 @@ router.post('/new_team', is_logged_in(), async (req,res) => {
         {
             let base = base_arr[i];
             insert_arr.push({
-                species: base.species,
+                animal: base._id,
                 owner_id: req.user._id,
                 gv: generate_gv_set(),
                 perfect_gv_count: 1,

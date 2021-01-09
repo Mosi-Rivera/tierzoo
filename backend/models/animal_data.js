@@ -2,8 +2,8 @@ const { number } = require('keygenerator/lib/keygen');
 const mongoose = require('mongoose');
 
 const AnimalDataSchema = mongoose.Schema({
-    owner_id: {type: mongoose.Types.ObjectId, required: true},
-    species: {type: String, required: true},
+    owner_id: {type: mongoose.Types.ObjectId, required: true, ref: 'user'},
+    animal: {type: mongoose.Types.ObjectId, required: true, ref: 'animal'},
     gv: {
         health:         {type: Number, required: true},
         attack:         {type: Number, required: true},

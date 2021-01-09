@@ -12,11 +12,11 @@ const food_keys = [
 ]
 const food_keys_len = food_keys.length;
 
-const random_key = () => food_keys[Math.floor(Math.random() * (food_keys_len - 1))];
+const random_key = () => food_keys[Math.round(Math.random() * (food_keys_len - 1))];
 
 const get_prizes = mult => {
     let result = {};
-    for (let i = Math.floor((mult / 60) * 3); i--;)
+    for (let i = Math.floor(Math.min(12,mult / 3600) * 3); i--;)
     {
         let key = random_key();
         if (result[key])
