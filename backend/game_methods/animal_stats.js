@@ -3,6 +3,7 @@ const AnimalData = require('../models/animal_data');
 const Offspring = require('../models/offspring');
 const {is_same_day} = require('../helpers');
 const abilities = require('./abilities');
+const createEloCalc = require('../elo');
 class Stats
 {
     health = 0;
