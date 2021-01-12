@@ -3,33 +3,36 @@ import {BASE_URL,error_handler} from '../environment';
 export function signup(data)
 {
     return fetch(BASE_URL + '/auth/signup',{
-        methods: 'POST',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify(data)
     })
-    .then(error_handler);
+    .then(error_handler)
+    .then(res => res.json());
 }
 
 export function login(data)
 {
+    console.log(data);
     return fetch(BASE_URL + '/auth/login',{
-        methods: 'POST',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify(data)
     })
-    .then(error_handler);
+    .then(error_handler)
+    .then(res => res.json());;
 }
 
 export function delete_account()
 {
     return fetch(BASE_URL + '/auth/delete_account',{
-        methods: 'GET',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -41,11 +44,12 @@ export function delete_account()
 export function is_logged_in()
 {
     return fetch(BASE_URL + '/auth/is_logged_in',{
-        methods: 'GET',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
     })
-    .then(error_handler);
+    .then(error_handler)
+    .then(res => res.json());;
 }

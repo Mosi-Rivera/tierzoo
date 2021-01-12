@@ -11,3 +11,67 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.modal-header img
+{
+    height: 2.5rem;
+}
+
+.stat-bars {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.c-stat-bars,
+.c-gv-bars {
+  width: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.stat-bars li {
+  width: 100%;
+  margin: 1rem 0px;
+  position: relative;
+  height: 1.5rem;
+}
+
+.stat-bars li > div
+{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 255, 0.473);
+}
+
+.stat-bars li > span
+{
+  padding-left: 0.5rem;
+}
+
+.stat-bars h3 {
+  z-index: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.26);
+  line-height: 1.5rem;
+}
+
+.c-team
+{
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.c-team li
+{
+  text-align: center;
+  display: inline-block;
+}

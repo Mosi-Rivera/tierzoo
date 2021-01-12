@@ -1,40 +1,39 @@
 import {BASE_URL,error_handler} from '../environment';
 
-export function animal_data(id)
+export function get_my_team()
 {
-    return fetch(BASE_URL + '/animal/login',{
-        method: 'POST',
+    return fetch(BASE_URL + '/user/team',{
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({id})
     })
     .then(error_handler)
     .then(res =>res.json());
 }
 
-export function delete_team()
+export function get_inventory()
 {
-    return fetch(BASE_URL + '/animal/delete_team',{
+    return fetch(BASE_URL + '/user/inventory',{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
-        credentials: 'include'
+        credentials: 'include',
     })
-    .then(error_handler);
+    .then(error_handler)
+    .then(res =>res.json());
 }
 
-export function new_team(data)
+export function collect_idle_rewards()
 {
-    return fetch(BASE_URL + '/animal/new_team',{
-        method: 'POST',
+    return fetch(BASE_URL + '/user/collect',{
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(data)
     })
     .then(error_handler)
     .then(res =>res.json());

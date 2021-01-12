@@ -8,28 +8,34 @@ export function get_opponents()
             'Content-Type': 'application/json'
         },
         credentials: 'include',
-    });
+    })
+    .then(error_handler)
+    .then(res =>res.json());
 }
 
 export function battle(id)
 {
     return fetch(BASE_URL + '/arena/battle',{
-        methods: 'POST',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify({id})
-    });
+    })
+    .then(error_handler)
+    .then(res =>res.json());
 }
 
 export function get_match_history()
 {
     return fetch(BASE_URL + '/arena/match_history',{
-        methods: 'GET',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'include'
-    });
+    })
+    .then(error_handler)
+    .then(res =>res.json());
 }
