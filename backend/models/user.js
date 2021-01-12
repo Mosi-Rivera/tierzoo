@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const AnimalData = require('./animal_data');
 
 const UserSchema = mongoose.Schema({
     username: {
@@ -10,18 +9,21 @@ const UserSchema = mongoose.Schema({
         type: String,
         require: true,
     },
-    inventory: {
-        meat:       {type: Number, default: 0,},
-        fish:       {type: Number, default: 0,},
-        insects:    {type: Number, default: 0,},
-        berries:    {type: Number, default: 0,},
-        vegetation: {type: Number, default: 0,},
-        worms:      {type: Number, default: 0,},
-        cooked_meat:{type: Number, default: 0,},
+    team: {
+        0: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
+        1: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
+        2: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
+        3: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
+        4: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
     },
-    wild: {
-        wins:   {type: Number, default: 0,},
-        losses: {type: Number, default: 0,},
+    level: {type: Number, default: 1},
+    story: {type: Number, default: 1},
+    inventory: {
+        scrolls:    {type: Number, default: 10,},
+        gold:       {type: Number, default: 1000,},
+        exp:        {type: Number, default: 1000,},
+        essence:    {type: Number, default: 100,},
+        gems:       {type: Number, default: 0,},
     },
     arena: {
         wins:   {type: Number, default: 0},

@@ -32,9 +32,14 @@ const is_same_day = (date1,date2) => !(
     date1.getYear() !== date2.getYear()
 );
 
+const exponential_growth = (base,growth,power) => { 
+    return base * Math.pow(( 1 + growth),power);
+}
+
 module.exports = {
     isAlphaNumeric,
     validate_password,
     validate_username,
-    is_same_day
+    is_same_day,
+    exponential_growth
 }

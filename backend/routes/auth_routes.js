@@ -7,6 +7,18 @@ const User = require('../models/user');
 const {is_logged_in} = require('../middelware/authMiddleware');
 const {isAlphaNumeric,validate_password,validate_username} = require('../helpers');
 
+class SafeUser
+{
+    constructor(user)
+    {
+        this.username = user.username;
+        this._id = user._id;
+        this.arena = user.arena;
+        this.inventory = user.inventory;
+        this.idle = user.idle;
+    }
+}
+
 router.post('/signup',async (req,res,next) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -31,11 +43,11 @@ router.post('/signup',async (req,res,next) => {
     }
 },passport.authenticate('local'),
 (req,res) => {
-    return res.status(200).json(req.user)
+    return res.status(200).json(new SafeUser(req.user))
 });
 
 router.post('/login',passport.authenticate('local'),(req,res) => {
-    return res.status(200).json(req.user);
+    return res.status(200).json(new SafeUser(req.user));
 });
 
 router.get('/delete_account',is_logged_in(),async (req,res) => {
@@ -51,7 +63,7 @@ router.get('/delete_account',is_logged_in(),async (req,res) => {
 })
 
 router.get('/is_logged_in',is_logged_in(),(req,res) => {
-    return res.status(200).json('user is logged in.');
+    return res.status(200).json(new SafeUser(req.user));
 });
 
 module.exports = router;
