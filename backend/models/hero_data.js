@@ -7,11 +7,11 @@ const HeroDataSchema = mongoose.Schema({
     name:       {type: String, required: true},
     tier:       {type: Number, required: true},
     level:      {type: Number, default: 1, required: true},
-    chestpiece: {type: Number, default: null},
-    headpiece:  {type: Number, default: null},
-    weapon:     {type: Number, default: null},
-    greaves:    {type: Number, default: null},
-    mythic:     {type: Number, default: null},
+    chestpiece: {type: Number, default: 0},
+    headpiece:  {type: Number, default: 0},
+    weapon:     {type: Number, default: 0},
+    greaves:    {type: Number, default: 0},
+    mythic:     {type: Number, default: 0},
 },
 {
     timestamps: {

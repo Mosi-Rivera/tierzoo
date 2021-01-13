@@ -5,7 +5,7 @@ const {is_logged_in} = require('../middelware/authMiddleware');
 const User = require('../models/user');
 const {exponential_growth} = require('../helpers');
 const { get_random_hero_index, summon_hero, summon_multiple_heros } = require('../game_methods/summon');
-
+const {HeroStats} = require('../game_methods/classes');
 router.get('/info', is_logged_in(), async (req,res) => {
     try
     {
@@ -13,7 +13,7 @@ router.get('/info', is_logged_in(), async (req,res) => {
         if (!id || typeof id !== 'string')
             throw new Error('Invalid id.');
         let hero = await HeroData.findOne({owner_id: id}).populate('data');
-        return res.status(200).json(await Hero.findOne({_id: id}).populate('data'));
+        return res.status(200).json(new HeroStats(hero));
     }
     catch(err)
     {

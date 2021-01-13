@@ -2,22 +2,22 @@ const router = require('express').Router();
 const User = require('../models/user');
 const { is_logged_in } = require('../middelware/authMiddleware');
 const BattleRecordSchema = require('../models/battle_record');
-const { get_teams } = require('../middelware/animalMiddleware');
 const BattleRecord = require('../models/battle_record');
+const {get_teams} = require('../middelware/heroMiddleware');
 const elo = require('../elo');
+const { simulate_combat } = require('../game_methods/combat');
 
 router.get('/get_opponents', is_logged_in(), async (req,res) => {
     try
     {
         let user = await User.findOne({_id: req.user._id},{'arena.elo': 1});
-        console.log(user);
+    
         let opponents = await User.aggregate([
             {$match: { _id: {$ne: user._id} }},
-            {$project: {diff: {$abs: {$subtract: [user.arena.elo, '$arena.elo']}}, 'arena.elo': 1 }},
+            {$project: {diff: {$abs: {$subtract: [user.arena.elo, '$arena.elo']}}, 'arena.elo': 1, username: 1 }},
             {$sort: {diff: 1}},
             {$limit: 5}
-        ])
-        console.log(opponents);
+        ]);
         return res.status(200).json(opponents);
     }
     catch(err)
@@ -25,13 +25,33 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
         console.log(err);
         return res.status(500).json(err);
     }
-})
+});
 
-router.post('/battle', is_logged_in(), async (req,res) => {
-    const id = req.body.id;
-    const _id = req.user._id;
-    
-})
+router.post('/battle', is_logged_in(), get_teams(), async (req,res) => {
+    try
+    {
+        console.log(res.locals);
+        let user = res.locals.user;
+        let other_user = res.locals.other_user;
+        let resolve = elo(user.arena.elo,other_user.arena.elo);
+        let result = simulate_combat(res.locals.ally_team,res.locals.enemy_team);
+        let new_elo = result.winner == 0 ? resolve(1,0) : resolve(0,1);
+        await User.updateOne({ _id: req.user._id },{$inc: {'arena.elo': new_elo.a.difference}},{new: true});
+        await User.updateOne({ _id: req.body.id  },{$inc: {'arena.elo': new_elo.b.difference}});
+        return res.status(200).json({
+            elo: user.arena.elo,
+            difference: new_elo.a.difference,
+            record: result.record,
+            rounds: result.rounds,
+            winner: result.winner
+        });
+    }
+    catch(err)
+    {
+        console.log(err);
+        return res.status(500).json(err);
+    } 
+});
 
 router.get('/match_history', is_logged_in(), async (req,res) => {
     try
@@ -44,6 +64,6 @@ router.get('/match_history', is_logged_in(), async (req,res) => {
         console.log(err);
         return res.status(500).json(err);
     }
-})
+});
 
 module.exports = router;
