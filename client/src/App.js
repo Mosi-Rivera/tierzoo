@@ -3,20 +3,21 @@ import {useState} from 'react';
 import {BrowserRouter,Switch,Route} from 'react-router-dom';
 import VLanding from './views/landing';
 import VHome from './views/home';
-import AnimalModal from './components/animal_modal';
 import './App.css';
+import Navbar from './components/navbar';
 
 function App() {
   const [user,set_user] = useState(null);
   const [team,set_team] = useState([]);
-  const [show_animal,set_show_animal] = useState(null);
+  const [opponents,set_opponents] = useState([]);
+  const [hero_info,set_hero_info] = useState(null);
   const props = {
-    set_user,
-    set_team,
+    set_user: (data) => {set_user(data)},
+    set_team: (data) => {console.log(data); set_team(data)},
+    set_opponents: (data) => {console.log(data);set_opponents(data)}, 
+    opponents,
     user,
     team,
-    show_animal,
-    set_show_animal
   }
   return (
     <BrowserRouter>
@@ -26,12 +27,12 @@ function App() {
           </Route>
           <Route path='*'>
             <div>
-              <AnimalModal show={!!show_animal} data={show_animal} onHide={() => set_show_animal(null)}/>
               <Switch>
                 <Route path='*'>
                   <VHome {...props}/>
                 </Route>
               </Switch>
+              <Navbar/>
             </div>
           </Route>
         </Switch>

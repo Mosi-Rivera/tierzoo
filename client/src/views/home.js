@@ -7,16 +7,6 @@ import { get_opponents } from '../api/routes/arena';
 export default function (props)
 {
     const history = useHistory();
-    const handle_rewards = async (e) => {
-        try 
-        {
-            props.set_show_rewards(await collect_idle_rewards());
-        }
-        catch(err)
-        {
-            console.log(err);
-        }
-    }
     const handle_inventory = async e => {
         try {
             props.set_show_inventory(await get_inventory());
@@ -28,7 +18,7 @@ export default function (props)
     }
     const handle_get_opponents = async e => {
         try {
-            props.set_show_arena_opponents(await get_opponents);
+            props.set_opponents(await get_opponents());
         }
         catch(err)
         {
@@ -40,9 +30,9 @@ export default function (props)
         (async () => {
             try
             {
-                props.set_user(await is_logged_in())
+                props.set_user(await is_logged_in());
                 props.set_team(await get_my_team());
-                console.log(props.team);
+                props.set_opponents(await get_opponents());
             }
             catch(err)
             {
@@ -51,16 +41,28 @@ export default function (props)
         })();
     },[]);
     return <div className='pseudo-body'>
-        <ul className='c-team'>
+        <ul>
             {
-                props.team.map((data,i) => <li onClick={() => props.set_show_animal(data)} key={i}>
-                    <h3>{data.species}</h3>
-                    <span>{data.level}</span>
-                    <img src={'/assets/animals/' + data.species + '.png'}/>
+                props.team.map((hero,i) => {
+                    if (!hero)
+                        return <li key={i} className='empty'></li>
+                    return <li key={i} className={'tier-' + hero.tier}>
+                        <span lassName='name'>{hero.name}</span>
+                        <span className='level'>Lvl {hero.level}</span>
+                        <img src={'assets/heros/' + hero.name + '.png'}/>
+                        <span className='power'>{hero.power}</span>
+                    </li>
+                })
+            }
+        </ul>
+        <ul>
+            {
+                props.opponents.map((opp,i) =><li key={i}>
+                    <span className='username'>{opp.username}</span>
+                    <span className='elo'>{opp.arena.elo}</span>
+                    <span className='view'>view</span>
                 </li>)
             }
         </ul>
-        <div onClick={handle_inventory}>COLLECT REWARDS</div>
-        <div onClick={handle_get_opponents}>arena</div>
     </div>
 }
