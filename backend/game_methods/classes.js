@@ -4,7 +4,7 @@ class HeroStats
 {
     constructor(hero)
     {
-        let data = hero.data;
+        let data = hero.hero;
         this.tier = hero.tier;
         this.name = hero.name;
         this.hp         = HeroStats.calc_health(hero);
@@ -14,7 +14,7 @@ class HeroStats
         this.crit       = (hero.weapon * 10);
         this.dodge      = (hero.greaves * 20);
         this.acc        = (hero.weapon * 10) + (hero.headpiece * 10);
-        this.haste      = (hero.weapon * 10) (hero.greaves * 5);
+        this.haste      = (hero.weapon * 10) + (hero.greaves * 5);
         this.hp_recovery= (hero.chestpiece * 10) + (hero.headpiece * 5);
         this.pr         = (hero.chestpiece * 20);
         this.ll         = (hero.weapon * 5);

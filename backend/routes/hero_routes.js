@@ -10,9 +10,12 @@ router.get('/info', is_logged_in(), async (req,res) => {
     try
     {
         const id = req.query.id;
+        console.log(id);
         if (!id || typeof id !== 'string')
             throw new Error('Invalid id.');
-        let hero = await HeroData.findOne({owner_id: id}).populate('data');
+        let hero = await HeroData.findOne({_id: id}).populate('data');
+        if (!hero)
+            throw new Error('Invalid id.');
         return res.status(200).json(new HeroStats(hero));
     }
     catch(err)

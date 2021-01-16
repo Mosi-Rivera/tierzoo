@@ -10,11 +10,8 @@ const UserSchema = mongoose.Schema({
         require: true,
     },
     team: {
-        0: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
-        1: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
-        2: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
-        3: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
-        4: {id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'},
+        type: [{id: false, type: mongoose.Types.ObjectId, default: null, ref: 'hero_data'}],
+        default: [null,null,null,null,null],
     },
     level: {type: Number, default: 1},
     story: {type: Number, default: 1},

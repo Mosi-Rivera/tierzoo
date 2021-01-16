@@ -38,7 +38,7 @@ module.exports = function (app) {
     ));
 
     // app.use(express.static("public"));
-    app.use(session({ store: sessionStore, secret: session_secret, resave: false, saveUninitialized: false, cookie: {maxAge: 360000000} }));
+    app.use(session({ store: sessionStore, secret: session_secret, resave: false, saveUninitialized: true, cookie: {maxAge: 360000000} }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(passport.initialize());
