@@ -41,16 +41,20 @@ export default function (props)
         })();
     },[]);
     return <div className='pseudo-body'>
-        <ul>
+        <ul className='c-team'>
             {
                 props.team.map((hero,i) => {
                     if (!hero)
-                        return <li key={i} className='empty'></li>
+                        return <li key={i} className='empty'>
+                            <div>{i + 1}</div>
+                        </li>
                     return <li key={i} className={'tier-' + hero.tier}>
-                        <span lassName='name'>{hero.name}</span>
-                        <span className='level'>Lvl {hero.level}</span>
-                        <img src={'assets/heros/' + hero.name + '.png'}/>
-                        <span className='power'>{hero.power}</span>
+                        <div>
+                            <span lassName='name'>{hero.name}</span>
+                            <span className='level'>Lvl {hero.level}</span>
+                            <img src={'assets/heros/' + hero.name + '.png'}/>
+                            <span className='power'>{hero.power}</span>
+                        </div>
                     </li>
                 })
             }
