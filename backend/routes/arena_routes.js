@@ -27,6 +27,28 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
     }
 });
 
+router.post('/set_team_position', is_logged_in(), get_teams(), async (req,res) => {
+    let id = req.body.id;
+    let position = req.body.position;
+    try
+    {
+        if (position < 0 && position >= 5)
+            throw new Error('Invalid position.');
+        let data = await HeroData.findOne({_id: id},{level: 1,name: 1});
+        if (!data)
+            throw new Error('Invalid id.');
+        await User.updateOne({_id: req.user._id},{
+            ['team.' + position]: data._id
+        });
+        return res.status(200).json(data);
+    }
+    catch(err)
+    {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+});
+
 router.post('/battle', is_logged_in(), get_teams(), async (req,res) => {
     try
     {

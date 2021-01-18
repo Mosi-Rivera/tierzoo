@@ -37,16 +37,12 @@ class BaseData {
 }
 
 const animals = [
-    new BaseData(0,1,'baby boxer',      5892,456,94,0),
-    new BaseData(1,1,'monster',         5982,575,95,0),
-    new BaseData(2,1,'ball & chain',    6201,514,101,0),
-    new BaseData(3,1,'zapper',          5862,463,93,0),
-
-    new BaseData(10,3,'merch-1.2.0',    12087,825,175,0),
-    new BaseData(11,3,'shield droid',   7694,570,115,0),
-    new BaseData(12,3,'spirit boxer',   7599,578,116,0),
-    new BaseData(13,3,'stormhead',      8312,601,126,0),
-    new BaseData(14,3,'mud guard',      8144,614,123,0),
+    new BaseData(0,1,'ball & chain',    6201,514,101,0),
+    new BaseData(1,3,'merch-1.2.0',    12087,825,175,0),
+    new BaseData(2,3,'shield droid',   7694,570,115,0),
+    new BaseData(10,3,'spirit boxer',   7599,578,116,0),
+    new BaseData(11,3,'stormhead',      8312,601,126,0),
+    new BaseData(12,3,'mud guard',      8144,614,123,0),
 ]
 
 mongoose.connect(uri);

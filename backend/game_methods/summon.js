@@ -1,8 +1,8 @@
 const Hero = require('../models/hero');
 const HeroData = require('../models/hero_data');
 
-const rare_length = 4;
-const elite_length = 5;
+const rare_length = 3;
+const elite_length = 3;
 const elite_rate = 0.1;
 
 const get_random_hero_index = () => {
