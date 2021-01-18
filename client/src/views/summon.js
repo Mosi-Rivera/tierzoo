@@ -63,20 +63,7 @@ export default function(props)
             console.log(err);
         }
     }
-    useEffect(function()
-    {
-        is_logged_in()
-        .then(async () => {
-            try {
-                props.set_inventory(await get_inventory());
-            }
-            catch(err)
-            {
-                console.log(err);
-            }
-        } )
-        .catch(() => history.push('/'));
-    },[]);
+    useEffect(props.check_logged_in,[]);
     return <div className='pseudo-body'>
         {
             props.inventory && Object.keys(props.inventory).map((key,i) => [<span key={0}>{key}: {props.inventory[key]}</span>,<br key={1}/>])

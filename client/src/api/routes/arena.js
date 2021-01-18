@@ -1,5 +1,19 @@
 import {BASE_URL,error_handler} from '../environment';
 
+export function set_team_position(position,id)
+{
+    return fetch(BASE_URL + '/arena/get_opponents',{
+        methods: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({position,id})
+    })
+    .then(error_handler)
+    .then(res =>res.json());
+}
+
 export function get_opponents()
 {
     return fetch(BASE_URL + '/arena/get_opponents',{

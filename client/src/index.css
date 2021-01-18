@@ -2,6 +2,7 @@ html,body
 {
   margin: 0px;
   padding: 0px;
+  overflow-x: hidden;
 }
 body {
   margin: 0;
@@ -23,50 +24,112 @@ ul {
   list-style-type: none;
 }
 
+.backdrop.show
+{
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.356);
+  z-index: 10000001;
+}
+
+.slider-right.show
+{
+  transform: translateX(0);
+}
+
+.slider-right
+{
+  transform: translateX(100%);
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.container-fluid {
+  /* padding-bottom: 60px; */
+}
+
 a
 {
   text-decoration: none;
   color: inherit;
 }
 
+a:hover
+{
+  text-decoration: none;
+}
+
 /* PSEUDO-BODY */
 .pseudo-body
 {
+  padding-top: 50px;
   padding-bottom: 50px;
   box-sizing: border-box;
-  max-height: 100vh;
 }
 
 /* NAVBAR */
-#navbar
+#navbar-bottom,
+#navbar-top
 {
-  height: 60px;
+  height: 48px;
   width: 100%;
   position: fixed;
   left: 0px;
   right: 0px;
-  bottom: 0px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-items: flex-start;
   background: rgb(44, 44, 44);
+  background: #111111;
+  z-index: 1000001;
 }
 
-#navbar li,
-#navbar a,
-#navbar div
+#navbar-top
 {
-  display: inline-block;
-  line-height: 60px;
-  width: 6rem;
-  text-align: center;
-  color: white;
+  top: 0px;
+  border-bottom: 2px solid rgba(51, 51, 51, 0.25);
 }
 
-#navbar li:hover,
-#navbar a:hover,
-#navbar div:hover
+#navbar-bottom
+{
+  bottom: 0px;
+  border-top: 2px solid rgba(51, 51, 51, 0.25);
+}
+
+#navbar-bottom li,
+#navbar-top li,
+#navbar-bottom a,
+#navbar-top a,
+#navbar-bottom div,
+#navbar-top div
+{
+  cursor: pointer;
+  display: inline-block;
+  line-height: 48px;
+  width: 50px;
+  text-align: center;
+  transition: color 300ms cubic-bezier(0.06, 0.81, 0, 0.98);
+  vertical-align: middle;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #F9F9F9;
+  font-weight: bold;
+}
+
+#navbar-bottom li:hover,
+#navbar-bottom a:hover,
+#navbar-bottom div:hover,
+#navbar-top li:hover,
+#navbar-top a:hover,
+#navbar-top div:hover
 {
   background-color: rgb(26, 26, 26);
   cursor: pointer;
@@ -80,10 +143,9 @@ a
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  height: 50vh;
-  width: 50vh;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
+  height: 45vh;
+  width: 45vh;
+  margin: 0 auto;
 }
 .c-team li
 {
@@ -91,7 +153,7 @@ a
   width: 33.33%;
   height: 33.33%;
   position: relative;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
   padding-top: 1rem;
 }
 
@@ -104,4 +166,220 @@ a
   text-align: center;
   background-color: rgb(31, 31, 31);
   cursor: pointer;
+}
+
+/* HEROS */
+
+.c-heros
+{
+  padding: 0px 0px 0px 3.2%;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1440px;
+  margin: 0px auto;
+}
+
+.c-heros .image-container
+{
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  background: rgba(0, 183, 255, 0.253);
+  /* background: #333; */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.7) .1em, transparent .1em), linear-gradient(90deg, rgba(255, 255, 255, 0.7) .1em, transparent .1em);
+  background-size: 10% 10%;
+}
+
+.c-heros .image-container::before
+{
+  content: "";
+  display: inline-block;
+  padding-top: 112%;
+  background-color: blue;
+}
+
+.c-heros .image-container::after
+{
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 11%;
+  padding-top: 11%;
+  background-color: rgb(255, 255, 255);
+  transition: transform 0.5s ease 0s;
+  transform: translate(50%, -50%) rotate(45deg);
+}
+
+.c-heros div:hover .image-container::after
+{
+  transform: translate(100%, -100%) rotate(45deg);
+}
+
+.c-heros img,
+.info-image img
+{
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  transform: scale3d(1.05, 1.05, 1);
+  transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+}
+
+.c-heros div:hover img
+{
+  transform: scale3d(1.001, 1.001, 1);
+}
+
+.c-heros .name
+{
+  display: block;
+  overflow: hidden;
+  background-color: rgb(6, 28, 37);
+  padding: 6% 8%;
+  transition: background-color 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+}
+
+.c-heros div:hover .name
+{
+  background-color: rgb(0, 102, 128);
+}
+
+.c-heros div:hover .name span
+{
+  transform: translate(10px, 0px);
+}
+
+.c-heros .name span
+{
+    text-transform: uppercase;
+    display: inline-block;
+    color: white;
+    white-space: nowrap;
+    font-size: 16px;
+    font-family: sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-overflow: ellipsis;
+    font-style: italic;
+    width: 100%;
+    transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+}
+
+.tier-1
+{
+  
+}
+
+.c-heros > div
+{
+  transition-delay: 0ms;
+  opacity: 1;
+  transform: translate(0px, 0px);
+  padding: 3.2% 3.2% 0px 0px;
+  text-decoration: none;
+  display: block;
+  flex: 1 1 14.2857%;
+  max-width: 14.2857%;
+  min-width: 0px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* INFO */
+.info-image
+{
+  width: 80%;
+  display: block;
+  position: relative;
+  margin: 0 auto;
+}
+
+.info-image::before
+{
+  content: "";
+  display: inline-block;
+  padding-top: 80%;
+}
+
+#hero-info
+{
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  max-width: 500px;
+  display: flex;
+  background-color: white;
+  z-index: 10000002;
+}
+
+#hero-info .hero-left
+{
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+#hero-info .col-sm-6
+{
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#hero-info .row
+{
+  flex: 1 1;
+}
+
+@media (max-width: 1000px)
+{
+  .c-heros > div
+  {
+    flex: 1 1 25%;
+    max-width: 25%;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 750px)
+{  
+  .c-heros > div {
+    flex: 1 1 33.3333%;
+    max-width: 33.3333%;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 520px)
+{
+  .c-heros > div {
+    flex: 1 1 50%;
+    max-width: 50%;
+    font-size: 3.5vw;
+  }
+}
+
+@media (min-width: 640px)
+{
+  .c-heros > div
+  {
+    padding: 20px 20px 0px 0px;
+  }
+}
+
+@media (min-width: 600px)
+{
+  .c-heros
+  {
+    padding: 0px 0px 0px 20px;
+  }
 }

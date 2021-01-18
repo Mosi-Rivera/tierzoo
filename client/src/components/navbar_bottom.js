@@ -25,15 +25,15 @@ export default function (props)
             console.log(err);
         }
     }
-    return <nav id='navbar'>
+    return <nav id='navbar-bottom'>
         <ul>
-            <li><Link to='/summon'>SUMMON</Link></li>
-            <li onClick={handle_inventory}>INVENTORY</li>
+            <li><Link to='/summon'>S</Link></li>
+            <li onClick={handle_inventory}>I</li>
         </ul>
-        <div onClick={handle_rewards}>COLLECT</div>
+        <div onClick={handle_rewards}>C</div>
         <ul>
-            <li><Link to='/heros'>HEROS</Link></li>
-            <li><Link to='/arena'>ARENA</Link></li>
+            <li><Link to='/heros'>H</Link></li>
+            <li><Link to='/arena'>A</Link></li>
         </ul>
     </nav>;
 }
