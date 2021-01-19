@@ -4,7 +4,7 @@ const HeroData = require('../models/hero_data');
 const {is_logged_in} = require('../middelware/authMiddleware');
 const User = require('../models/user');
 const {exponential_growth} = require('../helpers');
-const { get_random_hero_index, summon_hero, summon_multiple_heros } = require('../game_methods/summon');
+const { get_random_hero_index, summon_hero, summon_multiple_heroes } = require('../game_methods/summon');
 const {HeroStats} = require('../game_methods/classes');
 router.get('/info', is_logged_in(), async (req,res) => {
     try
@@ -84,7 +84,7 @@ router.get('/normal_summon_hero_multiple_gems', is_logged_in(), async (req,res) 
         if (inventory.gems < 2700)
             throw new Error('Insufficient gems.');
 
-        let summon_arr = await summon_multiple_heros(req.user._id);
+        let summon_arr = await summon_multiple_heroes(req.user._id);
         await User.updateOne({_id: req.user._id},{'inventory.gems': inventory.gems - 10});
         return res.status(200).json(summon_arr);
     }
@@ -119,7 +119,7 @@ router.get('/normal_summon_hero_multiple_scrolls', is_logged_in(), async (req,re
         if (inventory.scrolls < 10)
             throw new Error('Insufficient scrolls.');
 
-        let summon_arr = await summon_multiple_heros(req.user._id);
+        let summon_arr = await summon_multiple_heroes(req.user._id);
         console.log(summon_arr);
         await User.updateOne({_id: req.user._id},{'inventory.scrolls': inventory.scrolls - 10});
         return res.status(200).json(summon_arr);

@@ -4,6 +4,7 @@ const { is_logged_in } = require('../middelware/authMiddleware');
 const BattleRecordSchema = require('../models/battle_record');
 const BattleRecord = require('../models/battle_record');
 const {get_teams} = require('../middelware/heroMiddleware');
+const HeroData = require('../models/hero_data');
 const elo = require('../elo');
 const { simulate_combat } = require('../game_methods/combat');
 
@@ -27,14 +28,32 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
     }
 });
 
-router.post('/set_team_position', is_logged_in(), get_teams(), async (req,res) => {
+router.get('/remove_team_position', is_logged_in(), async (req,res) => {
+    let position = req.query.position;
+    try
+    {
+        if (typeof position !== 'number')
+            throw new Error('Invalid position.');
+        await User.updateOne({_id: req.user._id},{['team.' + position]: null});
+        res.status(200).json();
+    }
+    catch(err)
+    {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+})
+
+router.post('/set_team_position', is_logged_in(), async (req,res) => {
     let id = req.body.id;
     let position = req.body.position;
     try
     {
+        if (await User.findOne({_id: req.user._id,'team._id': id}))
+            throw new Error('Hero already in use.');
         if (position < 0 && position >= 5)
             throw new Error('Invalid position.');
-        let data = await HeroData.findOne({_id: id},{level: 1,name: 1});
+        let data = await HeroData.findOne({_id: id, owner_id: req.user._id},{level: 1,name: 1});
         if (!data)
             throw new Error('Invalid id.');
         await User.updateOne({_id: req.user._id},{

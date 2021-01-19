@@ -6,7 +6,7 @@ const {is_logged_in} = require('../middelware/authMiddleware');
 const { json } = require('body-parser');
 const { get_rewards } = require('../game_methods/idle');
 
-router.get('/heros', is_logged_in(), async (req,res) => {
+router.get('/heroes', is_logged_in(), async (req,res) => {
     try
     {
         return res.status(200).json(await HeroData.find({owner_id: req.user._id},{name: 1, tier: 1}));
@@ -23,11 +23,8 @@ router.get('/team', is_logged_in(), async (req,res) => {
     {
         const _id = req.user._id;
         let result = new Array(5);
-        const team = ( await User.findOne({_id: _id},{team: 1}).populate({path: 'team', populate: {path: 'data'}}) ).team;
-        for (let i = 5; i--;)
-            if (team[i]) result[i] = team[i];
-            
-        return res.status(200).json(result);
+        const team = ( await User.findOne({_id: _id},{team: 1}).populate({path: 'team', options: {retainNullValues: true}})).team;
+        return res.status(200).json(team);
     }
     catch(err)
     {

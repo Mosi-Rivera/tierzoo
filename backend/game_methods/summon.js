@@ -24,7 +24,7 @@ const summon_hero = async (id) => {
     });
 }
 
-const summon_multiple_heros = async (id) => {
+const summon_multiple_heroes = async (id) => {
     let arr = [];
     for (let i = 10; i--;)
     {
@@ -45,5 +45,5 @@ module.exports = {
     elite_rate,
     summon_hero,
     get_random_hero_index,
-    summon_multiple_heros
+    summon_multiple_heroes
 }

@@ -12,6 +12,7 @@ class SafeUser
     constructor(user)
     {
         this.username = user.username;
+        this.team = user.team;
         this._id = user._id;
         this.arena = user.arena;
         this.inventory = user.inventory;
@@ -62,8 +63,18 @@ router.get('/delete_account',is_logged_in(),async (req,res) => {
     }
 })
 
-router.get('/is_logged_in',is_logged_in(),(req,res) => {
-    return res.status(200).json(new SafeUser(req.user));
+router.get('/is_logged_in',is_logged_in(),async (req,res) => {
+    let match = {_id: req.user._id};
+    try
+    {
+        let user = req.query.team ? await User.findOne(match).populate({path: 'team', options: {retainNullValues: true}}) : await User.findOne(match);
+        return res.status(200).json(new SafeUser(user));
+    }
+    catch(err)
+    {
+        console.log(err);
+        return res.status(500).json(err);
+    }
 });
 
 module.exports = router;
