@@ -3,7 +3,7 @@ import {BASE_URL,error_handler} from '../environment';
 export function set_team_position(position,id)
 {
     return fetch(BASE_URL + '/arena/set_team_position',{
-        methods: 'POST',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -17,7 +17,7 @@ export function set_team_position(position,id)
 export function get_opponents()
 {
     return fetch(BASE_URL + '/arena/get_opponents',{
-        methods: 'GET',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },

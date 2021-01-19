@@ -5,7 +5,7 @@ import VLanding from './views/landing';
 import VHome from './views/home';
 import './App.css';
 import NavbarBottom from './components/navbar_bottom';
-import Heros from './views/heros';
+import Heroes from './views/heroes';
 import Summon from './views/summon';
 import ModalProfile from './components/modals/modal_profile';
 import ModalInventory from './components/modals/modal_inventory';
@@ -28,7 +28,7 @@ function App() {
   const [user,set_user] = useState(null);
   const [team,set_team] = useState([]);
   const [opponents,set_opponents] = useState([]);
-  const [heros,set_heros] = useState([]);
+  const [heroes,set_heroes] = useState([]);
   const [summons,set_summons] = useState(null);
   const [rewards,set_rewards] = useState(null);
   //1 = profile | 2 = inventory | 3 = summons | 4 = rewards
@@ -62,11 +62,13 @@ function App() {
     set_opponents,
     user,
     set_user,
-    check_logged_in
+    check_logged_in,
+    heroes,
+    set_heroes
   }
-  const heros_props = {
-    heros,
-    set_heros,
+  const heroes_props = {
+    heroes,
+    set_heroes,
     check_logged_in,
     set_hero_info,
   }
@@ -79,7 +81,6 @@ function App() {
     check_logged_in
   }
   return (
-    <BrowserRouter>
         <Switch>
           <Route exact path='/'>
             <VLanding set_user={set_user}/>
@@ -88,8 +89,8 @@ function App() {
               <Container fluid>
                 <NavbarTop {...navbar_top_props}/>
                 <Switch>
-                  <Route path='/heros'>
-                    <Heros {...heros_props}/>
+                  <Route path='/heroes'>
+                    <Heroes {...heroes_props}/>
                   </Route>
                   <Route path='/summon'>
                     <Summon {...summon_props}/>
@@ -107,7 +108,6 @@ function App() {
             </Container>
           </Route>
         </Switch>
-    </BrowserRouter>
   );
 }
 

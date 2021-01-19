@@ -143,7 +143,9 @@ a:hover
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  height: 45vh;
+  height: calc((100vh - 100px) / 2);
+  box-sizing: border-box;
+  padding: 1rem;
   width: 45vh;
   margin: 0 auto;
 }
@@ -170,7 +172,7 @@ a:hover
 
 /* HEROS */
 
-.c-heros
+.c-heroes
 {
   padding: 0px 0px 0px 3.2%;
   display: flex;
@@ -179,7 +181,7 @@ a:hover
   margin: 0px auto;
 }
 
-.c-heros .image-container
+.c-heroes .image-container
 {
   position: relative;
   display: block;
@@ -191,7 +193,7 @@ a:hover
   background-size: 10% 10%;
 }
 
-.c-heros .image-container::before
+.c-heroes .image-container::before
 {
   content: "";
   display: inline-block;
@@ -199,7 +201,7 @@ a:hover
   background-color: blue;
 }
 
-.c-heros .image-container::after
+.c-heroes .image-container::after
 {
   content: "";
   position: absolute;
@@ -212,12 +214,12 @@ a:hover
   transform: translate(50%, -50%) rotate(45deg);
 }
 
-.c-heros div:hover .image-container::after
+.c-heroes div:hover .image-container::after
 {
   transform: translate(100%, -100%) rotate(45deg);
 }
 
-.c-heros img,
+.c-heroes img,
 .info-image img
 {
   image-rendering: pixelated;
@@ -231,12 +233,12 @@ a:hover
   transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
 }
 
-.c-heros div:hover img
+.c-heroes div:hover img
 {
   transform: scale3d(1.001, 1.001, 1);
 }
 
-.c-heros .name
+.c-heroes .name
 {
   display: block;
   overflow: hidden;
@@ -245,17 +247,17 @@ a:hover
   transition: background-color 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
 }
 
-.c-heros div:hover .name
+.c-heroes div:hover .name
 {
   background-color: rgb(0, 102, 128);
 }
 
-.c-heros div:hover .name span
+.c-heroes div:hover .name span
 {
   transform: translate(10px, 0px);
 }
 
-.c-heros .name span
+.c-heroes .name span
 {
     text-transform: uppercase;
     display: inline-block;
@@ -276,7 +278,7 @@ a:hover
   
 }
 
-.c-heros > div
+.c-heroes > div
 {
   transition-delay: 0ms;
   opacity: 1;
@@ -340,9 +342,30 @@ a:hover
   flex: 1 1;
 }
 
+/* HEROES SLIDER */
+.slider-heroes
+{
+  background-color: white;
+  z-index: 10000002;
+  position: fixed;
+  height: calc((100vh - 100px) / 2);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  transition: transform .3s cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+.slider-heroes.show
+{
+  transform: translateY(0%);
+}
+
 @media (max-width: 1000px)
 {
-  .c-heros > div
+  .c-heroes > div
   {
     flex: 1 1 25%;
     max-width: 25%;
@@ -352,7 +375,7 @@ a:hover
 
 @media (max-width: 750px)
 {  
-  .c-heros > div {
+  .c-heroes > div {
     flex: 1 1 33.3333%;
     max-width: 33.3333%;
     font-size: 16px;
@@ -361,7 +384,7 @@ a:hover
 
 @media (max-width: 520px)
 {
-  .c-heros > div {
+  .c-heroes > div {
     flex: 1 1 50%;
     max-width: 50%;
     font-size: 3.5vw;
@@ -370,7 +393,7 @@ a:hover
 
 @media (min-width: 640px)
 {
-  .c-heros > div
+  .c-heroes > div
   {
     padding: 20px 20px 0px 0px;
   }
@@ -378,7 +401,7 @@ a:hover
 
 @media (min-width: 600px)
 {
-  .c-heros
+  .c-heroes
   {
     padding: 0px 0px 0px 20px;
   }

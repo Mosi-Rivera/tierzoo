@@ -1,8 +1,8 @@
 import {BASE_URL,error_handler} from '../environment';
 
-export function get_heros()
+export function get_heroes()
 {
-    return fetch(BASE_URL + '/user/heros',{
+    return fetch(BASE_URL + '/user/heroes',{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

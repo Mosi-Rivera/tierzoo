@@ -32,7 +32,7 @@ export default function (props)
         </ul>
         <div onClick={handle_rewards}>C</div>
         <ul>
-            <li><Link to='/heros'>H</Link></li>
+            <li><Link to='/heroes'>H</Link></li>
             <li><Link to='/arena'>A</Link></li>
         </ul>
     </nav>;

@@ -41,9 +41,9 @@ export function delete_account()
     .then(error_handler);
 }
 
-export function is_logged_in()
+export function is_logged_in(get_team)
 {
-    return fetch(BASE_URL + '/auth/is_logged_in',{
+    return fetch(BASE_URL + '/auth/is_logged_in' + (get_team ? '?team=true' : ''),{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

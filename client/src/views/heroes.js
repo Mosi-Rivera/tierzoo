@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import {get_heros} from '../api/routes/user';
+import {get_heroes} from '../api/routes/user';
 import {is_logged_in} from '../api/routes/auth';
 import { Row,Col } from 'react-bootstrap';
 import image_configs from '../sprites/config';
@@ -44,7 +44,7 @@ export default function(props)
     {
         props.check_logged_in(async id => {
             try{
-                props.set_heros(await get_heros(id));
+                props.set_heroes(await get_heroes(id));
             }
             catch(err)
             {
@@ -52,10 +52,10 @@ export default function(props)
             }
         });
     },[]);
-    return <div id='heros' className='pseudo-body'>
-        <div className='c-heros'>
+    return <div id='heroes' className='pseudo-body'>
+        <div className='c-heroes'>
             {
-                props.heros?.map((hero,i) => {
+                props.heroes?.map((hero,i) => {
                 let image_conf = image_configs[hero.name];
                 return <div key={i} onClick={() => handle_set_hero(hero._id)}>
                     <span >{hero.level}</span>
