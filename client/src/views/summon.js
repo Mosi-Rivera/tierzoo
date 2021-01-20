@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {is_logged_in} from '../api/routes/auth';
+import {Col,Row} from 'react-bootstrap';
 import {
     summon_multiple_gems,
     summon_multiple_scrolls,
@@ -64,18 +65,29 @@ export default function(props)
         }
     }
     useEffect(props.check_logged_in,[]);
-    return <div className='pseudo-body'>
-        {
-            props.inventory && Object.keys(props.inventory).map((key,i) => [<span key={0}>{key}: {props.inventory[key]}</span>,<br key={1}/>])
-        }
-        <div>
-            <div onClick={handle_single_summon}>
-                <span>summon x1</span>
-                <span>{props.inventory?.scrolls > 1 ? '1 scroll' : '300 gems'}</span>
+    return <div id='summons' className='pseudo-body'>
+        <div style={{
+            backgroundImage: 'url("assets/shield_droid/Police Shielder.gif")'
+        }} className='summon-banner'>
+            <div className='c-message'>
+                <h3 className='message'>
+                    NEW Epic Hero <span>Shield Droid</span>
+                </h3>
             </div>
-            <div onClick={handle_multiple_sumon}>
-                <span>summon x10</span>
-                <span>{props.inventory?.scrolls > 1 ? '10 scroll' : '2700 gems'}</span>
+            <div className='c-summon'>
+                <h3>
+                    Produces <span>Common</span> and <span>Epic</span> heroes
+                </h3>
+                <div>
+                    <div onClick={handle_single_summon}>
+                        <span>summon x1</span>
+                        <span>{props.inventory?.scrolls > 1 ? '1 scroll' : '300 gems'}</span>
+                    </div>
+                    <div onClick={handle_multiple_sumon}>
+                        <span>summon x10</span>
+                        <span>{props.inventory?.scrolls > 1 ? '10 scroll' : '2700 gems'}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

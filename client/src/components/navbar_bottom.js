@@ -6,7 +6,16 @@ export default function (props)
     const handle_rewards = async (e) => {
         try 
         {
-            props.set_rewards(await collect_idle_rewards());
+            let rewards = await collect_idle_rewards();
+            let _inventory = {inventory: props.inventory};
+            if (_inventory.inventory)
+            {
+                let keys = Object.keys(rewards);
+                for (let i = keys.length; i--;)
+                    _inventory[keys[i]] += rewards[keys[i]];
+                props.set_inventory(_inventory.inventory);
+            }
+            props.set_rewards(rewards);
             props.show_rewards();
         }
         catch(err)

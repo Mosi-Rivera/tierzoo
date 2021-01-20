@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { set_team_position } from '../api/routes/arena';
 import SliderHeroes from '../components/slider_heroes';
+import image_configs from '../sprites/config';
 export default function(props)
 {
     const [selected_index,set_selected_index] = useState(0);
@@ -25,7 +26,9 @@ export default function(props)
             if (_team)
             {
                 _team[index] = null;
+                console.log(_team,index);
                 props.set_team(_team);
+                set_show(show);
             }
             console.log(err);
         }
@@ -50,9 +53,8 @@ export default function(props)
                         </li>
                     return <li key={i} className={'tier-' + hero.tier}>
                         <div>
-                            <span className='name'>{hero.name}</span>
                             <span className='level'>Lvl {hero.level}</span>
-                            <img src={'assets/heroes/' + hero.name + '.png'}/>
+                            <img src={image_configs[hero.name]?.src}/>
                             <span className='power'>{hero.power}</span>
                         </div>
                     </li>

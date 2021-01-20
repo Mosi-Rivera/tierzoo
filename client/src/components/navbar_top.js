@@ -8,6 +8,7 @@ export default function (props)
             <li>{props.user?.username}</li>
         </ul>
         <ul>
+            <li>{props.inventory?.scrolls}</li>
             <li>{props.inventory?.gold}</li>
             <li>{props.inventory?.gems}</li>
         </ul>

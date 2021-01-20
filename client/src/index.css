@@ -50,6 +50,43 @@ ul {
   transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+.close-button
+{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background: rgb(236, 236, 236);
+  margin: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.close-button::before,
+.close-button::after
+{
+  content: "";
+  display: inline-block;
+  width: 100%;
+  height: 5px;
+  background-color: #111111;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+}
+
+.close-button::after
+{
+  transform:translateY(275%) rotate(45deg);
+}
+
+.close-button::before
+{
+  transform:translateY(275%) rotate(-45deg);
+}
+
 .container-fluid {
   /* padding-bottom: 60px; */
 }
@@ -300,6 +337,7 @@ a:hover
   display: block;
   position: relative;
   margin: 0 auto;
+  max-width: 200px;
 }
 
 .info-image::before
@@ -318,6 +356,7 @@ a:hover
   display: flex;
   background-color: white;
   z-index: 10000002;
+  padding: 1rem;
 }
 
 #hero-info .hero-left
@@ -361,6 +400,66 @@ a:hover
 .slider-heroes.show
 {
   transform: translateY(0%);
+}
+
+/* SUMMON */
+#summons
+{
+  height: 100vh;
+}
+
+.summon-banner
+{
+  position: relative;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 75%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summon-banner .c-message
+{
+  padding-top: 2rem;
+}
+
+.summon-banner .c-summon
+{
+  padding-bottom: 2rem;
+}
+
+.summon-banner .c-summon > div
+{
+  width: 100%;
+  margin: 0 auto;
+}
+
+.summon-banner .c-summon > div > div
+{
+  display: inline-block;
+}
+
+.summon-banner .c-summon > div > div:first-child
+{
+  float: left;
+}
+
+.summon-banner .c-summon > div > div:last-child
+{
+  float: right;
+}
+
+.summon-banner .c-summon > div > div span
+{
+  display: block;
+}
+
+.c-message
+{
+
 }
 
 @media (max-width: 1000px)

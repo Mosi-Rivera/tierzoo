@@ -99,7 +99,7 @@ function App() {
                     <VHome {...home_props}/>
                   </Route>
                 </Switch>
-              <HeroInfo handle_close={() => set_hero_info(null)} info={hero_info} show={hero_info !== null}/>
+              <HeroInfo handle_close={() => set_hero_info(null)} info={hero_info} set_info={set_hero_info} show={hero_info !== null}/>
               <ModalInventory handleClose={close_modal}   inventory={inventory} show={show_modal == modal_keys.inventory}/>
               <ModalProfile   handleClose={close_modal}   user={user}           show={show_modal == modal_keys.profile}/>
               <ModalSummons   handleClose={close_modal}   summons={summons}     show={show_modal == modal_keys.summons}/>

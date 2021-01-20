@@ -5,7 +5,7 @@ import {Modal} from 'react-bootstrap';
 export default function (props)
 {
   let inventory = props.inventory;
-    return <Modal show={props.show} onHide={props.handleClose}>
+    return <Modal show={props.show} onHide={props.handleClose} centered>
         <Modal.Body>
           <h3>{props.user?.username}</h3>
           <span>{props.user?.level}</span>

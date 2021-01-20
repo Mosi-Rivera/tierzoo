@@ -4,7 +4,7 @@ import {Modal} from 'react-bootstrap';
 
 export default function (props)
 {
-    return <Modal show={props.show} onHide={props.handleClose}>
+    return <Modal show={props.show} onHide={props.handleClose} centered>
         <Modal.Body>
             <ul>
                 {
