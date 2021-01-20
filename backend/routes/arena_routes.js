@@ -49,7 +49,7 @@ router.post('/set_team_position', is_logged_in(), async (req,res) => {
     let position = req.body.position;
     try
     {
-        if (await User.findOne({_id: req.user._id,'team._id': id}))
+        if (await User.findOne({_id: req.user._id,'team': id}))
             throw new Error('Hero already in use.');
         if (position < 0 && position >= 5)
             throw new Error('Invalid position.');

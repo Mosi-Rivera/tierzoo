@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Hero = require('../models/hero_data');
+const mongoose = require('mongoose');
 const HeroData = require('../models/hero_data');
 const {is_logged_in} = require('../middelware/authMiddleware');
 const User = require('../models/user');
@@ -29,9 +30,14 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
     try
     {
         const id = req.query.id;
-        if (!id || typeof id !== 'string')
+        if (!mongoose.Types.ObjectId.isValid(id))
             throw new Error('Invalid id.');
-        let hero = await Hero.findOne({_id: id});
+        let hero = await HeroData.findOne({_id: id});
+        console.log('passed.',id,hero);
+        if (!hero)
+            throw new Error('Invalid id.');
+        else if (hero.level >= 220)
+            throw new Error('Already the highest possible level.');
         let inventory = (await User.findOne({_id: req.user._id},{inventory: 1})).inventory;
         let inventory_update = {};
         if (hero.level % 20 == 0)
@@ -50,7 +56,7 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
             throw new Error('Not enough materials.');
         inventory_update['inventory.gold'] = inventory.gold - gold;
         inventory_update['inventory.exp'] = inventory.exp - exp;
-        await HeroData.updateOne({_id: id},{level: new_level});
+        await HeroData.updateOne({_id: id},{$inc: {level: hero.level + 1 > 220 ? 0 : 1 }});
         await User.updateOne({_id: req.user._id},inventory_update);
         return res.status(200).json({message: 'Success!'});
     }

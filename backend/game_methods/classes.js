@@ -5,6 +5,8 @@ class HeroStats
     constructor(hero)
     {
         let data = hero.hero;
+        this.level = hero.level;
+        this._id = hero._id;
         this.tier = hero.tier;
         this.name = hero.name;
         this.hp         = HeroStats.calc_health(hero);
