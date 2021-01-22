@@ -1,11 +1,14 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-
+import {useSelector,useDispatch} from 'react-redux';
+import {close,modal_enum} from '../../redux/reducers/r_modals';
 
 export default function (props)
 {
-  let inventory = props.inventory;
-    return <Modal show={props.show} onHide={props.handleClose} centered>
+  const dispatch = useDispatch();
+  const inventory = useSelector(state => state.inventory);
+  const active = useSelector(state => state.modals.active);
+    return <Modal show={active === modal_enum.inventory} onHide={() => dispatch(close())} centered>
         <Modal.Body>
           <ul>
             {

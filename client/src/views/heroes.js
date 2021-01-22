@@ -1,10 +1,13 @@
 import React, {useEffect} from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import {get_heroes} from '../api/routes/user';
-import {is_logged_in} from '../api/routes/auth';
-import { Row,Col } from 'react-bootstrap';
 import image_configs from '../sprites/config';
 import { hero_info } from '../api/routes/hero';
+import {check_logged_in} from '../helper';
+import { set_all } from '../redux/reducers/r_heroes';
+import { useSelector,useDispatch } from 'react-redux';
+import { modal_enum,set } from '../redux/reducers/r_modals';
+import { set_info } from '../redux/reducers/r_hero_info';
 
 const throttle = (func, limit) => {
     let lastFunc
@@ -30,10 +33,13 @@ const throttle = (func, limit) => {
 export default function(props)
 {
     const history = useHistory();
-    const handle_set_hero = throttle(async (id) => {
+    const dispatch = useDispatch();
+    const heroes = useSelector(state => state.heroes);
+    const handle_open_hero_info = throttle(async (id) => {
         try
         {
-            props.set_hero_info(await hero_info(id));
+            dispatch(set_info(await hero_info(id)));
+            dispatch(set(modal_enum.info));
         }
         catch(err)
         {
@@ -42,9 +48,10 @@ export default function(props)
     },1000);
     useEffect(function()
     {
-        props.check_logged_in(async id => {
-            try{
-                props.set_heroes(await get_heroes(id));
+        check_logged_in(history, async () => {
+            try
+            {
+                dispatch(set_all(await get_heroes()));
             }
             catch(err)
             {
@@ -55,18 +62,18 @@ export default function(props)
     return <div id='heroes' className='pseudo-body'>
         <div className='c-heroes'>
             {
-                props.heroes?.map((hero,i) => {
-                let image_conf = image_configs[hero.name];
-                return <div key={i} onClick={() => handle_set_hero(hero._id)}>
-                    <span >{hero.level}</span>
-                    <span className={'image-container tier-' + hero.tier}>
+                heroes?.map((hero,i) => {
+                    let image_conf = image_configs[hero.name];
+                    return <div key={i} onClick={() => handle_open_hero_info(hero._id)}>
+                        <span >{hero.level}</span>
+                        <span className={'image-container tier-' + hero.tier}>
 
-                        <img src={image_conf?.src}/>
-                    </span>
-                    <span className='name'>
-                        <span>{hero.name}</span>
-                    </span>
-                </div>
+                            <img src={image_conf?.src}/>
+                        </span>
+                        <span className='name'>
+                            <span>{hero.name}</span>
+                        </span>
+                    </div>
                 })
             }
         </div>

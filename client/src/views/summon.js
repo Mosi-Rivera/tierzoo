@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import {is_logged_in} from '../api/routes/auth';
-import {Col,Row} from 'react-bootstrap';
+import {Carousel, Col,Row} from 'react-bootstrap';
 import {
     summon_multiple_gems,
     summon_multiple_scrolls,
     summon_single_gems,
     summon_single_scrolls
 } from '../api/routes/hero';
-import { get_inventory } from '../api/routes/user';
 import {useHistory} from 'react-router-dom';
+import { check_logged_in } from '../helper';
 export default function(props)
 {
     const history = useHistory();
@@ -64,31 +64,42 @@ export default function(props)
             console.log(err);
         }
     }
-    useEffect(props.check_logged_in,[]);
+    useEffect(() => {
+        check_logged_in(history);
+    },[]);
     return <div id='summons' className='pseudo-body'>
-        <div style={{
-            backgroundImage: 'url("assets/shield_droid/Police Shielder.gif")'
-        }} className='summon-banner'>
-            <div className='c-message'>
-                <h3 className='message'>
-                    NEW Epic Hero <span>Shield Droid</span>
-                </h3>
-            </div>
-            <div className='c-summon'>
-                <h3>
-                    Produces <span>Common</span> and <span>Epic</span> heroes
-                </h3>
-                <div>
-                    <div onClick={handle_single_summon}>
-                        <span>summon x1</span>
-                        <span>{props.inventory?.scrolls > 1 ? '1 scroll' : '300 gems'}</span>
+        <Carousel>
+            <Carousel.Item>
+                <img
+                className="d-block w-100"
+                src="assets/shield_droid/Police Shielder.gif"
+                alt="First slide"
+                />
+                <Carousel.Caption className='header'>
+                    <h3 className='message'>
+                        NEW epic hero <span className='epic'>Shield Droid</span>
+                    </h3>
+                </Carousel.Caption>
+                <Carousel.Caption>
+                    <div className='c-summon-button'>
+                        <div>
+                            <div onClick={handle_single_summon}>
+                                <span>single-summon</span>
+                            </div>
+                            <span>{props.inventory?.scrolls > 1 ? '1' : '300'}</span>
+                        </div>
+                        <div className='summon-button'>
+                            <div onClick={handle_multiple_sumon}>
+                                <span>multi-summon</span>
+                            </div>
+                            <span>{props.inventory?.scrolls > 1 ? '10' : '2700'}</span>
+                        </div>
                     </div>
-                    <div onClick={handle_multiple_sumon}>
-                        <span>summon x10</span>
-                        <span>{props.inventory?.scrolls > 1 ? '10 scroll' : '2700 gems'}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <h5>
+                        Produces <span className='common'>Common</span> and <span className='epic'>Epic</span> heroes
+                    </h5>
+                </Carousel.Caption>
+            </Carousel.Item>
+        </Carousel>
     </div>
 }

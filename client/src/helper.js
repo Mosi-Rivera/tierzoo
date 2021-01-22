@@ -1,18 +1,19 @@
 import { is_logged_in } from "./api/routes/auth";
+import store from './redux/store';
+import {set_inventory} from './redux/reducers/r_inventory';
+import {set_user} from './redux/reducers/r_user';
 
-export function create_check_logged_in(history,set_inventory,set_user)
+export function check_logged_in(history,cb,get_team = false)
 {
-    console.log('creating this shiet',history);
-    return function(cb = null,getTeam = false)
-    {
-        is_logged_in(getTeam)
-        .then(res => {
-            set_inventory(res.inventory);
-            delete res.inventory;
-            set_user(res);
-            if (cb)
-                cb(res);
-        })
-        .catch(() => history.push('/'))
-    }
+    is_logged_in(get_team)
+    .then(res => {
+        let team = res.team;
+        delete res.team;
+        store.dispatch(set_inventory(res.inventory));
+        delete res.inventory;
+        store.dispatch(set_user(res));
+        if (cb)
+            cb(res,team);
+    })
+    .catch(() => history.push('/'))
 }

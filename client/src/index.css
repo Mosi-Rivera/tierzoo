@@ -111,6 +111,24 @@ a:hover
 }
 
 /* NAVBAR */
+.c-inventory li
+{
+  width: fit-content !important;
+  padding-right: 1rem;
+}
+
+.c-inventory li span 
+{
+  display: inline-block;
+  line-height: 48px;
+}
+
+.c-inventory .icon
+{
+  width: 48px;
+  height: 48px;
+}
+
 #navbar-bottom,
 #navbar-top
 {
@@ -150,7 +168,8 @@ a:hover
   cursor: pointer;
   display: inline-block;
   line-height: 48px;
-  width: 50px;
+  width: 48px;
+  height: 48px;
   text-align: center;
   transition: color 300ms cubic-bezier(0.06, 0.81, 0, 0.98);
   vertical-align: middle;
@@ -403,63 +422,184 @@ a:hover
 }
 
 /* SUMMON */
-#summons
+#summons img
 {
-  height: 100vh;
+  height: calc(100vh - 100px);
+  object-fit: cover;
+  object-position: 0px 80%;
 }
 
-.summon-banner
+#summons .carousel
+{
+  margin: 0px -.75rem;
+}
+
+#summons h3,
+#summons h1
+{
+  font-weight: bolder;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black;
+}
+
+#summons h5
+{
+  width: fit-content;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.637);
+  padding: .5rem 1.5rem;
+  border: 3px solid rgba(0, 0, 0, 0.678);
+  border-radius: 20px;
+}
+
+#summons h1
+{
+  font-size: 3.5rem;
+  -webkit-text-stroke-width: 4px;
+}
+
+#summons h3
+{
+  font-size: 2.5rem;
+  
+}
+
+#summons .epic
+{
+  color: rgba(190, 5, 190, 0.843);
+}
+
+#summons .common
+{
+  color: #01bd01d7;
+}
+
+.carousel-caption.header
+{
+  top: 0px;
+}
+
+.c-summon-button
+{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  padding: 1rem 0px;
+}
+
+.c-summon-button > div
+{
+  margin: 0px 1rem;
+  font-size: 1.25rem;
+}
+
+.c-summon-button > div:last-child > div
+{
+  cursor: pointer;
+  padding: 1rem;
+  border: 5px solid rgba(190, 5, 190, 0.843);
+  background-color: rgba(190, 5, 190, 0.473);
+  border-radius: 10px;
+}
+
+.c-summon-button > div:first-child > div
+{
+  cursor: pointer;
+  padding: 1rem;
+  border: 5px solid #01bd01d7;
+  background-color: rgba(1, 189, 1, 0.473);
+  border-radius: 10px;
+}
+
+.icon,
+.icon-sm
 {
   position: relative;
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center 75%;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  align-items: center;
 }
 
-.summon-banner .c-message
+.icon::after,
+.icon-sm::after
 {
-  padding-top: 2rem;
-}
-
-.summon-banner .c-summon
-{
-  padding-bottom: 2rem;
-}
-
-.summon-banner .c-summon > div
-{
-  width: 100%;
-  margin: 0 auto;
-}
-
-.summon-banner .c-summon > div > div
-{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  content: "";
   display: inline-block;
+  box-sizing: border-box;
+  /* margin: 1rem; */
+  height: 2rem;
+  width: 2rem;
+  background-size: cover;
+  /* image-rendering: pixelated; */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
-.summon-banner .c-summon > div > div:first-child
+.icon-sm::after
 {
-  float: left;
+  width: 1rem;
+  height: 1rem;
 }
 
-.summon-banner .c-summon > div > div:last-child
+.arena-icon::after
 {
-  float: right;
+  background-image: url('./icons/arena.png');
 }
 
-.summon-banner .c-summon > div > div span
+.summon-icon::after
 {
-  display: block;
+  background-image: url('./icons/summon.png');
 }
 
-.c-message
+.exp-icon::after
 {
+  background-image: url('./icons/exp.png');
+}
 
+.collect-icon::after
+{
+  background-image: url('./icons/collect.png');
+}
+
+.essence-icon::after
+{
+  background-image: url('./icons/essence.png');
+}
+
+.gem-icon::after
+{
+  background-image: url('./icons/gem.png');
+}
+
+.gold-icon::after
+{
+  background-image: url('./icons/gold.png');
+}
+
+.hero-idle-icon::after
+{
+  background-image: url('./icons/hero-idle.png');
+}
+
+.hero-icon::after
+{
+  background-image: url('./icons/hero.png');
+}
+
+.inventory-icon::after
+{
+  background-image: url('./icons/inventory.png');
+}
+
+.scroll-icon::after
+{
+  background-image: url('./icons/scroll.png');
+}
+
+.settings-icon::after
+{
+  background-image: url('./icons/settings.png');
 }
 
 @media (max-width: 1000px)

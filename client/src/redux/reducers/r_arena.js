@@ -1,6 +1,6 @@
 import {createReducer,createAction} from '@reduxjs/toolkit';
-const set_opponents = createAction('set_opponents');
-const ste_elo = createAction('set_elo');
+export const set_opponents = createAction('set_opponents');
+export const set_elo = createAction('set_elo');
 const state = {
     opponents: [],
     elo: [],
