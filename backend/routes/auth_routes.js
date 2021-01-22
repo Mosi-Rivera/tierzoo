@@ -67,7 +67,10 @@ router.get('/is_logged_in',is_logged_in(),async (req,res) => {
     let match = {_id: req.user._id};
     try
     {
-        let user = req.query.team ? await User.findOne(match).populate({path: 'team', options: {retainNullValues: true}}) : await User.findOne(match);
+        let user = (
+            req.query.team ? 
+            await User.findOne(match).populate({path: 'team', select: '_id level tier name', options: {retainNullValues: true}}) : 
+            await User.findOne(match));
         return res.status(200).json(new SafeUser(user));
     }
     catch(err)

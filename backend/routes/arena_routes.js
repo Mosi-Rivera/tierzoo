@@ -29,9 +29,11 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
 });
 
 router.get('/remove_team_position', is_logged_in(), async (req,res) => {
-    let position = req.query.position;
+    const position = Number.parseInt(req.query.position);
     try
     {
+        if (position < 0 || position >= 5)
+            throw new Error('Invalid position');
         if (typeof position !== 'number')
             throw new Error('Invalid position.');
         await User.updateOne({_id: req.user._id},{['team.' + position]: null});

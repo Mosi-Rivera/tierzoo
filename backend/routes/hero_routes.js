@@ -56,9 +56,13 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
             throw new Error('Not enough materials.');
         inventory_update['inventory.gold'] = inventory.gold - gold;
         inventory_update['inventory.exp'] = inventory.exp - exp;
-        await HeroData.updateOne({_id: id},{$inc: {level: hero.level + 1 > 220 ? 0 : 1 }});
+        const result = await HeroData.findByIdAndUpdate(
+            id,
+            {$inc: {level: hero.level + 1 > 220 ? 0 : 1 }},
+            {new: true}
+        ).populate('hero');
         await User.updateOne({_id: req.user._id},inventory_update);
-        return res.status(200).json({message: 'Success!'});
+        return res.status(200).json(new HeroStats(result));
     }
     catch(err)
     {
