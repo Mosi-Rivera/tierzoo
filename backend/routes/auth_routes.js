@@ -16,7 +16,7 @@ class SafeUser
         this._id = user._id;
         this.arena = user.arena;
         this.inventory = user.inventory;
-        this.idle = user.idle;
+        this.idle = {last_collect: Date.now() - user.idle.last_collect.getTime()};
     }
 }
 
