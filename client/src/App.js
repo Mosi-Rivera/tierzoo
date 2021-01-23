@@ -12,8 +12,18 @@ import ModalSummons from './components/modals/modal_summons';
 import HeroInfo from './components/hero_info';
 import { Container } from 'react-bootstrap';
 import NavbarTop from './components/navbar_top';
-
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { tick } from './redux/reducers/r_idle';
+let interval = null;
 function App() {
+  const dispatch = useDispatch();
+  useEffect(function(){
+    interval = setInterval(() => {
+      dispatch(tick());
+    }, 60000);
+    return () => clearInterval(interval);
+  },[]);
   return (
         <Switch>
           <Route exact path='/'>

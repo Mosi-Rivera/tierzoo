@@ -6,6 +6,7 @@ import heroes       from './reducers/r_heroes';
 import hero_info    from './reducers/r_hero_info';
 import modals       from './reducers/r_modals';
 import arena        from './reducers/r_arena';
+import idle         from './reducers/r_idle';
 
 export default configureStore({
     reducer: combineReducers({
@@ -15,6 +16,7 @@ export default configureStore({
         heroes,
         arena,
         hero_info,
-        modals
+        modals,
+        idle
     })
 });

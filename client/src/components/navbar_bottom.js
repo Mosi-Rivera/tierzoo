@@ -4,17 +4,21 @@ import {collect_idle_rewards, get_inventory} from '../api/routes/user';
 import {useSelector,useDispatch} from 'react-redux';
 import {inc_item, set_inventory} from '../redux/reducers/r_inventory';
 import r_modals, {set,modal_enum, set_rewards} from '../redux/reducers/r_modals';
+import {set_collect_timer} from '../redux/reducers/r_idle';
+import { collect_secs_to_str } from '../helper';
 
 export default function (props)
 {
     const dispatch = useDispatch();
+    const idle = useSelector(state => state.idle);
     const handle_rewards = async (e) => {
         try 
         {
             let rewards = await collect_idle_rewards();
+            dispatch(set_collect_timer(0));
             let keys = Object.keys(rewards);
             for (let i = keys.length; i--;)
-                dispatch(inc_item({key: keys[i], value: rewards[keys[i]]}));
+                dispatch(inc_item({key: keys[i].replace('inventory.',''), value: rewards[keys[i]]}));
             dispatch(set_rewards(rewards));
             dispatch(set(modal_enum.reward));
         }
@@ -36,13 +40,24 @@ export default function (props)
     }
     return <nav id='navbar-bottom'>
         <ul>
-            <Link to='/summon'><li className='icon summon-icon'></li></Link>
-            <li onClick={handle_inventory} className='icon inventory-icon'></li>
+            <Link to='/summon'><li className='icon summon-icon'>
+                <span>summon</span>
+            </li></Link>
+            <li onClick={handle_inventory} className='icon inventory-icon'>
+                <span>inventory</span>
+            </li>
         </ul>
-        <div className='icon collect-icon' onClick={handle_rewards}></div>
+        <div className='icon collect-icon' onClick={handle_rewards}>
+            <span>collect</span>
+            <span className='collect-timer'>{collect_secs_to_str(idle.timer)}</span>
+        </div>
         <ul>
-            <Link to='/heroes'><li className='icon hero-icon'></li></Link>
-            <Link to='arena'><li className='icon arena-icon'></li></Link>
+            <Link to='/heroes'><li className='icon hero-icon'>
+                <span>heroes</span>
+            </li></Link>
+            <Link to='arena'><li className='icon arena-icon'>
+                <span>arena</span>    
+            </li></Link>
         </ul>
     </nav>;
 }

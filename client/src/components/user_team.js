@@ -55,8 +55,10 @@ export default function(props)
                             className={'tier-' + hero.tier}
                             >
                         <div>
-                            <span className='level'>Lvl {hero.level}</span>
-                            <img src={image_configs[hero.name]?.src}/>
+                            <span className='level'>Lv. {hero.level}</span>
+                            <span className='c-image'>
+                                <img src={image_configs[hero.name]?.src}/>
+                            </span>
                             <span className='power'>{hero.power}</span>
                         </div>
                     </li>

@@ -86,13 +86,25 @@ export default function(props)
                             <div onClick={handle_single_summon}>
                                 <span>single-summon</span>
                             </div>
-                            <span>{props.inventory?.scrolls > 1 ? '1' : '300'}</span>
+                            <span>
+                                {
+                                    props.inventory?.scrolls > 1 ? 
+                                    [<span className='icon scroll-icon' key={0}></span>,'1'] : 
+                                    [<span className='icon gem-icon' key={0}></span>,'300']
+                                }
+                            </span>
                         </div>
                         <div className='summon-button'>
                             <div onClick={handle_multiple_sumon}>
                                 <span>multi-summon</span>
                             </div>
-                            <span>{props.inventory?.scrolls > 1 ? '10' : '2700'}</span>
+                            <span>
+                                {
+                                    props.inventory?.scrolls > 1 ? 
+                                    [<span className='icon scroll-icon' key={0}></span>, '10'] : 
+                                    [<span className='icon gem-icon' key={0}></span>,'2700']
+                                }
+                            </span>
                         </div>
                     </div>
                     <h5>
