@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import { login, signup,is_logged_in } from '../api/routes/auth';
+import { save_user } from '../helper';
 const get_form_data = (e) => {
     let fd = new FormData(e.target);
     return {
@@ -24,7 +25,7 @@ export default function (props)
         e.preventDefault();
         login(get_form_data(e))
         .then(res => {
-            props.set_user(res);
+            save_user(res);
             history.push('/home');
         })
         .catch(err => console.log(err));

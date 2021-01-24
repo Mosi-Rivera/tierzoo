@@ -4,7 +4,14 @@ export const inc_level = createAction('inc_level');
 const state = null;
 export default createReducer(state,{
     [set_info.type]: (state,data) => {
-        state = data.payload;
+        if (state && state._id === data.payload._id)
+        {
+            let level = state.level;
+            state = data.payload;
+            state.level = level;
+        }
+        else
+            state = data.payload;
         return state;
     },
     [inc_level.type]: (state,data) => {

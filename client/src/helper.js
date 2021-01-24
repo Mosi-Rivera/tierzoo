@@ -4,20 +4,23 @@ import {set_inventory} from './redux/reducers/r_inventory';
 import {set_user} from './redux/reducers/r_user';
 import { set_collect_timer } from "./redux/reducers/r_idle";
 
+export function save_user(user,cb)
+{
+    let team = user.team;
+    delete user.team;
+    store.dispatch(set_inventory(user.inventory));
+    delete user.inventory;
+    store.dispatch(set_collect_timer(user.idle?.last_collect));
+    delete user.idle;
+    store.dispatch(set_user(user));
+    if (cb)
+        cb(user,team);   
+}
+
 export function check_logged_in(history,cb,get_team = false)
 {
     is_logged_in(get_team)
-    .then(res => {
-        let team = res.team;
-        delete res.team;
-        store.dispatch(set_inventory(res.inventory));
-        delete res.inventory;
-        store.dispatch(set_collect_timer(res.idle?.last_collect));
-        delete res.idle;
-        store.dispatch(set_user(res));
-        if (cb)
-            cb(res,team);
-    })
+    .then(res => save_user(res,cb))
     .catch((err) => {console.log(err);  history.push('/')})
 }
 

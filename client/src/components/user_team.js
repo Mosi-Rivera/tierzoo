@@ -47,7 +47,10 @@ export default function(props)
                             set_selected_index(i);
                             dispatch(set(modal_enum.heroes));
                         }} key={i} className='empty'>
-                            <div>{i + 1}</div>
+                            <span className='level'>none</span>
+                            <span className='c-question'>
+                                ?
+                            </span>
                         </li>
                     return <li 
                             onClick={() => handle_remove(i,hero)}
@@ -59,7 +62,6 @@ export default function(props)
                             <span className='c-image'>
                                 <img src={image_configs[hero.name]?.src}/>
                             </span>
-                            <span className='power'>{hero.power}</span>
                         </div>
                     </li>
                 })
