@@ -7,6 +7,7 @@ const User = require('../models/user');
 const {exponential_growth} = require('../helpers');
 const { get_random_hero_index, summon_hero, summon_multiple_heroes } = require('../game_methods/summon');
 const {HeroStats} = require('../game_methods/classes');
+const { essence_cost, gold_cost, exp_cost } = require('../game_methods/leveling');
 router.get('/info', is_logged_in(), async (req,res) => {
     try
     {
@@ -17,7 +18,7 @@ router.get('/info', is_logged_in(), async (req,res) => {
         let hero = await HeroData.findOne({_id: id}).populate('data');
         if (!hero)
             throw new Error('Invalid id.');
-        return res.status(200).json(new HeroStats(hero));
+        return res.status(200).json(new HeroStats(hero,true));
     }
     catch(err)
     {
@@ -42,15 +43,15 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
         let inventory_update = {};
         if (hero.level % 20 == 0)
         {
-            let essence = ((hero/20) * 40) * 2.5;
+            let essence = essence_cost(hero.level);
             if (inventory.essence < essence)
                 throw new Error('Not enough materials.');
             inventory_update['essence'] = inventory.essence - essence;
         }
         let new_level = Math.min(hero.level + 1, 220); 
 
-        const gold = Math.floor(exponential_growth(23,.6,new_level - 1));
-        const exp = Math.floor(exponential_growth(89,.1,new_level - 1));
+        const gold = gold_cost(hero.level);
+        const exp = exp_cost(hero.level);
 
         if (inventory.gold < gold || inventory.exp < exp)
             throw new Error('Not enough materials.');
@@ -60,9 +61,10 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
             id,
             {$inc: {level: hero.level + 1 > 220 ? 0 : 1 }},
             {new: true}
-        ).populate('hero');
+        ).populate('data');
+        console.log(result);
         await User.updateOne({_id: req.user._id},inventory_update);
-        return res.status(200).json(new HeroStats(result));
+        return res.status(200).json(new HeroStats(result,true));
     }
     catch(err)
     {
