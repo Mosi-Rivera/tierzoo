@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { level_up } from '../api/routes/hero';
 import image_configs from '../sprites/config';
-import {close, modal_enum,set} from '../redux/reducers/r_modals';
-import {inc_level, set_info} from '../redux/reducers/r_hero_info';
-import {useSelector,useDispatch} from 'react-redux'
-import { string_to_number_formatter } from '../helper';
+import { close, modal_enum,set } from '../redux/reducers/r_modals';
+import { inc_level, set_info } from '../redux/reducers/r_hero_info';
+import { inc_item } from '../redux/reducers/r_inventory';
+import { useSelector,useDispatch } from 'react-redux'
+import { string_to_number_formatter, debounce } from '../helper';
+import store from '../redux/store';
+import { set_level } from '../redux/reducers/r_heroes';
 const stat_keys = [
     'hp',
     'atk',
@@ -18,6 +21,48 @@ const stat_keys = [
     'pr',
     'll',
 ];
+let level_sum       = 0;
+
+const handle_level_up = debounce(async () => {
+    let {hero_info} = store.getState();
+    if (!hero_info)
+        return;
+    if (!level_sum)
+        return;
+    let levels = level_sum;
+    try
+    {
+        let _info = await level_up(hero_info?._id,levels);
+        store.dispatch(set_info(_info));
+        store.dispatch(set_level({index: _info._id,value: _info.level}));
+        level_sum = 0;
+    }
+    catch(err)
+    {
+        console.log(err);
+        store.dispatch(inc_level(-levels));
+        level_sum = 0;
+    }
+},
+400,
+() => {
+    let {inventory,hero_info} = store.getState();
+    if (!inventory || !hero_info) return false;
+    if (
+        inventory.gold >= hero_info.level_gold &&
+        inventory.exp >= hero_info.level_exp &&
+        inventory.essence >= hero_info.level_essence
+        )
+    {
+        store.dispatch(inc_item({ key: 'gold',     value: -hero_info.level_gold      }));
+        store.dispatch(inc_item({ key: 'exp',      value: -hero_info.level_exp       }));
+        store.dispatch(inc_item({ key: 'essence',  value: -hero_info.level_essence   }));
+        store.dispatch(inc_level(1));
+        level_sum++;
+        return true;
+    }
+    return false;
+})
 
 export default function (props)
 {
@@ -26,20 +71,7 @@ export default function (props)
     const active = useSelector(state => state.modals.active);
     const handle_close = () => dispatch(close());
     const inventory = useSelector(state => state.inventory);
-    const handle_level_up = async () => {
-        dispatch(inc_level(1));
-        try
-        {
-            let _info = await level_up(info?._id);
-            console.log(_info);
-            dispatch(set_info(_info));
-        }
-        catch(err)
-        {
-            console.log(err);
-            dispatch(inc_level(-1));
-        }
-    }
+    useEffect(() => level_sum = 0,[]);
     return <div>
         <div className={'backdrop ' + (active === modal_enum.info ? 'show' : '')} onClick={handle_close}></div>
         <div  id='hero-info' className={'slider-right ' + (active === modal_enum.info ? 'show' : '')}>

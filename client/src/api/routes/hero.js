@@ -13,9 +13,11 @@ export function hero_info(id)
     .then(res => res.json());
 }
 
-export function level_up(id)
+export function level_up(id,levels)
 {
-    return fetch(BASE_URL + '/hero/level_up?id=' + id,{
+    if (!levels || !id)
+        throw new Error('Invalid parameters');
+    return fetch(`${BASE_URL}/hero/level_up?id=${id}&levels=${levels}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

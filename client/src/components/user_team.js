@@ -15,9 +15,13 @@ export default function(props)
         let index = selected_index;
         try
         {
-            dispatch(set_hero({index, hero: data}));
-            await set_team_position(selected_index,data._id);
+            console.log(data);
+            dispatch(set_hero({
+                index,
+                hero: data
+            }));
             dispatch(close());
+            await set_team_position(selected_index,data._id);
         }
         catch(err)
         {
@@ -29,7 +33,7 @@ export default function(props)
         try
         {
             dispatch(remove_hero(i));
-            dispatch(await remove_team_position(i));
+            await remove_team_position(i);
         }
         catch(err)
         {
@@ -39,33 +43,34 @@ export default function(props)
     }
     return <div>
         <SliderHeroes on_select={on_select}/>
-        <ul className='c-team'>
-            {
-                team.map((hero,i) => {
-                    if (!hero)
-                        return <li onClick={() => {
-                            set_selected_index(i);
-                            dispatch(set(modal_enum.heroes));
-                        }} key={i} className='empty'>
-                            <span className='level'>none</span>
-                            <span className='c-question'>
-                                ?
-                            </span>
+        <div className='c-c-team'>
+            <ul className='c-team'>
+                {
+                    team.map((hero,i) => {
+                        if (!hero)
+                            return <li onClick={() => {
+                                set_selected_index(i);
+                                dispatch(set(modal_enum.heroes));
+                            }} key={i} className='empty'>
+                                <span className='level'>none</span>
+                                <span className='c-question'>
+                                    ?
+                                </span>
+                            </li>
+                        return <li 
+                                onClick={() => handle_remove(i,hero)}
+                                key={i}
+                                >
+                            <div>
+                                <span className='level'>Lv. {hero.level}</span>
+                                <span className={'image-container tier-' + hero.tier}>
+                                    <img src={image_configs[hero.name]?.src}/>
+                                </span>
+                            </div>
                         </li>
-                    return <li 
-                            onClick={() => handle_remove(i,hero)}
-                            key={i}
-                            className={'tier-' + hero.tier}
-                            >
-                        <div>
-                            <span className='level'>Lv. {hero.level}</span>
-                            <span className='c-image'>
-                                <img src={image_configs[hero.name]?.src}/>
-                            </span>
-                        </div>
-                    </li>
-                })
-            }
-        </ul>
+                    })
+                }
+            </ul>
+        </div>
     </div> 
 }

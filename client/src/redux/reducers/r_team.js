@@ -11,6 +11,7 @@ export default createReducer(store,{
     },
     [set_hero.type]: (state,data) => {
         const {index,hero} = data.payload;
+        console.log(hero,state[index]);
         state[index] = hero;
         return state;
     },
