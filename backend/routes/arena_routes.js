@@ -61,6 +61,7 @@ router.post('/set_team_position', is_logged_in(), async (req,res) => {
         await User.updateOne({_id: req.user._id},{
             ['team.' + position]: data._id
         });
+        console.log(data);
         return res.status(200).json(data);
     }
     catch(err)

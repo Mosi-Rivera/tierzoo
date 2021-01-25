@@ -31,40 +31,46 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
     try
     {
         const id = req.query.id;
-        if (!mongoose.Types.ObjectId.isValid(id))
-            throw new Error('Invalid id.');
+        const levels = Number.parseInt(req.query.levels);
+        if (!mongoose.Types.ObjectId.isValid(id) || levels <= 0)
+            throw new Error('Invalid id or levels.');
         let hero = await HeroData.findOne({_id: id});
-        console.log('passed.',id,hero);
         if (!hero)
             throw new Error('Invalid id.');
         else if (hero.level >= 220)
             throw new Error('Already the highest possible level.');
         let inventory = (await User.findOne({_id: req.user._id},{inventory: 1})).inventory;
-        let inventory_update = {};
-        if (hero.level % 20 == 0)
+        let inventory_update = {
+            ['inventory.essence']: 0,
+            ['inventory.exp']: 0,
+            ['inventory.gold']: 0
+        };
+        let level = hero.level;
+        for (let i = levels,gold,exp,essence; i--;)
         {
-            let essence = essence_cost(hero.level);
-            if (inventory.essence < essence)
-                throw new Error('Not enough materials.');
-            inventory_update['essence'] = inventory.essence - essence;
+            gold = gold_cost(level);
+            exp = exp_cost(level);
+            essence = essence_cost(level);
+            if (
+                level >= 100 ||
+                inventory.essence   < Math.abs(inventory_update['inventory.essence'])   + essence   ||
+                inventory.exp       < Math.abs(inventory_update['inventory.exp'])       + exp       ||
+                inventory.gold      < Math.abs(inventory_update['inventory.gold'])      + gold
+            ) break;
+            inventory_update['inventory.essence']   -= essence;
+            inventory_update['inventory.exp']       -= exp;
+            inventory_update['inventory.gold']      -= gold;
+            level++;
         }
-        let new_level = Math.min(hero.level + 1, 220); 
-
-        const gold = gold_cost(hero.level);
-        const exp = exp_cost(hero.level);
-
-        if (inventory.gold < gold || inventory.exp < exp)
-            throw new Error('Not enough materials.');
-        inventory_update['inventory.gold'] = inventory.gold - gold;
-        inventory_update['inventory.exp'] = inventory.exp - exp;
+        if (level === hero.level)
+            throw new Error('Lacking materials.');
         const result = await HeroData.findByIdAndUpdate(
             id,
-            {$inc: {level: hero.level + 1 > 220 ? 0 : 1 }},
+            {$inc: { level: level - hero.level }},
             {new: true}
         ).populate('data');
-        console.log(result);
-        await User.updateOne({_id: req.user._id},inventory_update);
-        return res.status(200).json(new HeroStats(result,true));
+        await User.updateOne({_id: req.user._id},{$inc: inventory_update});
+        return res.status(200).json(new HeroStats(result));
     }
     catch(err)
     {

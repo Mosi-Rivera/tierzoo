@@ -9,7 +9,7 @@ const { get_rewards } = require('../game_methods/idle');
 router.get('/heroes', is_logged_in(), async (req,res) => {
     try
     {
-        return res.status(200).json(await HeroData.find({owner_id: req.user._id},{name: 1, tier: 1}));
+        return res.status(200).json(await HeroData.find({owner_id: req.user._id},{name: 1, tier: 1, level: 1}));
     }
     catch(err)
     {

@@ -3,18 +3,12 @@ const { gold_cost, exp_cost, essence_cost } = require('./leveling');
 
 class HeroStats
 {
-    constructor(hero,show_level_cost)
+    constructor(hero)
     {
         this.level      = hero.level;
         this._id        = hero._id;
         this.tier       = hero.tier;
         this.name       = hero.name;
-        if (show_level_cost)
-        {
-            this.level_gold     = gold_cost(hero.level);
-            this.level_exp      = exp_cost(hero.level);
-            this.level_essence  = essence_cost(hero.level);
-        }
         this.hp         = Math.floor(HeroStats.calc_health(hero));
         this.atk        = Math.floor(HeroStats.calc_attack(hero));
         this.def        = Math.floor(HeroStats.calc_defense(hero));
