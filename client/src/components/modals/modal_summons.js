@@ -10,10 +10,13 @@ export default function (props)
     let summons = modals.summons;
     return <Modal show={modals.active === modal_enum.summons} onHide={() => dispatch(close())} centered>
         <Modal.Body>
-            <ul>
+            <ul className='item-list'>
                 {
                     summons && summons.map((hero,i) => 
-                        <li key={i}>{hero.name}</li>
+                        <li key={i}>
+                            <span></span>
+                            <span>{hero.name}</span>
+                        </li>
                     )
                 }
             </ul>

@@ -52,20 +52,20 @@ export default function(props)
                                 set_selected_index(i);
                                 dispatch(set(modal_enum.heroes));
                             }} key={i} className='empty'>
-                                <span className='level'>none</span>
-                                <span className='c-question'>
-                                    ?
+                                <span className='image-container empty tier-none'>
+                                    <span className='question-none'>?</span>
                                 </span>
+                                <span className='level'>none</span>
                             </li>
                         return <li 
                                 onClick={() => handle_remove(i,hero)}
                                 key={i}
                                 >
                             <div>
-                                <span className='level'>Lv. {hero.level}</span>
                                 <span className={'image-container tier-' + hero.tier}>
                                     <img src={image_configs[hero.name]?.src}/>
                                 </span>
+                                <span className='level'>Lv. {hero.level}</span>
                             </div>
                         </li>
                     })

@@ -41,20 +41,34 @@ export default function (props)
     },[]);
     return <div className='pseudo-body'>
         <Row>
-            <Col sm={6}>
+            <Col md={5}>
                 <UserTeam/>
             </Col>
-            <Col sm={6}>
-            <span>refresh</span>
-                <ul>
-                    {
-                        arena.opponents.map((opp,i) =><li key={i}>
-                            <span className='username'>{opp.username}</span>
-                            <span className='elo'>{opp.arena.elo}</span>
-                            <span className='view'>view</span>
-                        </li>)
-                    }
-                </ul>
+            <Col md={7}>
+                <div className='c-challenge'>
+                    <div className='c-header shadow'>
+                        <span className='title'>CHALLENGE</span>
+                        <span className='refresh'>
+                            <span>refresh</span>
+                        </span>
+                    </div>
+                    <div className='c-opponents'>
+                        <Row>
+                            {
+                                arena?.opponents.map((opp,i) => <Col key={i} sm={6}>
+                                    <div className='c-opponent-data shadow'>
+                                        <span className='username'>{opp.username}</span>
+                                        <span className='elo'>
+                                            <span className='icon elo-icon'></span>
+                                            {opp.arena.elo}
+                                        </span>
+                                        <span className='victories'>{opp.arena.wins}</span>
+                                    </div>
+                                </Col>)
+                            }
+                        </Row>
+                    </div>
+                </div>
             </Col>
         </Row>
     </div>

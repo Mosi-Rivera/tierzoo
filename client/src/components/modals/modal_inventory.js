@@ -10,7 +10,7 @@ export default function (props)
   const active = useSelector(state => state.modals.active);
     return <Modal show={active === modal_enum.inventory} onHide={() => dispatch(close())} centered>
         <Modal.Body>
-          <ul>
+          <ul className='item-list'>
             {
               inventory && Object.keys(inventory).map((key,i) => {
                 let value = inventory[key];
