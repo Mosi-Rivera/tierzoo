@@ -15,10 +15,13 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
     
         let opponents = await User.aggregate([
             {$match: { _id: {$ne: user._id} }},
-            {$project: {diff: {$abs: {$subtract: [user.arena.elo, '$arena.elo']}}, 'arena.elo': 1, username: 1 }},
+            {$project: {diff: {$abs: {$subtract: [user.arena.elo, '$arena.elo']}}, 'team': 1, 'arena.wins': 1, 'arena.elo': 1, username: 1 }},
             {$sort: {diff: 1}},
-            {$limit: 5}
+            {$limit: 5},
         ]);
+
+        opponents = await User.populate(opponents,{path: 'team', select: 'name tier level'});
+
         return res.status(200).json(opponents);
     }
     catch(err)
