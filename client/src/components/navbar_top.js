@@ -9,12 +9,12 @@ export default function (props)
     const inventory = useSelector(state => state.inventory);
     return <nav id='navbar-top'>
         <ul>
-            <li onClick={() => set(modal_enum.profile)}>{user?.username}</li>
+            <li className='hover' onClick={() => set(modal_enum.profile)}>{user?.username}</li>
         </ul>
         <ul className='c-inventory'>
             <li>
                 <span className='icon scroll-icon'></span>
-                <span>{string_to_number_formatter(inventory?.scrolls)}</span>
+                <span>{inventory?.scrolls}</span>
             </li>
             <li>
                 <span className='icon gold-icon'></span>
@@ -22,7 +22,7 @@ export default function (props)
             </li>
             <li>
                 <span className='icon gem-icon'></span>
-                <span>{string_to_number_formatter(inventory?.gems)}</span>
+                <span>{inventory?.gems}</span>
             </li>
         </ul>
     </nav>

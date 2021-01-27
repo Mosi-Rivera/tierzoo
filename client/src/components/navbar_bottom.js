@@ -40,22 +40,22 @@ export default function (props)
     }
     return <nav id='navbar-bottom'>
         <ul>
-            <Link to='/summon'><li className='icon summon-icon'>
+            <Link to='/summon'><li className='icon summon-icon hover'>
                 <span>summon</span>
             </li></Link>
-            <li onClick={handle_inventory} className='icon inventory-icon'>
+            <li onClick={handle_inventory} className='icon inventory-icon hover'>
                 <span>inventory</span>
             </li>
         </ul>
-        <div className='icon collect-icon' onClick={handle_rewards}>
+        <div className='icon collect-icon hover' onClick={handle_rewards}>
             <span>collect</span>
             <span className='collect-timer'>{collect_secs_to_str(idle.timer)}</span>
         </div>
         <ul>
-            <Link to='/heroes'><li className='icon hero-icon'>
+            <Link to='/heroes'><li className='icon hero-icon hover'>
                 <span>heroes</span>
             </li></Link>
-            <Link to='arena'><li className='icon arena-icon'>
+            <Link to='arena'><li className='icon arena-icon hover'>
                 <span>arena</span>    
             </li></Link>
         </ul>

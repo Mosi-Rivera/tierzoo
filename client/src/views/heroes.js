@@ -1,4 +1,4 @@
-import React, {useEffect,useCallback} from 'react';
+import React, {useEffect,useCallback, useState} from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import {get_heroes} from '../api/routes/user';
 import image_configs from '../sprites/config';
@@ -14,6 +14,7 @@ export default function(props)
     const history = useHistory();
     const dispatch = useDispatch();
     const heroes = useSelector(state => state.heroes);
+    const [ascend,set_ascend] = useState(false);
     const handle_open_hero_info = useCallback(throttle(async (id) => {
         try
         {
@@ -39,6 +40,18 @@ export default function(props)
         });
     },[]);
     return <div id='heroes' className='pseudo-body'>
+        <div>
+            <div onClick={() => set_ascend(!ascend)}>
+                <span>ASCEND</span>
+            </div>
+            {
+                ascend && <div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            }
+        </div>
         <div className='c-heroes'>
             {
                 heroes?.map((hero,i) => {

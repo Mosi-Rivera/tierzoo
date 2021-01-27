@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {is_logged_in} from '../api/routes/auth';
+import {useSelector,useDispatch} from 'react-redux';
 import {Carousel, Col,Row} from 'react-bootstrap';
 import {
     summon_multiple_gems,
@@ -9,29 +10,32 @@ import {
 } from '../api/routes/hero';
 import {useHistory} from 'react-router-dom';
 import { check_logged_in } from '../helper';
+import { modal_enum, set, set_summons } from '../redux/reducers/r_modals';
+import { inc_item } from '../redux/reducers/r_inventory';
 export default function(props)
 {
     const history = useHistory();
+    const dispatch = useDispatch();
+    const inventory = useSelector(state => state.inventory);
+    const modals = useSelector(state => state.modals);
     const handle_single_summon = async () => {
         try
         {
             let result;
-            if (props.inventory?.scrolls >= 1)
+            if (inventory?.scrolls >= 1)
             {
                 result = await summon_single_scrolls();
-                let inv = {...props.inventory};
-                inv.scrolls -= 1;
-                props.set_inventory(inv);
+                dispatch(inc_item({key: 'scrolls', value: -1}));
             }
-            else
+            else if (inventory?.gems >= 300)
             {
                 result = await summon_single_gems();
-                let inv = {...props.inventory};
-                inv.gems -= 300;
-                props.set_inventory(inv);
+                dispatch(inc_item({key: 'gems', value: -300}));
             }
-            props.set_summons(result);
-            props.show_summons();
+            else
+                return;
+            dispatch(set_summons(result));
+            dispatch(set(modal_enum.summons));
         }
         catch(err)
         {
@@ -42,22 +46,20 @@ export default function(props)
         try
         {
             let result;
-            if (props.inventory?.scrolls >= 10)
+            if (inventory?.scrolls >= 10)
             {
                 result = await summon_multiple_scrolls();
-                let inv = {...props.inventory};
-                inv.scrolls -= 10;
-                props.set_inventory(inv);
+                dispatch(inc_item({key: 'scrolls', value: -10}));
             }
-            else
+            else if (inventory?.gems >= 2700)
             {
                 result = await summon_multiple_gems();
-                let inv = {...props.inventory};
-                inv.gems -= 2700;
-                props.set_inventory(inv);
+                dispatch(inc_item({key: 'gems', value: -2700}));
             }
-            props.set_summons(result);
-            props.show_summons();
+            else
+                return;
+            dispatch(set_summons(result));
+            dispatch(set(modal_enum.summons));
         }
         catch(err)
         {
@@ -88,7 +90,7 @@ export default function(props)
                             </div>
                             <span>
                                 {
-                                    props.inventory?.scrolls > 1 ? 
+                                    inventory?.scrolls >= 1 ? 
                                     [<span className='icon scroll-icon' key={0}></span>,'1'] : 
                                     [<span className='icon gem-icon' key={0}></span>,'300']
                                 }
@@ -100,7 +102,7 @@ export default function(props)
                             </div>
                             <span>
                                 {
-                                    props.inventory?.scrolls > 1 ? 
+                                    inventory?.scrolls >= 10 ? 
                                     [<span className='icon scroll-icon' key={0}></span>, '10'] : 
                                     [<span className='icon gem-icon' key={0}></span>,'2700']
                                 }

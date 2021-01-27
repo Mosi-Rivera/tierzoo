@@ -46,9 +46,9 @@ export default function (props)
             </Col>
             <Col md={7}>
                 <div className='c-challenge'>
-                    <div className='c-header shadow'>
+                    <div className='c-header shadow border-light-shadow'>
                         <span className='title'>CHALLENGE</span>
-                        <span className='refresh'>
+                        <span className='refresh border-light-shadow'>
                             <span>refresh</span>
                         </span>
                     </div>
@@ -56,7 +56,7 @@ export default function (props)
                         <Row>
                             {
                                 arena?.opponents.map((opp,i) => <Col key={i} sm={6}>
-                                    <div className='c-opponent-data shadow'>
+                                    <div className='c-opponent-data shadow border-light-shadow'>
                                         <span className='username'>{opp.username}</span>
                                         <span className='elo'>
                                             <span className='icon elo-icon'></span>

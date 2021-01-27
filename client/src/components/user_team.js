@@ -55,7 +55,7 @@ export default function(props)
                                 <span className='image-container empty tier-none'>
                                     <span className='question-none'>?</span>
                                 </span>
-                                <span className='level'>none</span>
+                                <span className='level border-light-shadow'>none</span>
                             </li>
                         return <li 
                                 onClick={() => handle_remove(i,hero)}
@@ -65,7 +65,7 @@ export default function(props)
                                 <span className={'image-container tier-' + hero.tier}>
                                     <img src={image_configs[hero.name]?.src}/>
                                 </span>
-                                <span className='level'>Lv. {hero.level}</span>
+                                <span className='level border-light-shadow'>Lv. {hero.level}</span>
                             </div>
                         </li>
                     })
