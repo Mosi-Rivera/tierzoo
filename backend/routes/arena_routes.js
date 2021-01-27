@@ -17,7 +17,7 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
             {$match: { _id: {$ne: user._id} }},
             {$project: {diff: {$abs: {$subtract: [user.arena.elo, '$arena.elo']}}, 'team': 1, 'arena.wins': 1, 'arena.elo': 1, username: 1 }},
             {$sort: {diff: 1}},
-            {$limit: 5},
+            {$limit: 10},
         ]);
 
         opponents = await User.populate(opponents,{path: 'team', select: 'name tier level'});

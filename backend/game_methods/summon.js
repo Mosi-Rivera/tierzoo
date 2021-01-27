@@ -9,7 +9,7 @@ const get_random_hero_index = () => {
     if (Math.random() < elite_rate)
         return 10 + Math.round(Math.random() * (elite_length - 0.9));
     else
-        return Math.floor(Math.random() * (rare_length - 1));
+        return Math.round(Math.random() * (rare_length - 0.9));
 }
 
 const summon_hero = async (id) => {
