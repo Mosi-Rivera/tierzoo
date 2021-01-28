@@ -21,7 +21,7 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
         ]);
 
         opponents = await User.populate(opponents,{path: 'team', select: 'name tier level'});
-
+        console.log(opponents);
         return res.status(200).json(opponents);
     }
     catch(err)
