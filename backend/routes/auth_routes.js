@@ -80,4 +80,9 @@ router.get('/is_logged_in',is_logged_in(),async (req,res) => {
     }
 });
 
+router.get('/logout', is_logged_in(), (req,res) => {
+    req.logout();
+    res.status(200).json({message: 'logged out.'});
+})
+
 module.exports = router;
