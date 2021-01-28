@@ -31,17 +31,18 @@ router.get('/info', is_logged_in(), async (req,res) => {
 router.post('/ascend', is_logged_in(), async (req,res) => {
     const id = req.body.id;
     const fodder = req.body.fodder;
+    console.log(id,fodder);
     try
     {
         if (
             fodder.length !== 2 || 
             !mongoose.Types.ObjectId.isValid(fodder[0]) || 
-            !mongoose.Types.ObjectId.isValid(1)
+            !mongoose.Types.ObjectId.isValid(fodder[1])
         )
             throw new Error("Invalid fodder.");
         if (!mongoose.Types.ObjectId.isValid(id))
             throw new Error("Invalid id");
-        let data = await HeroData.find({_id: id},{tier: 1});
+        let data = await HeroData.findOne({_id: id},{tier: 1});
         if (!data || data.tier > 2)
             throw new Error("Invalid Id.");
         let data_arr = await HeroData.find({_id: { $in: fodder }, tier: data.tier});
@@ -49,7 +50,7 @@ router.post('/ascend', is_logged_in(), async (req,res) => {
             throw new Error("Invalid fodder");
         await HeroData.updateOne({_id: id}, {$inc: {tier: 1}});
         await HeroData.deleteMany({ _id: { $in: fodder } });
-        res.status(200).json({message: 'ok'});
+        res.status(200).json({tier: data.tier + 1});
     }
     catch(err)
     {
