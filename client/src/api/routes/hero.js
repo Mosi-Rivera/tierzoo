@@ -1,5 +1,19 @@
 import {BASE_URL,error_handler} from '../environment';
 
+export function ascend_hero(data)
+{
+    return fetch(BASE_URL + '/hero/ascend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    })
+    .then(error_handler)
+    .then(res => res.json());
+}
+
 export function hero_info(id)
 {
     return fetch(BASE_URL + '/hero/info?id=' + id,{

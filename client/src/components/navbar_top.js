@@ -21,7 +21,7 @@ export default function (props)
                 <span>{string_to_number_formatter(inventory?.gold)}</span>
             </li>
             <li>
-                <span className='icon gem-icon'></span>
+                <span className='icon gems-icon'></span>
                 <span>{inventory?.gems}</span>
             </li>
         </ul>

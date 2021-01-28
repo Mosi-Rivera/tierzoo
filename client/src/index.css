@@ -167,8 +167,8 @@ ul {
 .shadow
 {
   -webkit-box-shadow: 0px 6px 10px 0px rgb(0 0 0 / 36%);
-    -moz-box-shadow: 0px 6px 10px 0px rgb(0 0 0 / 36%);
-    box-shadow: 0px 6px 10px 0px rgb(0 0 0 / 36%);
+  -moz-box-shadow: 0px 6px 10px 0px rgb(0 0 0 / 36%);
+  box-shadow: 0px 6px 10px 0px rgb(0 0 0 / 36%);
 }
 
 .image-container
@@ -568,6 +568,74 @@ a:hover
 }
 
 /* HEROS */
+#heroes
+{
+  position: relative;
+}
+
+.c-ascend-hero
+{
+  width: 100%;
+  max-width: 250px;
+  height: 155px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-right: 0px;
+  display: flex;
+}
+
+.ascend-hero
+{
+  width: 45%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.ascend-hero::before
+{
+  content: "";
+  display: inline-block;
+  padding-top: 90%;
+}
+
+.c-ascend-fodder
+{
+  width: 55%;
+  padding-left: 1rem;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.c-ascend-fodder > div
+{
+  width: 50%;
+  padding-right: .5rem;
+}
+
+.c-ascend-fodder > div > .image-container,
+.ascend-hero .image-container
+{
+  display: inline-block;
+  width: 100%;
+  background: #181818;
+  background-size: calc(20% - 0.2px) calc(20% - 0.2px);
+  cursor: pointer;
+}
+
+.c-ascend-fodder > div > .image-container.tier-none,
+.ascend-hero .image-container.tier-none
+{
+  cursor: default;
+}
+
+.c-ascend-fodder > div > .image-container::before,
+.ascend-hero .image-container::before
+{
+  content: "";
+  display: inline-block;
+  padding-top: 100%;
+}
 
 .c-heroes
 {
@@ -576,6 +644,65 @@ a:hover
   flex-wrap: wrap;
   max-width: 1440px;
   margin: 0px auto;
+  padding-top: 55px !important;
+}
+
+.heroes-bar.ascend
+{
+  height: 200px;
+}
+
+.c-heroes.ascend
+{
+  padding-top: 200px !important;
+}
+
+.heroes-bar
+{
+  left: 0;
+  right: 0;
+  top: 48px;
+  height: 55px;
+  position: fixed;
+  z-index: 1;
+  background-color: #121212;
+  transition: height 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.c-ascend {
+  margin: 0 auto;
+  margin-top: .5rem;
+  width: 150px;
+  background-color: rgba(0, 0, 0, 0.384);
+  padding: 0.1rem;
+  border-radius: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.178);
+  box-sizing: content-box;
+}
+
+.c-ascend span
+{
+  display: block;
+  width: 100px;
+  border-radius: 5px;
+  background-color: #242424;
+  text-align: center;
+  font-weight: 700;
+  padding: .25rem 0px;
+  cursor: pointer;
+  transition: background-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              border-color 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.c-ascend.pressed
+{
+  background-color: rgba(0, 255, 34, 0.384);
+}
+.c-ascend.pressed span
+{
+  transform: translateX(50px);
 }
 
 .c-heroes .image-container
@@ -1058,8 +1185,8 @@ a:hover
   background-image: url('./icons/essence.png');
 }
 
-.gem-icon::after,
-[class~='inventory.gem-icon']::after
+.gems-icon::after,
+[class~='inventory.gems-icon']::after
 {
   background-image: url('./icons/gem.png');
 }
@@ -1135,7 +1262,7 @@ a:hover
 
 .tier-3
 {
-  background-image: linear-gradient(#777777 1px, transparent 1px), linear-gradient(90deg, #777777 1px, transparent 1px);
+  background-image: linear-gradient(#777777 1px, transparent 1px), linear-gradient(90deg, #777777 1px, transparent 1px) !important;
 }
 
 .tier-3::after
