@@ -11,6 +11,7 @@ import { set_opponents } from '../redux/reducers/r_arena';
 import { check_logged_in } from '../helper';
 import { set_team } from '../redux/reducers/r_team';
 import { set_all } from '../redux/reducers/r_heroes';
+import {set_enemy} from '../redux/reducers/r_arena';
 export default function (props)
 {
     const history = useHistory();
@@ -48,7 +49,7 @@ export default function (props)
                 <div className='c-challenge'>
                     <div className='c-header shadow border-light-shadow'>
                         <span className='title'>CHALLENGE</span>
-                        <span className='refresh border-light-shadow'>
+                        <span style={{alignSelf: 'flex-end'}} className='refresh reverse-border-light-shadow button'>
                             <span>refresh</span>
                         </span>
                     </div>
@@ -56,7 +57,12 @@ export default function (props)
                         <Row>
                             {
                                 arena?.opponents.map((opp,i) => <Col key={i} sm={6}>
-                                    <div className='c-opponent-data shadow border-light-shadow'>
+                                    <div onClick={
+                                        () => {
+                                            dispatch(set_enemy(opp));
+                                            dispatch(set(modal_enum.enemy_view));
+                                        }
+                                    } className='c-opponent-data shadow border-light-shadow'>
                                         <span className='username'>{opp.username}</span>
                                         <span className='elo'>
                                             <span className='icon elo-icon'></span>

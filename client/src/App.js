@@ -15,6 +15,7 @@ import NavbarTop from './components/navbar_top';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { tick } from './redux/reducers/r_idle';
+import ModalEnemyView from './components/modals/modal_enemy_view';
 let interval = null;
 function App() {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ function App() {
                   </Route>
                 </Switch>
               <HeroInfo/>
+              <ModalEnemyView/>
               <ModalInventory/>
               <ModalProfile/>
               <ModalSummons/>

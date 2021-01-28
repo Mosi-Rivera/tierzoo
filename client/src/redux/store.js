@@ -1,4 +1,8 @@
-import {configureStore,combineReducers} from '@reduxjs/toolkit';
+import {
+    configureStore,
+    combineReducers,
+    createAction
+} from '@reduxjs/toolkit';
 import user         from './reducers/r_user';
 import inventory    from './reducers/r_inventory';
 import team         from './reducers/r_team';
@@ -8,15 +12,27 @@ import modals       from './reducers/r_modals';
 import arena        from './reducers/r_arena';
 import idle         from './reducers/r_idle';
 
+export const USER_LOGOUT = createAction('USER_LOGOUT');
+
+const app_reducers = combineReducers({
+    user,
+    inventory,
+    team,
+    heroes,
+    arena,
+    hero_info,
+    modals,
+    idle
+})
+
+const root_reducer = (state,action) => {
+    if (action.type === USER_LOGOUT.type) {
+        state = undefined;
+    }
+
+    return app_reducers(state,action);
+}
+
 export default configureStore({
-    reducer: combineReducers({
-        user,
-        inventory,
-        team,
-        heroes,
-        arena,
-        hero_info,
-        modals,
-        idle
-    })
+    reducer: root_reducer
 });

@@ -103,6 +103,7 @@ export default function(props)
     const filter_ascend_list = (fodder) => set_filtered(
         heroes?.filter(
             elem => (
+                elem.tier !== 3 &&
                 (fodder[0] ? (
                     fodder[0].name === elem.name &&
                     fodder[0]._id !== elem._id &&
@@ -113,7 +114,7 @@ export default function(props)
             )
         )
     );
-    const reset_filter = () => set_filtered(heroes || []);
+    const reset_filter = () => set_filtered(heroes ? heroes.filter(elem => elem.tier !== 3) : []);
     useEffect(() => filter_ascend_list(ascend_fodder),[heroes]);
     useEffect(function()
     {

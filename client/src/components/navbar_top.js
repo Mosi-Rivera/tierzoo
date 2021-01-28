@@ -9,7 +9,7 @@ export default function (props)
     const inventory = useSelector(state => state.inventory);
     return <nav id='navbar-top'>
         <ul>
-            <li className='hover' onClick={() => set(modal_enum.profile)}>{user?.username}</li>
+            <li className='hover' onClick={() => dispatch(set(modal_enum.profile))}>{user?.username}</li>
         </ul>
         <ul className='c-inventory'>
             <li>

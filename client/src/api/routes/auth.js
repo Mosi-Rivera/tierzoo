@@ -53,3 +53,15 @@ export function is_logged_in(get_team)
     .then(error_handler)
     .then(res => res.json());;
 }
+
+export function logout()
+{
+    return fetch(BASE_URL + '/auth/logout',{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+    })
+    .then(error_handler)
+}

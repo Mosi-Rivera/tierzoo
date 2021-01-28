@@ -9,7 +9,8 @@ export const modal_enum = {
     reward: 3,
     summons: 4,
     profile: 5,
-    heroes: 6
+    heroes: 6,
+    enemy_view: 7
 }
 const state = {
     active: 0,
