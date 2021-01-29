@@ -27,6 +27,20 @@ ul {
   list-style-type: none;
 }
 
+input
+{
+  background-color: rgba(0, 0, 0, 0.281);
+  outline: none;
+  color: #DBDBDB;
+  border: none;
+  padding: .25rem .5rem;
+}
+
+input::placeholder
+{
+  color: #DBDBDB;
+}
+
 .border-light-shadow
 {
   border-bottom: 1px solid rgba(0, 0, 0, 0.418);
@@ -269,6 +283,42 @@ a
 a:hover
 {
   text-decoration: none;
+}
+
+/* LANDING */
+
+#landing .c-cta .image-container
+{
+  position: relative;
+  left: -15%;
+  width: 130%;
+  height: 100%;
+  display: block;
+  transform: scaleX(-1);
+}
+
+#landing .c-cta .image-container img
+{
+  bottom: calc(50% - 150px);
+}
+
+#landing
+{
+  min-height: 100vh;
+  display: flex;
+}
+
+#landing .c-cta
+{
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+#landing .c-cta .title
+{
+  padding-right: 2rem;
 }
 
 /* PSEUDO-BODY */
