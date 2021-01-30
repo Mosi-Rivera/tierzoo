@@ -1,3 +1,35 @@
+@keyframes move-idle
+{
+  from {background-position-x: 0px;}
+  to {background-position-x: -400%;}
+}
+
+@keyframes move-walk
+{
+  from {background-position-x: 0px;}
+  to {background-position-x: -500%;}
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #242424;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #303030;
+}
+
 html,body
 {
   margin: 0px;
@@ -287,25 +319,97 @@ a:hover
 
 /* LANDING */
 
-#landing .c-cta .image-container
+#navbar-top h5
 {
-  position: relative;
-  left: -15%;
-  width: 130%;
-  height: 100%;
-  display: block;
-  transform: scaleX(-1);
+  line-height: 48px;
+  padding-left: 1rem;
 }
 
-#landing .c-cta .image-container img
+#navbar-bottom .button
 {
-  bottom: calc(50% - 150px);
+  height: 35px;
+  line-height: 15px;
+  position: relative;
+  top: 5px;
+}
+
+#navbar-bottom .button span
+{
+  font-size: .8rem !important;
+  font-style: normal;
+}
+
+#landing .c-cta .image-container
+{
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+#landing .c-cta .image-container span
+{
+  width: 130%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  transform: translate(50vw, calc(-50% + 10%)) scaleX(-1);
+}
+
+#landing .c-cta .image-container span::before
+{
+  content: '';
+  display: inline-block;
+  padding-top: 100%;
+}
+
+#landing .c-cta .image-container .merchant-walk
+{
+  background-image: url("./merchant/walk.png");
+  animation: move-walk .5s steps(5) infinite;
+  background-size: 500%;
+  transform: translate(-15%, calc(-50% + 10%)) scaleX(-1);
+  transition: transform 1s ease-out;
+}
+
+#landing .c-cta .image-container .merchant-idle
+{
+  background-image: url("./merchant/idle.png");
+  animation: move-idle .5s steps(4) infinite;
+  background-size: 400%;
+  transform: translate(-15%, calc(-50% + 10%)) scaleX(-1);
+  transition: transform 1s ease-out;
 }
 
 #landing
 {
   min-height: 100vh;
+}
+
+form div
+{
   display: flex;
+  flex-flow: column;
+}
+
+form div input
+{
+  margin-top: 1rem !important;
+  padding: .5rem 1rem;
+}
+
+form div span
+{
+  text-align: center;
+  margin-top: .5rem;
+  cursor: pointer;
+}
+
+form div h3
+{
+  text-align: center;
 }
 
 #landing .c-cta
@@ -319,6 +423,16 @@ a:hover
 #landing .c-cta .title
 {
   padding-right: 2rem;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+#landing .c-cta .title h1
+{
+  font-size: 2.8rem;
+  font-weight: 700;
 }
 
 /* PSEUDO-BODY */
@@ -367,7 +481,8 @@ a:hover
   box-sizing: content-box;
 }
 
-#navbar-bottom span
+#navbar-bottom li span,
+#navbar-bottom div span
 {
   position: absolute;
   bottom: 9px;
@@ -855,21 +970,27 @@ a:hover
   padding: 1rem;
 }
 
+.navbar-bottom .button
+{
+
+}
+
 .button
 {
   width: fit-content !important;
   display: block;
-  background: #131313;
+  background: #0BC4E2;
+  color: white;
 }
 
 #hero-info .level-up-button,
 .button
 {
-  background: #181818;
+  background: #0BC4E2;
   width: fit-content;
   margin: 0 auto;
   padding: .5rem 2rem;
-  border-radius: 5px;
+  border-radius: 2px;
   cursor: pointer;
   transition: background 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
   -webkit-touch-callout: none; /* iOS Safari */
@@ -883,6 +1004,7 @@ a:hover
 #hero-info .level-up-button span,
 .button span
 {
+  position: unset;
   text-transform: uppercase;
   display: inline-block;
   white-space: nowrap;
@@ -905,7 +1027,7 @@ a:hover
 #hero-info .level-up-button:hover,
 .button:hover
 {
-  background: #111111;
+  background: #0bb2cc;
 }
 
 #hero-info .level-costs
@@ -1328,6 +1450,17 @@ a:hover
   .c-team .image-container .question-none
   {
     font-size: 15vw;
+  }
+
+  .c-cta
+  {
+    padding-top: 2rem;
+    justify-content: flex-start !important;
+  }
+
+  .c-cta .image-container
+  {
+    margin-top: 2rem;
   }
 }
 

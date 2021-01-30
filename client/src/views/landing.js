@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import { login, signup,is_logged_in } from '../api/routes/auth';
 import { save_user } from '../helper';
-import {Container,Col, Row} from 'react-bootstrap';
+import {Container,Col, Row, Modal} from 'react-bootstrap';
 
 const get_form_data = (e) => {
     let fd = new FormData(e.target);
@@ -10,9 +10,9 @@ const get_form_data = (e) => {
         username: fd.get('username'),
         password: fd.get('password'),
     }
-} 
+}
 
-export default function (props)
+function AuthModal(props)
 {
     const history = useHistory();
     const [show_signup,set_show_signup] = useState(true);
@@ -32,15 +32,65 @@ export default function (props)
         })
         .catch(err => console.log(err));
     }
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Body className='border-light-shadow'>
+          <div className='c-form'>
+                {
+                    show_signup ? <form onSubmit={handle_signup}>
+                        <div>
+                            <h3>Sign Up</h3>
+                            <input className='reverse-border-light-shadow' type='text' name='username' placeholder='username'/>
+                            <input className='reverse-border-light-shadow' type='password' name='password' placeholder='password'/>
+                            <input className='button reverse-border-light-shadow' type='submit' value='Sign Up'/>
+                            <span onClick={toggle_show_signup}>Already have an account?</span>
+                        </div>
+                    </form> : <form onSubmit={handle_login}>
+                        <div>
+                            <h3>Log In</h3>
+                            <input className='reverse-border-light-shadow' type='text' name='username' placeholder='username'/>
+                            <input className='reverse-border-light-shadow' type='password' name='password' placeholder='password'/>
+                            <input className='button reverse-border-light-shadow' type='submit' value='Log In'/>
+                            <span onClick={toggle_show_signup}>Don't have an account?</span>
+                        </div>
+                    </form>
+                }
+            </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
+export default function (props)
+{
+    const history = useHistory();
+    const [merchant_class,set_merchant_class] = useState('');
+    const [show_auth,set_show_auth] = useState(false);
     useEffect(function(){
+        let to_1 = setTimeout(() => {
+            set_merchant_class('merchant-idle'); to_1 = null;
+        },1000);
+        let to_2 = setTimeout(() => {
+            set_merchant_class('merchant-walk');
+            to_2 = null;
+        },0);
         is_logged_in()
         .then(() => history.push('/home'))
         .catch(err => console.log(err));
+        return function ()
+        {
+            clearTimeout(to_1);
+            clearTimeout(to_2);
+        }
     },[]);
     return <Container fluid>
         <nav id='navbar-top' className='shadow'>
             <h5>AFK ASSAULT</h5>
-            <div><span>PLAY NOW</span></div>
         </nav>
         <div id='landing' className='pseudo-body'>
             <div className='c-cta'>
@@ -53,32 +103,17 @@ export default function (props)
                     </Col>
                     <Col md={6}>
                         <span className='image-container'>
-                            <img src={'/assets/merchant/icon.png'}/>
+                            <span className={merchant_class}></span>
                         </span>
-                        {/* <div className='c-form'>
-                            {
-                                show_signup ? <form onSubmit={handle_signup}>
-                                    <input className='reverse-border-light-shadow' type='text' name='username' placeholder='username'/>
-                                    <input className='reverse-border-light-shadow' type='password' name='password' placeholder='password'/>
-                                    <input className='reverse-border-light-shadow' type='submit' value='Sign Up'/>
-                                    <span onClick={toggle_show_signup}>Already have an account?</span>
-                                </form> : <form onSubmit={handle_login}>
-                                    <input className='reverse-border-light-shadow' type='text' name='username' placeholder='username'/>
-                                    <input className='reverse-border-light-shadow' type='password' name='password' placeholder='password'/>
-                                    <input className='reverse-border-light-shadow' type='submit' value='Log In'/>
-                                    <span onClick={toggle_show_signup}>Don't have an account?</span>
-                                </form>
-                            }
-                        </div> */}
                     </Col>
                 </Row>
             </div>
         </div>
         <nav id='navbar-bottom' className='shadow'>
-            <ul>
-                <li><span className='icon arena-icon'></span>signup</li>
-                <li>login</li>
-            </ul>
+            <span onClick={() => set_show_auth(true)} className='button border-light-shadow'>
+                <span>PLAY NOW!</span>
+            </span>
         </nav>
+        <AuthModal show={show_auth} onHide={() => set_show_auth(false)}/>
     </Container>
 }
