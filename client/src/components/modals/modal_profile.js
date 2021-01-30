@@ -12,13 +12,11 @@ export default function (props)
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const active = useSelector(state => state.modals.active);
-    return <Modal show={active === modal_enum.profile} onHide={() => dispatch(close())} centered>
+    return <Modal show={active === modal_enum.profile} onHide={() => dispatch(close())} size={'sm'} centered>
         <Modal.Body>
-          <div>
+          <div style={{textAlign: 'center', marginBottom: '.5rem'}}>
             <h3>{user?.username}</h3>
-            <span>{user?.level}</span>
-            <span>{user?.arena.elo}</span>
-            <span>{Math.floor(((user?.arena.wins || 0) / (user?.arena.losses || 1)) * 100)}wr</span>
+            <span><span className='icon elo-icon' style={{padding: '.8rem'}}></span> {user?.arena.elo}</span>
           </div>
           <span onClick={() => logout()
             .then(() => {
