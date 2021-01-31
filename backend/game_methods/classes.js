@@ -3,7 +3,7 @@ const { gold_cost, exp_cost, essence_cost } = require('./leveling');
 
 class HeroStats
 {
-    constructor(hero)
+    constructor(hero,combat)
     {
         this.level      = hero.level;
         this._id        = hero._id;
@@ -20,6 +20,11 @@ class HeroStats
         this.hp_recovery= (hero.chestpiece * 10) + (hero.headpiece * 5);
         this.pr         = (hero.chestpiece * 20);
         this.ll         = (hero.weapon * 5);
+        if (combat)
+        {
+            this.max_hp = this.hp;
+            this.shield = 0;
+        }
     }
 
     static calc_hero_power(hero)

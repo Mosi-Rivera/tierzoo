@@ -21,7 +21,6 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
         ]);
 
         opponents = await User.populate(opponents,{path: 'team', select: 'name tier level'});
-        console.log(opponents);
         return res.status(200).json(opponents);
     }
     catch(err)
@@ -64,7 +63,6 @@ router.post('/set_team_position', is_logged_in(), async (req,res) => {
         await User.updateOne({_id: req.user._id},{
             ['team.' + position]: data._id
         });
-        console.log(data);
         return res.status(200).json(data);
     }
     catch(err)
@@ -77,11 +75,11 @@ router.post('/set_team_position', is_logged_in(), async (req,res) => {
 router.post('/battle', is_logged_in(), get_teams(), async (req,res) => {
     try
     {
-        console.log(res.locals);
         let user = res.locals.user;
         let other_user = res.locals.other_user;
         let resolve = elo(user.arena.elo,other_user.arena.elo);
         let result = simulate_combat(res.locals.ally_team,res.locals.enemy_team);
+        console.log(result);
         let new_elo = result.winner == 0 ? resolve(1,0) : resolve(0,1);
         await User.updateOne({ _id: req.user._id },{$inc: {'arena.elo': new_elo.a.difference}},{new: true});
         await User.updateOne({ _id: req.body.id  },{$inc: {'arena.elo': new_elo.b.difference}});

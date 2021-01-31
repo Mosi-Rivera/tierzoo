@@ -31,7 +31,6 @@ router.get('/info', is_logged_in(), async (req,res) => {
 router.post('/ascend', is_logged_in(), async (req,res) => {
     const id = req.body.id;
     const fodder = req.body.fodder;
-    console.log(id,fodder);
     try
     {
         if (
@@ -170,7 +169,6 @@ router.get('/normal_summon_hero_multiple_scrolls', is_logged_in(), async (req,re
             throw new Error('Insufficient scrolls.');
 
         let summon_arr = await summon_multiple_heroes(req.user._id);
-        console.log(summon_arr);
         await User.updateOne({_id: req.user._id},{ $inc: {'inventory.scrolls': -10} });
         return res.status(200).json(summon_arr);
     }

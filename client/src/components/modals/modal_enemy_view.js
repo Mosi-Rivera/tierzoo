@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { close,modal_enum } from '../../redux/reducers/r_modals';
 import image_configs from '../../sprites/config'; 
+import {battle} from '../../api/routes/arena';
 
 export default function(props)
 {
@@ -34,7 +35,7 @@ export default function(props)
                     }
                 </ul>
             </div>
-            <span className='button reverse-border-light-shadow'><span>BATTLE!</span></span>
+            <span className='button reverse-border-light-shadow' onClick={() => battle(arena.enemy_view?._id)}><span>BATTLE!</span></span>
         </Modal.Body>
     </Modal>
 }
