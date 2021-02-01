@@ -7,6 +7,10 @@ class CombatRecord
     taken = 0;
     healing_done = 0;
     healing_received = 0;
+    constructor(name)
+    {
+        this.name = name;
+    }
 }
 
 const simulate_combat = (ally_team,enemy_team) => {
@@ -16,12 +20,12 @@ const simulate_combat = (ally_team,enemy_team) => {
     }
     ally_team = ally_team.map((data,i) => {
         let stats = new HeroStats(data,true);
-        record.ally.push(new CombatRecord());
+        record.ally.push(new CombatRecord(stats.name));
         return ({ data: stats, index: i, attack: abilities[data.name](stats,i) })
     });
     enemy_team = enemy_team.map((data,i) => {
         let stats = new HeroStats(data,true);
-        record.enemy.push(new CombatRecord());
+        record.enemy.push(new CombatRecord(stats.name));
         return ({ data: stats, index: i, attack: abilities[data.name](stats,i) })
     });
     let rounds = 0

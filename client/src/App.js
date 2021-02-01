@@ -1,21 +1,22 @@
 import {Switch,Route, useHistory} from 'react-router-dom';
-import VLanding from './views/landing';
-import VHome from './views/home';
+import VLanding       from './views/landing';
+import VHome          from './views/home';
 import './App.css';
-import NavbarBottom from './components/navbar_bottom';
-import Heroes from './views/heroes';
-import Summon from './views/summon';
-import ModalProfile from './components/modals/modal_profile';
+import NavbarBottom   from './components/navbar_bottom';
+import Heroes         from './views/heroes';
+import Summon         from './views/summon';
+import ModalProfile   from './components/modals/modal_profile';
 import ModalInventory from './components/modals/modal_inventory';
-import ModalRewards from './components/modals/modal_rewards';
-import ModalSummons from './components/modals/modal_summons';
-import HeroInfo from './components/hero_info';
-import { Container } from 'react-bootstrap';
-import NavbarTop from './components/navbar_top';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { tick } from './redux/reducers/r_idle';
+import ModalRewards   from './components/modals/modal_rewards';
+import ModalSummons   from './components/modals/modal_summons';
+import HeroInfo       from './components/hero_info';
+import { Container }  from 'react-bootstrap';
+import NavbarTop      from './components/navbar_top';
+import { useEffect }  from 'react';
+import {useDispatch}  from 'react-redux';
+import { tick }       from './redux/reducers/r_idle';
 import ModalEnemyView from './components/modals/modal_enemy_view';
+import ModalBattleRecap from './components/modals/modal_battle_recap';
 let interval = null;
 function App() {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ function App() {
                   </Route>
                 </Switch>
               <HeroInfo/>
+              <ModalBattleRecap/>
               <ModalEnemyView/>
               <ModalInventory/>
               <ModalProfile/>

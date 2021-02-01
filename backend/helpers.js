@@ -36,10 +36,15 @@ const exponential_growth = (base,growth,power) => {
     return base * Math.pow(( 1 + growth),power);
 }
 
+const random_range = (min, max) => {  
+    return Math.random() * (max - min) + min; 
+}  
+
 module.exports = {
     isAlphaNumeric,
     validate_password,
     validate_username,
     is_same_day,
-    exponential_growth
+    exponential_growth,
+    random_range
 }

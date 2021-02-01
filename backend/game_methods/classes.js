@@ -5,14 +5,15 @@ class HeroStats
 {
     constructor(hero,combat)
     {
-        this.level      = hero.level;
+        let level = hero.level;
+        hero.level += --hero.tier * 2;
         this._id        = hero._id;
         this.tier       = hero.tier;
         this.name       = hero.name;
-        this.hp         = Math.floor(HeroStats.calc_health(hero));
-        this.atk        = Math.floor(HeroStats.calc_attack(hero));
-        this.def        = Math.floor(HeroStats.calc_defense(hero));
-        this.power      = Math.floor(HeroStats.calc_hero_power(hero));
+        this.hp         = HeroStats.stat_calc('hp',hero);
+        this.atk        = HeroStats.stat_calc('atk',hero);
+        this.def        = HeroStats.stat_calc('def',hero);
+        this.power      = HeroStats.calc_hero_power(this.atk,this.def,this.hp);
         this.crit       = (hero.weapon * 10);
         this.dodge      = (hero.greaves * 20);
         this.acc        = (hero.weapon * 10) + (hero.headpiece * 10);
@@ -24,30 +25,23 @@ class HeroStats
         {
             this.max_hp = this.hp;
             this.shield = 0;
+            this.level = hero.level;
         }
+        else
+            this.level = level;
     }
 
-    static calc_hero_power(hero)
+    static stat_calc(str,data)
     {
-        return (HeroStats.calc_attack(hero) * .2) + (HeroStats.calc_defense(hero) * 4.6) + (HeroStats.calc_attack(hero) * 4.7);
+        if (str === 'hp')
+            return Math.round(((((data.data[str] + 31) * 2) * data.level) / 100) + data.level + 10);
+        else
+            return Math.round(((data.data[str] + 31) * 2 * data.level) / 100) + 5;
     }
 
-    static calc_health(hero)
+    static calc_hero_power(atk,def,hp)
     {
-        let data = hero.data;
-        return exponential_growth(data.hp,.005,hero.level - 1) + (hero.chestpiece * 1000) + (hero.greaves * 200) + (hero.headpiece * 200);
-    }
-
-    static calc_defense(hero)
-    {
-        let data = hero.data;
-        return exponential_growth(data.hp,.005,hero.level - 1) + (hero.chestpiece * 800) + (hero.greaves * 500) + (hero.headpiece * 500);
-    }
-
-    static calc_attack(hero)
-    {
-        let data = hero.data;
-        return exponential_growth(data.atk,.005,hero.level - 1) + (hero.weapon * 500);
+        return Math.round(hp * .2) + (def * 4.6) + (atk * 4.7);
     }
 }
 

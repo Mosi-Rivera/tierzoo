@@ -1,15 +1,30 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { close,modal_enum } from '../../redux/reducers/r_modals';
+import { close,modal_enum, set, set_recap } from '../../redux/reducers/r_modals';
 import image_configs from '../../sprites/config'; 
 import {battle} from '../../api/routes/arena';
+import {set_elo} from '../../redux/reducers/r_arena';
 
 export default function(props)
 {
     const dispatch = useDispatch();
     const active = useSelector(state => state.modals.active);
     const arena = useSelector(state => state.arena);
+    const handle_battle = async () => {
+        try
+        {
+            let result = await battle(arena.enemy_view?._id);
+            console.log(result);
+            dispatch(set_recap(result));
+            dispatch(set_elo(result.elo));
+            dispatch(set(modal_enum.battle_recap));
+        }
+        catch(err)
+        {
+            console.log(err);
+        }
+    }
     return <Modal show={active === modal_enum.enemy_view} onHide={() => dispatch(close())} centered>
         <Modal.Body className='border-light-shadow'>
             <h3 style={{textAlign: 'center'}}>{arena.enemy_view?.username}</h3>
@@ -35,7 +50,7 @@ export default function(props)
                     }
                 </ul>
             </div>
-            <span className='button reverse-border-light-shadow' onClick={() => battle(arena.enemy_view?._id)}><span>BATTLE!</span></span>
+            <span className='button reverse-border-light-shadow' onClick={handle_battle}><span>BATTLE!</span></span>
         </Modal.Body>
     </Modal>
 }

@@ -1,7 +1,10 @@
-const calculate_damage = (atk,def,pr) => {
-    return Math.max(0,Math.round(
-        atk * ( ( 0.2 * atk ) / ( (0.2 * atk) + def) )
-    ) - pr);
+const {random_range} = require('../helpers');
+
+const calculate_damage = (atk,def,level,power) => {
+    let mod = random_range(.85,1);
+    return Math.round(
+        (((((2 * level) / 5) * power * (atk/def)) / 50) + 2) * mod
+    );
 }
 const get_lowest_health = arr => {
     let min = 10000000000;
@@ -38,7 +41,7 @@ function deal_damage(damage,target)
         }
     }
     target.data.hp -= damage;
-    return damage;
+    return Math.round(damage);
 }
 
 
@@ -50,7 +53,8 @@ module.exports = {
             let target = enemy[enemy.length - 1];
             if (target)
             {
-                let damage = deal_damage(calculate_damage(data.atk,target.data.def,0),target);
+                let damage = deal_damage(calculate_damage(data.atk,target.data.def,data.level,80),target);
+                target.def = target.def - 5 <= 0 ? 1 : target.def - 5;
                 enemy_record[target.index].taken    += damage;
                 ally_record[index].dealt            += damage;
                 if (target.data.hp <= 0)
@@ -74,8 +78,8 @@ module.exports = {
                     target.data.hp += healing;
                     if (target.data.hp > target.max_hp)
                         target.data.hp = target.max_hp;
-                    ally_record[heal_index].healing_received += healing;
-                    ally_record[index].healing_done += healing;
+                    ally_record[heal_index].healing_received += Math.round(healing);
+                    ally_record[index].healing_done += Math.round(healing);
                     heals--;
                 }
             }
@@ -115,7 +119,7 @@ module.exports = {
             let target = enemy[target_index];
             if (target)
             {
-                let damage = deal_damage(calculate_damage(data.atk,target.data.def,0),target);
+                let damage = deal_damage(calculate_damage(data.atk,target.data.def,data.level,110),target);
                 enemy_record[target.index].taken    += damage;
                 ally_record[index].dealt            += damage;
                 if (target.data.hp <= 0)
@@ -131,7 +135,7 @@ module.exports = {
                 let target = enemy[i];
                 if (target)
                 {
-                    let damage = deal_damage(calculate_damage(data.atk,target.data.def,0) / 2,target);
+                    let damage = deal_damage(calculate_damage(data.atk,target.data.def,data.level,40) / 2,target);
                     enemy_record[target.index].taken    += damage;
                     ally_record[index].dealt            += damage;
                 }
@@ -147,12 +151,12 @@ module.exports = {
             let target = enemy[enemy.length - 1];
             if (target)
             {
-                let damage = deal_damage(calculate_damage(data.atk,target.data.def,0),target);
+                let damage = deal_damage(calculate_damage(data.atk,target.data.def,data.level,60),target);
                 enemy_record[target.index].taken    += damage;
                 ally_record[index].dealt            += damage;
                 if (target.data.hp <= 0)
                     enemy.splice(enemy.length - 1,1);
-                data.atk += (++mult) + 1000;
+                data.atk += (++mult) + 10;
                 if (target.data.hp <= 0)
                     enemy.splice(enemy.length - 1,1);
             }
