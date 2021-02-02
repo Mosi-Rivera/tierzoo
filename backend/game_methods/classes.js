@@ -28,7 +28,10 @@ class HeroStats
             this.level = hero.level;
         }
         else
+        {
             this.level = level;
+            this.ability = hero.data.ability;
+        }
     }
 
     static stat_calc(str,data)

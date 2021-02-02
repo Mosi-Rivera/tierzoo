@@ -72,7 +72,7 @@ export default function (props)
     const handle_close = () => dispatch(close());
     const inventory = useSelector(state => state.inventory);
     useEffect(() => level_sum = 0,[]);
-    return <div>
+    return <div id='c-hero-info'>
         <div className={'backdrop ' + (active === modal_enum.info ? 'show' : '')} onClick={handle_close}></div>
         <div  id='hero-info' className={'slider-right ' + (active === modal_enum.info ? 'show' : '')}>
         <Tabs defaultActiveKey="info">
@@ -115,7 +115,7 @@ export default function (props)
             <Tab eventKey="abilities" title="abilities">
                 <div>
                     <p>
-                        {info?.abilities}
+                        {info?.ability}
                     </p>
                 </div>
             </Tab>

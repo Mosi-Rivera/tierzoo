@@ -3,8 +3,8 @@ import { Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { close,modal_enum, set, set_recap } from '../../redux/reducers/r_modals';
 import image_configs from '../../sprites/config'; 
-import {battle} from '../../api/routes/arena';
-import {set_elo} from '../../redux/reducers/r_arena';
+import {battle, get_opponents} from '../../api/routes/arena';
+import {set_elo, set_opponents} from '../../redux/reducers/r_arena';
 
 export default function(props)
 {
@@ -17,8 +17,9 @@ export default function(props)
             let result = await battle(arena.enemy_view?._id);
             console.log(result);
             dispatch(set_recap(result));
-            dispatch(set_elo(result.elo));
+            dispatch(set_elo(result.elo + result.difference));
             dispatch(set(modal_enum.battle_recap));
+            dispatch(set_opponents(await get_opponents()));
         }
         catch(err)
         {
@@ -28,7 +29,7 @@ export default function(props)
     return <Modal show={active === modal_enum.enemy_view} onHide={() => dispatch(close())} centered>
         <Modal.Body className='border-light-shadow'>
             <h3 style={{textAlign: 'center'}}>{arena.enemy_view?.username}</h3>
-            <span className='elo'>{arena.enemy_view?.arena?.elo}</span>
+            <span style={{textAlign: 'center', display: 'block'}} className='elo'><span className='icon elo-icon'></span>{arena.enemy_view?.arena?.elo}</span>
             <div className='c-c-team'>
                 <ul className='c-team'>
                     {

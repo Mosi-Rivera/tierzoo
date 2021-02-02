@@ -13,6 +13,7 @@ export default function(props)
             <div className='modal-recap'>
                 <h3>{modals.battle_recap?.winner == 0 ? 'VICTORY!' : 'DEFEAT'}</h3>
                 <h3>
+                    <span className='icon elo-icon'></span>
                     {modals.battle_recap?.elo}
                     ({(modals.battle_recap?.difference  > 0 ? "+" : "") + modals.battle_recap?.difference})
                 </h3>
