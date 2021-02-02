@@ -7,6 +7,7 @@ const HeroSchema = mongoose.Schema({
     hp:         {type: Number, required:true},
     atk:        {type: Number, required:true},
     def:        {type: Number, required:true},
+    ability:    {type: String, required: true},
     crit:       {type: Number, default: 0},
     dodge:      {type: Number, default: 0},
     acc:        {type: Number, default: 0},
