@@ -25,7 +25,8 @@ const UserSchema = mongoose.Schema({
     arena: {
         wins:   {type: Number, default: 0},
         losses: {type: Number, default: 0},
-        elo:    {type: Number, default: 1200}
+        elo:    {type: Number, default: 1200},
+        elo_pr: {type: Number, default: 1200},
     },
     idle: {
         last_collect: {type: Date, default: () => new Date()}
