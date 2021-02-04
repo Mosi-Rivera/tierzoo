@@ -16,7 +16,6 @@ export function signup(data)
 
 export function login(data)
 {
-    console.log(data);
     return fetch(BASE_URL + '/auth/login',{
         method: 'POST',
         headers: {

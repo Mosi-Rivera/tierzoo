@@ -4,7 +4,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import {close,modal_enum} from '../../redux/reducers/r_modals';
 import {string_to_number_formatter} from '../../helper';
 
-export default function (props)
+export default function ModalRewards(props)
 {
   const dispatch = useDispatch();
   const modals = useSelector(state => state.modals);

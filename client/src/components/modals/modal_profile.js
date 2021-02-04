@@ -6,7 +6,7 @@ import { USER_LOGOUT } from '../../redux/store';
 import {useHistory} from 'react-router-dom';
 import {logout} from '../../api/routes/auth';
 
-export default function (props)
+export default function ModalProfile(props)
 {
   const history = useHistory();
   const dispatch = useDispatch();

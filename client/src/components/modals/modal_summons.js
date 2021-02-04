@@ -3,7 +3,7 @@ import {Modal} from 'react-bootstrap';
 import {useSelector,useDispatch} from 'react-redux';
 import {close,modal_enum} from '../../redux/reducers/r_modals';
 import sprite_configs from '../../sprites/config';
-export default function (props)
+export default function ModalSummons(props)
 {
     const dispatch = useDispatch();
     const modals = useSelector(state => state.modals);
@@ -15,13 +15,13 @@ export default function (props)
                 {
                     summons?.length ? summons.map((hero,i) => <div key={i}>
                             <span className={'image-container tier-' + hero.tier }>
-                                <img src={sprite_configs[hero.name]?.src}/>
+                                <img src={sprite_configs[hero.name]?.src} alt={hero.name + "hero icon."}/>
                             </span>
                             <span className='name reverse-border-light-shadow'>{hero.name}</span>
                         </div>
                     ) : <div className='single-summon'>
                     <span className={'image-container tier-' + summons?.tier }>
-                        <img src={sprite_configs[summons?.name]?.src}/>
+                        <img src={sprite_configs[summons?.name]?.src} alt={summons?.name + "hero icon."}/>
                     </span>
                     <span className='name reverse-border-light-shadow'>{summons?.name}</span>
                 </div>

@@ -13,7 +13,6 @@ router.get('/info', is_logged_in(), async (req,res) => {
     try
     {
         const id = req.query.id;
-        console.log(id);
         if (!id || typeof id !== 'string')
             throw new Error('Invalid id.');
         let hero = await HeroData.findOne({_id: id}).populate('data');
@@ -72,9 +71,9 @@ router.get('/level_up', is_logged_in(), async (req,res) => {
             throw new Error('Already the highest possible level.');
         let inventory = (await User.findOne({_id: req.user._id},{inventory: 1})).inventory;
         let inventory_update = {
-            ['inventory.essence']: 0,
-            ['inventory.exp']: 0,
-            ['inventory.gold']: 0
+            'inventory.essence': 0,
+            'inventory.exp': 0,
+            'inventory.gold': 0
         };
         let level = hero.level;
         for (let i = levels,gold,exp,essence; i--;)

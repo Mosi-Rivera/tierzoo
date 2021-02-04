@@ -44,7 +44,6 @@ const simulate_combat = (ally_team,enemy_team) => {
         rounds++;
         
     }
-    console.log(enemy_team,ally_team);
     return {winner: 1,record, rounds};
 }
 

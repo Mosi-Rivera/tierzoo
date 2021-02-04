@@ -25,7 +25,6 @@ const get_lowest_health = arr => {
 function deal_damage(damage,target)
 {
     let shield = target.data.shield;
-    console.log(damage);
     if (shield > 0)
     {
         damage = shield - damage;
@@ -47,7 +46,7 @@ function deal_damage(damage,target)
 
 
 module.exports = {
-    ['ball & chain']:   function(data,index){
+    'ball & chain':   function(data,index){
         return (allies,enemy,ally_record,enemy_record) =>
         {
             let target = enemy[enemy.length - 1];
@@ -62,7 +61,7 @@ module.exports = {
             }
         }
     },
-    ['merch-1.2.0']:    function(data,index) {
+    'merch-1.2.0':    function(data,index) {
         let count = 0;
         let max_heals = 3;
         let heals = max_heals;
@@ -91,7 +90,7 @@ module.exports = {
             }
         }
     },
-    ['shield droid']:   function(data,index){
+    'shield droid':   function(data,index){
         let shield_turn = 0;
         let turns = 3;
         return function(allies,enemies,ally_record,enemy_record)
@@ -112,7 +111,7 @@ module.exports = {
             shield_turn--;
         }
     },
-    ['spirit boxer']:   function(data,index){
+    'spirit boxer':   function(data,index){
         return function(allies,enemy,ally_record,enemy_record)
         {
             let target_index = get_lowest_health(enemy);
@@ -127,7 +126,7 @@ module.exports = {
             }
         }
     },
-    ['stormhead']:      function(data,index){
+    'stormhead':      function(data,index){
         return function(allies,enemy,ally_record,enemy_record)
         {
             for (let i = enemy.length; i--;)
@@ -144,7 +143,7 @@ module.exports = {
             }
         }
     },
-    ['mud guard']:      function(data,index){
+    'mud guard':      function(data,index){
         let mult = 0;
         return function(allies,enemy,ally_record,enemy_record)
         {

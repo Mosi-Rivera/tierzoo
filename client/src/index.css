@@ -158,6 +158,11 @@ table td
   justify-content: center;
 }
 
+.arena-loot .item-list li
+{
+  width: 28%;
+}
+
 .item-list div
 {
   padding: 3.2% 3.2% 0px 0px;

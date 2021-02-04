@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import {is_logged_in} from '../api/routes/auth';
 import {useSelector,useDispatch} from 'react-redux';
-import {Carousel, Col,Row} from 'react-bootstrap';
+import {Carousel} from 'react-bootstrap';
 import {
     summon_multiple_gems,
     summon_multiple_scrolls,
@@ -17,7 +16,6 @@ export default function(props)
     const history = useHistory();
     const dispatch = useDispatch();
     const inventory = useSelector(state => state.inventory);
-    const modals = useSelector(state => state.modals);
     const handle_single_summon = async () => {
         try
         {
@@ -75,7 +73,7 @@ export default function(props)
                 <img
                 className="d-block w-100"
                 src="assets/shield_droid/Police Shielder.gif"
-                alt="First slide"
+                alt="First Summon Banner"
                 />
                 <Carousel.Caption className='header'>
                     <h3 className='message'>

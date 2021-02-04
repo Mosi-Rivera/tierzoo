@@ -66,7 +66,7 @@ function AuthModal(props)
     );
   }
 
-export default function (props)
+export default function ViewLanding (props)
 {
     const history = useHistory();
     const [merchant_class,set_merchant_class] = useState('');

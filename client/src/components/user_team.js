@@ -6,7 +6,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import {set,modal_enum, close} from '../redux/reducers/r_modals';
 import {set_hero,remove_hero} from '../redux/reducers/r_team';
 
-export default function(props)
+export default function UserTeam(props)
 {
     const dispatch = useDispatch();
     const [selected_index,set_selected_index] = useState(0);
@@ -15,7 +15,6 @@ export default function(props)
         let index = selected_index;
         try
         {
-            console.log(data);
             dispatch(set_hero({
                 index,
                 hero: data
@@ -63,7 +62,7 @@ export default function(props)
                                 >
                             <div>
                                 <span className={'image-container tier-' + hero.tier}>
-                                    <img src={image_configs[hero.name]?.src}/>
+                                    <img src={image_configs[hero.name]?.src} alt={hero.name + " hero icon."}/>
                                 </span>
                                 <span className='level border-light-shadow'>Lv. {hero.level}</span>
                             </div>

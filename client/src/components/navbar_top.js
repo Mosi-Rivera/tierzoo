@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector,useDispatch} from 'react-redux';
 import { string_to_number_formatter } from '../helper';
 import {set,modal_enum} from '../redux/reducers/r_modals';
-export default function (props)
+export default function NavbarTop(props)
 {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);

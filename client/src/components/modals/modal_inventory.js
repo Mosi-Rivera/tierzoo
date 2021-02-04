@@ -4,7 +4,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import { string_to_number_formatter } from '../../helper';
 import {close,modal_enum} from '../../redux/reducers/r_modals';
 
-export default function (props)
+export default function ModalInventory(props)
 {
   const dispatch = useDispatch();
   const inventory = useSelector(state => state.inventory);

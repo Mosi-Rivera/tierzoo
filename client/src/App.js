@@ -1,4 +1,4 @@
-import {Switch,Route, useHistory} from 'react-router-dom';
+import {Switch,Route} from 'react-router-dom';
 import VLanding       from './views/landing';
 import VHome          from './views/home';
 import './App.css';
@@ -17,6 +17,7 @@ import {useDispatch}  from 'react-redux';
 import { tick }       from './redux/reducers/r_idle';
 import ModalEnemyView from './components/modals/modal_enemy_view';
 import ModalBattleRecap from './components/modals/modal_battle_recap';
+import ModalArenaLoot from './components/modals/modal_arena_loot';
 let interval = null;
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function App() {
                   </Route>
                 </Switch>
               <HeroInfo/>
+              <ModalArenaLoot/>
               <ModalBattleRecap/>
               <ModalEnemyView/>
               <ModalInventory/>

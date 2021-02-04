@@ -11,7 +11,6 @@ import { remove, set_all, set_tier } from '../redux/reducers/r_heroes';
 import { useSelector,useDispatch } from 'react-redux';
 import { modal_enum,set } from '../redux/reducers/r_modals';
 import { set_info } from '../redux/reducers/r_hero_info';
-import config from '../sprites/config';
 import image_configs from '../sprites/config';
 
 function AscendCard(props)
@@ -19,13 +18,13 @@ function AscendCard(props)
     return ( 
         props.hero ?  
         <span onClick={props.handle_remove} className={'image-container tier-' + props.hero.tier}>
-            <img src={image_configs[props.hero.name]?.src}/>
+            <img src={image_configs[props.hero.name]?.src} alt={props.hero.name + "hero icon."}/>
         </span> :
         <span className={'image-container tier-none'}></span>
     )
 }
 
-export default function(props)
+export default function ViewHeroes(props)
 {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -64,7 +63,7 @@ export default function(props)
         }
     }
     const handle_remove_fodder = i => {
-        if (i == 0)
+        if (i === 0)
         {
             reset_filter();
             set_ascend_fodder([null,null,null]);
@@ -134,7 +133,6 @@ export default function(props)
             <div className={'c-ascend ' + (ascend ? 'pressed' : '')} onClick={() => set_ascend(!ascend)}>
                 <span className='border-light-shadow shadow'>ASCEND</span>
             </div>
-            { console.log(ascend_fodder) }
             {
                 ascend && <div className='c-ascend-hero'>
                     <div className='ascend-hero'>
@@ -158,7 +156,7 @@ export default function(props)
                     return <div key={i} onClick={ascend ? () => handle_set_fodder(hero) : () => handle_open_hero_info(hero._id)}>
                         <span className={'image-container tier-' + hero.tier}>
                             <span className='level'>{hero.level}</span>
-                            <img src={image_conf?.src}/>
+                            <img src={image_conf?.src} alt={image_conf.src + "hero icon."}/>
                         </span>
                         <span className='name'>
                             <span>{hero.name}</span>

@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react';
 import image_configs from '../sprites/config';
 import {useSelector,useDispatch} from 'react-redux';
 import {close,modal_enum} from '../redux/reducers/r_modals';
-export default function (props)
+export default function SliderHeroes(props)
 {
     const dispatch = useDispatch();
     const team = useSelector(state => state.team);
@@ -34,7 +34,7 @@ export default function (props)
                 {
                     filtered_heroes?.map((hero,i) => <div key={i} onClick={() => props.on_select(hero)}>
                         <span className={'image-container tier-' + hero.tier}>
-                            <img src={image_configs[hero.name]?.src}/>
+                            <img src={image_configs[hero.name]?.src} alt={hero.name + " hero icon."}/>
                         </span>
                         <span>Lv. {hero.level}</span>
                     </div>)

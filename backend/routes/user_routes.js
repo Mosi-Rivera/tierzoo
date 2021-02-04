@@ -52,7 +52,6 @@ router.get('/collect', is_logged_in(), async (req,res) => {
         let user = await User.findOne({_id: req.user._id});
         let minutes = (Date.now() - user.idle.last_collect.getTime()) / 60000;
         let rewards = get_rewards(minutes,user.arena.elo);
-        console.log(rewards);
         await User.updateOne({_id: req.user._id},{ $inc: rewards, 'idle.last_collect': new Date() });
         return res.status(200).json(rewards);
     }

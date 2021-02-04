@@ -7,6 +7,7 @@ const {get_teams} = require('../middelware/heroMiddleware');
 const HeroData = require('../models/hero_data');
 const elo = require('../elo');
 const { simulate_combat } = require('../game_methods/combat');
+const get_loot = require('../game_methods/loot');
 
 router.get('/get_opponents', is_logged_in(), async (req,res) => {
     try
@@ -79,16 +80,31 @@ router.post('/battle', is_logged_in(), get_teams(), async (req,res) => {
         let other_user = res.locals.other_user;
         let resolve = elo(user.arena.elo,other_user.arena.elo);
         let result = simulate_combat(res.locals.ally_team,res.locals.enemy_team);
-        console.log(result);
         let new_elo = result.winner == 0 ? resolve(1,0) : resolve(0,1);
-        await User.updateOne({ _id: req.user._id },{$inc: {'arena.elo': new_elo.a.difference}},{new: true});
-        await User.updateOne({ _id: req.body.id  },{$inc: {'arena.elo': new_elo.b.difference}});
+        let loot = get_loot(user.arena,result.winner == 0);
+        const update_self = {$inc: {'arena.elo': new_elo.a.difference}};
+        const update_other = {$inc: {'arena.elo': new_elo.b.difference}};
+        if (result.winner == 0)
+        {
+            update_other.$inc['arena.losses'] = update_self.$inc['arena.wins'] = 1;
+            update_self.$inc['inventory.gems'] = loot;
+        }
+        else
+            update_other.$inc['arena.wins'] = update_self.$inc['arena.losses'] = 1;
+        if (user.arena.elo + new_elo.a.difference > user.arena.elo_pr)
+            udpate_self.arena.elo_pr = elo + new_elo.a.difference;
+        if (other_user.arena.elo + new_elo.b.difference > other_user.arena.elo_pr)
+            udpate_other.arena.elo_pr = elo + new_elo.b.difference;
+        await User.updateOne({ _id: req.user._id },update_self,{new: true});
+        await User.updateOne({ _id: req.body.id  },update_other);
+        user.arena.elo += new_elo.a.difference;
         return res.status(200).json({
             elo: user.arena.elo,
             difference: new_elo.a.difference,
             record: result.record,
             rounds: result.rounds,
-            winner: result.winner
+            winner: result.winner,
+            loot: loot || null
         });
     }
     catch(err)

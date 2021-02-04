@@ -4,6 +4,7 @@ export const close          = createAction('close');
 export const set_rewards    = createAction('set_rewards');
 export const set_summons    = createAction('set_summons');
 export const set_recap      = createAction('set_recap');
+export const set_arena_loot = createAction('set_arena_loot');
 export const modal_enum = {
     info: 1,
     inventory: 2,
@@ -13,12 +14,14 @@ export const modal_enum = {
     heroes: 6,
     enemy_view: 7,
     battle_recap: 8,
+    arena_loot: 9
 }
 const state = {
     active: 0,
     rewards: null,
     summons: null,
-    battle_recap: null
+    battle_recap: null,
+    arena_loot: null,
 };
 
 export default createReducer(state,
@@ -41,6 +44,10 @@ export default createReducer(state,
         },
         [set_recap.type]: (state,data) => {
             state.battle_recap = data.payload;
+            return state;
+        },
+        [set_arena_loot.type]: (state,data) => {
+            state.arena_loot = data.payload;
             return state;
         }
     }

@@ -29,7 +29,7 @@ export default createReducer(state, {
         {
             for (let i = state.length; i--;)
             {
-                if (state[i]._id == index)
+                if (state[i]._id === index)
                 {
                     state[i].tier = value;
                     break;
@@ -42,13 +42,13 @@ export default createReducer(state, {
         if (!state)
             return state;
         let {index,value} = data.payload;
-        if (typeof index == 'number')
+        if (typeof index === 'number')
         {
             let hero = state[index];
             if (hero)
                 hero.level = value;
         }
-        else if (typeof index == 'string')
+        else if (typeof index === 'string')
             for (let i = state.length; i--;)
                 if (state[i]._id === index)
                     state[i].level = value;
@@ -63,7 +63,7 @@ export default createReducer(state, {
         {
             for (let i = state.length; i--;)
             {
-                if (state[i]._id == payload)
+                if (state[i]._id === payload)
                 {
                     state.splice(i,1);
                     break

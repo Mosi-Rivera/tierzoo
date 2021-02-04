@@ -1,12 +1,13 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { close,modal_enum, set, set_recap } from '../../redux/reducers/r_modals';
+import { close,modal_enum, set, set_recap,set_arena_loot } from '../../redux/reducers/r_modals';
 import image_configs from '../../sprites/config'; 
 import {battle, get_opponents} from '../../api/routes/arena';
 import {set_elo, set_opponents} from '../../redux/reducers/r_arena';
+import { inc_item } from '../../redux/reducers/r_inventory';
 
-export default function(props)
+export default function ModalEnemyView(props)
 {
     const dispatch = useDispatch();
     const active = useSelector(state => state.modals.active);
@@ -15,7 +16,11 @@ export default function(props)
         try
         {
             let result = await battle(arena.enemy_view?._id);
-            console.log(result);
+            if (result.loot)
+            {
+                dispatch(inc_item({key: 'gems',value: result.loot}));
+                dispatch(set_arena_loot(result.loot));
+            }
             dispatch(set_recap(result));
             dispatch(set_elo(result.elo + result.difference));
             dispatch(set(modal_enum.battle_recap));
@@ -42,7 +47,7 @@ export default function(props)
                             return <li key={i}>
                                 <div>
                                     <span className={'image-container tier-' + hero.tier}>
-                                        <img src={image_configs[hero.name]?.src}/>
+                                        <img src={image_configs[hero.name]?.src} alt={hero.name + "hero icon."}/>
                                     </span>
                                     <span className='level border-light-shadow'>Lv. {hero.level}</span>
                                 </div>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Row, Col, Tab, Tabs } from 'react-bootstrap';
 import { level_up } from '../api/routes/hero';
 import image_configs from '../sprites/config';
-import { close, modal_enum,set } from '../redux/reducers/r_modals';
+import { close, modal_enum } from '../redux/reducers/r_modals';
 import { inc_level, set_info } from '../redux/reducers/r_hero_info';
 import { inc_item } from '../redux/reducers/r_inventory';
 import { useSelector,useDispatch } from 'react-redux'
@@ -64,7 +64,7 @@ const handle_level_up = debounce(async () => {
     return false;
 })
 
-export default function (props)
+export default function HeroInfo(props)
 {
     const dispatch = useDispatch();
     const info = useSelector(state => state.hero_info);
@@ -83,17 +83,15 @@ export default function (props)
                         <div className='hero-left'>
                             <h3>{info?.name} Lv. {info?.level}</h3>
                             <h4 className='power secondary-color'><span>power:</span> <span>{info?.power.toLocaleString()}</span></h4>
-                            {/* <h4>{info?.level}</h4> */}
-                            {/* <h4>{info?.tier}</h4> */}
                             <span className='image-container info-image'>
-                                {info && <img src={image_configs[info?.name]?.src}/>}
+                                {info && <img src={image_configs[info?.name]?.src} alt={info?.name + ' hero icon.'}/>}
                             </span>
                         </div>
                     </Col>
                     <Col>
                         <Row>
                             {
-                                stat_keys.map((key,i) => <div className='c-stat'>
+                                stat_keys.map((key,i) => <div className='c-stat' key={i}>
                                     <div className='stat'>
                                         <span>{key}</span> <span>{info?.[key].toLocaleString()}</span>
                                     </div>
@@ -122,5 +120,4 @@ export default function (props)
         </Tabs>
         </div>
     </div>
-    return 
 }

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { get_inventory, get_my_team, collect_idle_rewards, get_heroes } from '../api/routes/user';
-import { is_logged_in } from '../api/routes/auth';
-import { get_opponents, set_team_position } from '../api/routes/arena';
+import { get_heroes } from '../api/routes/user';
+import { get_opponents } from '../api/routes/arena';
 import {Col,Row} from 'react-bootstrap';
 import UserTeam from '../components/user_team';
 import {useDispatch,useSelector} from 'react-redux';
@@ -12,7 +11,7 @@ import { check_logged_in } from '../helper';
 import { set_team } from '../redux/reducers/r_team';
 import { set_all } from '../redux/reducers/r_heroes';
 import {set_enemy} from '../redux/reducers/r_arena';
-export default function (props)
+export default function ViewHome (props)
 {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -35,9 +34,7 @@ export default function (props)
             .then(res => dispatch(set_all(res)))
             .catch(err => console.log(err));
             
-            get_opponents()
-            .then(res => dispatch(set_opponents(res)))
-            .catch(err => console.log(err));
+            handle_get_opponents();
         },true)
     },[]);
     return <div className='pseudo-body'>
@@ -49,7 +46,7 @@ export default function (props)
                 <div className='c-challenge'>
                     <div className='c-header shadow border-light-shadow'>
                         <span className='title'>CHALLENGE</span>
-                        <span style={{alignSelf: 'flex-end'}} className='refresh reverse-border-light-shadow button'>
+                        <span onClick={handle_get_opponents} style={{alignSelf: 'flex-end'}} className='refresh reverse-border-light-shadow button'>
                             <span>refresh</span>
                         </span>
                     </div>
