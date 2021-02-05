@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {collect_idle_rewards, get_inventory} from '../api/routes/user';
 import {useSelector,useDispatch} from 'react-redux';
 import {inc_item, set_inventory} from '../redux/reducers/r_inventory';
@@ -11,6 +11,12 @@ export default function NavbarBottom(props)
 {
     const dispatch = useDispatch();
     const idle = useSelector(state => state.idle);
+    const location = useLocation();
+    const get_button_classname = str => {
+        if (str === location.pathname)
+            return 'active';
+        return '';
+    }
     const handle_rewards = async (e) => {
         try 
         {
@@ -22,10 +28,7 @@ export default function NavbarBottom(props)
             dispatch(set_rewards(rewards));
             dispatch(set(modal_enum.reward));
         }
-        catch(err)
-        {
-            console.log(err);
-        }
+        catch(err){}
     }
     const handle_inventory = async (e) => {
         try
@@ -34,30 +37,48 @@ export default function NavbarBottom(props)
             dispatch(set(modal_enum.inventory));
         }
         catch(err)
-        {
-            console.log(err);
-        }
+        {}
     }
     return <nav id='navbar-bottom'>
         <ul>
-            <Link to='/summon'><li className='icon summon-icon hover'>
-                <span>summon</span>
-            </li></Link>
+            <li className={'icon summon-icon hover ' + get_button_classname('/summon')}>
+                <Link to='/summon'>
+                    <span>summon</span>
+                </Link>
+            </li>
             <li onClick={handle_inventory} className='icon inventory-icon hover'>
                 <span>inventory</span>
             </li>
+            <li className='icon collect-icon hover' onClick={handle_rewards}>
+                <span>collect</span>
+                <span className='collect-timer'>{collect_secs_to_str(idle.timer)}</span>
+            </li>
+            <li className={'icon hero-icon hover ' + get_button_classname('/heroes')}>
+                <Link to='/heroes'>
+                    <span>heroes</span>
+                </Link>
+            </li>
+            <li className={'icon arena-icon hover ' + get_button_classname('/arena')}>
+                <Link to='arena'>
+                    <span>arena</span>
+                </Link>    
+            </li>
         </ul>
-        <div className='icon collect-icon hover' onClick={handle_rewards}>
+        {/* <div className='icon collect-icon hover' onClick={handle_rewards}>
             <span>collect</span>
             <span className='collect-timer'>{collect_secs_to_str(idle.timer)}</span>
         </div>
         <ul>
-            <Link to='/heroes'><li className='icon hero-icon hover'>
-                <span>heroes</span>
-            </li></Link>
-            <Link to='arena'><li className='icon arena-icon hover'>
-                <span>arena</span>    
-            </li></Link>
-        </ul>
+            <li className={'icon hero-icon hover ' + get_button_classname('/heroes')}>
+                <Link to='/heroes'>
+                    <span>heroes</span>
+                </Link>
+            </li>
+            <li className={'icon arena-icon hover ' + get_button_classname('/arena')}>
+                <Link to='arena'>
+                    <span>arena</span>
+                </Link>    
+            </li>
+        </ul> */}
     </nav>;
 }

@@ -38,10 +38,7 @@ export default function ViewHeroes(props)
             dispatch(set_info(await hero_info(id)));
             dispatch(set(modal_enum.info));
         }
-        catch(err)
-        {
-            console.log(err);
-        }
+        catch(err){}
     },1000),[]);
     const handle_ascend_hero = async () => {
         try
@@ -57,7 +54,6 @@ export default function ViewHeroes(props)
         }
         catch(err)
         {
-            console.log(err);
             set_ascend_fodder([null,null,null]);
             reset_filter();
         }
@@ -122,10 +118,7 @@ export default function ViewHeroes(props)
             {
                 dispatch(set_all(await get_heroes()));
             }
-            catch(err)
-            {
-                console.log(err);
-            }
+            catch(err){}
         });
     },[]);
     return <div id='heroes' className='pseudo-body'>

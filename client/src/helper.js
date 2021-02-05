@@ -21,7 +21,7 @@ export function check_logged_in(history,cb,get_team = false)
 {
     is_logged_in(get_team)
     .then(res => save_user(res,cb))
-    .catch((err) => {console.log(err);  history.push('/')})
+    .catch((err) => history.push('/'))
 }
 
 export function string_to_number_formatter(num)

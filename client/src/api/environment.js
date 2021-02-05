@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:4200';
+export const BASE_URL = ''; //http://localhost:4200
 export function error_handler(res)
 {
     if (!res.ok)

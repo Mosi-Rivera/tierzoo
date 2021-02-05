@@ -39,7 +39,6 @@ const handle_level_up = debounce(async () => {
     }
     catch(err)
     {
-        console.log(err);
         store.dispatch(inc_level(-levels));
         level_sum = 0;
     }

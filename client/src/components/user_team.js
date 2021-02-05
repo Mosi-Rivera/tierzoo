@@ -25,7 +25,6 @@ export default function UserTeam(props)
         catch(err)
         {
             dispatch(remove_hero(index));
-            console.log(err);
         }
     }
     const handle_remove = async (i,data) => {
@@ -36,7 +35,6 @@ export default function UserTeam(props)
         }
         catch(err)
         {
-            console.log(err);
             dispatch(set_hero({index: i, data}));
         }
     }

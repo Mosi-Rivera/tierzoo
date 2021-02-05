@@ -35,10 +35,7 @@ export default function(props)
             dispatch(set_summons(result));
             dispatch(set(modal_enum.summons));
         }
-        catch(err)
-        {
-            console.log(err);
-        }
+        catch(err){}
     }
     const handle_multiple_sumon = async () => {
         try
@@ -59,10 +56,7 @@ export default function(props)
             dispatch(set_summons(result));
             dispatch(set(modal_enum.summons));
         }
-        catch(err)
-        {
-            console.log(err);
-        }
+        catch(err){}
     }
     useEffect(() => {
         check_logged_in(history);
@@ -90,7 +84,7 @@ export default function(props)
                                 {
                                     inventory?.scrolls >= 1 ? 
                                     [<span className='icon scroll-icon' key={0}></span>,'1'] : 
-                                    [<span className='icon gem-icon' key={0}></span>,'300']
+                                    [<span className='icon gems-icon' key={0}></span>,'300']
                                 }
                             </span>
                         </div>
@@ -102,14 +96,14 @@ export default function(props)
                                 {
                                     inventory?.scrolls >= 10 ? 
                                     [<span className='icon scroll-icon' key={0}></span>, '10'] : 
-                                    [<span className='icon gem-icon' key={0}></span>,'2700']
+                                    [<span className='icon gems-icon' key={0}></span>,'2700']
                                 }
                             </span>
                         </div>
                     </div>
-                    <h5>
+                    <div className='summon-info'>
                         Produces <span className='common'>Common</span> and <span className='epic'>Epic</span> heroes
-                    </h5>
+                    </div>
                 </Carousel.Caption>
             </Carousel.Item>
         </Carousel>

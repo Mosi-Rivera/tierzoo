@@ -23,7 +23,7 @@ export default function ModalProfile(props)
               dispatch(USER_LOGOUT());
               history.push('/');
             })
-            .catch(err => console.log(err))
+            .catch(err => {})
           } className='button reverse-border-light-shadow'><span>logout</span></span>
         </Modal.Body>
       </Modal>

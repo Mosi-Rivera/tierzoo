@@ -21,7 +21,7 @@ function AuthModal(props)
         e.preventDefault();
         signup(get_form_data(e))
         .then(() => history.push('/home'))
-        .catch(err => console.log(err));
+        .catch(err => {});
     }
     const handle_login = (e) => {
         e.preventDefault();
@@ -30,7 +30,7 @@ function AuthModal(props)
             save_user(res);
             history.push('/home');
         })
-        .catch(err => console.log(err));
+        .catch(err => {});
     }
     return (
       <Modal
@@ -81,7 +81,7 @@ export default function ViewLanding (props)
         },0);
         is_logged_in()
         .then(() => history.push('/home'))
-        .catch(err => console.log(err));
+        .catch(err => {});
         return function ()
         {
             clearTimeout(to_1);

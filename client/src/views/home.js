@@ -20,10 +20,7 @@ export default function ViewHome (props)
         try {
             dispatch(set_opponents(await get_opponents()));
         }
-        catch(err)
-        {
-            console.log(err);
-        }
+        catch(err){}
     }
     useEffect(function()
     {
@@ -32,7 +29,7 @@ export default function ViewHome (props)
 
             get_heroes()
             .then(res => dispatch(set_all(res)))
-            .catch(err => console.log(err));
+            .catch(err => {});
             
             handle_get_opponents();
         },true)

@@ -26,10 +26,7 @@ export default function ModalEnemyView(props)
             dispatch(set(modal_enum.battle_recap));
             dispatch(set_opponents(await get_opponents()));
         }
-        catch(err)
-        {
-            console.log(err);
-        }
+        catch(err){}
     }
     return <Modal show={active === modal_enum.enemy_view} onHide={() => dispatch(close())} centered>
         <Modal.Body className='border-light-shadow'>
