@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import {useSelector,useDispatch} from 'react-redux';
 import { string_to_number_formatter } from '../../helper';
 import {close,modal_enum} from '../../redux/reducers/r_modals';
@@ -14,10 +14,10 @@ export default function ModalInventory(props)
         <h3 style={{textAlign: 'center'}}>INVENTORY</h3>
           <ul className='item-list'>
             {
-              inventory && Object.keys(inventory).map((key,i) => {
+              inventory && Object.keys(inventory).map(key => {
                 let value = inventory[key];
                 if (value > 0)
-                  return <li className='reverse-border-light-shadow' key={i}>
+                  return <li className='reverse-border-light-shadow' key={key}>
                     <span className={'icon ' + key + '-icon'}></span>
                     <span className='quantity'>
                       {string_to_number_formatter(inventory[key])}

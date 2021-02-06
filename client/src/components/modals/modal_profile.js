@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import {useSelector,useDispatch} from 'react-redux';
 import {close,modal_enum} from '../../redux/reducers/r_modals';
 import { USER_LOGOUT } from '../../redux/store';

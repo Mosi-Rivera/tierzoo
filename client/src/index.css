@@ -381,10 +381,6 @@ table td
   transform:translateY(275%) rotate(-45deg);
 }
 
-.container-fluid {
-  /* padding-bottom: 60px; */
-}
-
 a
 {
   text-decoration: none;
@@ -1056,11 +1052,6 @@ form div h3
   z-index: 10000002;
   padding: 1rem;
   flex-flow: column;
-}
-
-.navbar-bottom .button
-{
-
 }
 
 .button

@@ -1,5 +1,8 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Tab, Tabs } from 'react-bootstrap';
+import React, { useEffect,memo } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Tab from 'react-bootstrap/Tab';
+import Tabs  from 'react-bootstrap/Tabs';
 import { level_up } from '../api/routes/hero';
 import image_configs from '../sprites/config';
 import { close, modal_enum } from '../redux/reducers/r_modals';
@@ -63,7 +66,7 @@ const handle_level_up = debounce(async () => {
     return false;
 })
 
-export default function HeroInfo(props)
+function HeroInfo()
 {
     const dispatch = useDispatch();
     const info = useSelector(state => state.hero_info);
@@ -90,7 +93,7 @@ export default function HeroInfo(props)
                     <Col>
                         <Row>
                             {
-                                stat_keys.map((key,i) => <div className='c-stat' key={i}>
+                                stat_keys.map(key => <div className='c-stat' key={key}>
                                     <div className='stat'>
                                         <span>{key}</span> <span>{info?.[key].toLocaleString()}</span>
                                     </div>
@@ -120,3 +123,5 @@ export default function HeroInfo(props)
         </div>
     </div>
 }
+
+export default memo(HeroInfo);

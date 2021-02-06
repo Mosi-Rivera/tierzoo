@@ -26,7 +26,6 @@ router.get('/get_opponents', is_logged_in(), async (req,res) => {
     }
     catch(err)
     {
-        console.log(err);
         return res.status(500).json(err);
     }
 });
@@ -44,7 +43,6 @@ router.get('/remove_team_position', is_logged_in(), async (req,res) => {
     }
     catch(err)
     {
-        console.log(err);
         return res.status(500).json(err);
     }
 })
@@ -68,7 +66,6 @@ router.post('/set_team_position', is_logged_in(), async (req,res) => {
     }
     catch(err)
     {
-        console.log(err);
         return res.status(500).json(err);
     }
 });
@@ -92,9 +89,9 @@ router.post('/battle', is_logged_in(), get_teams(), async (req,res) => {
         else
             update_other.$inc['arena.wins'] = update_self.$inc['arena.losses'] = 1;
         if (user.arena.elo + new_elo.a.difference > user.arena.elo_pr)
-            udpate_self.arena.elo_pr = elo + new_elo.a.difference;
+            update_self['arena.elo_pr'] = user.arena.elo + new_elo.a.difference;
         if (other_user.arena.elo + new_elo.b.difference > other_user.arena.elo_pr)
-            udpate_other.arena.elo_pr = elo + new_elo.b.difference;
+            update_other['arena.elo_pr'] = user.arena.elo + new_elo.b.difference;
         await User.updateOne({ _id: req.user._id },update_self,{new: true});
         await User.updateOne({ _id: req.body.id  },update_other);
         user.arena.elo += new_elo.a.difference;

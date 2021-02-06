@@ -32,7 +32,7 @@ export default function SliderHeroes(props)
         >
             <div>
                 {
-                    filtered_heroes?.map((hero,i) => <div key={i} onClick={() => props.on_select(hero)}>
+                    filtered_heroes?.map(hero => <div key={hero._id} onClick={() => props.on_select(hero)}>
                         <span className={'image-container tier-' + hero.tier}>
                             <img src={image_configs[hero.name]?.src} alt={hero.name + " hero icon."}/>
                         </span>

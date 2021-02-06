@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import {Carousel} from 'react-bootstrap';
+import Carousel from 'react-bootstrap/Carousel';
 import {
     summon_multiple_gems,
     summon_multiple_scrolls,
@@ -11,6 +11,7 @@ import {useHistory} from 'react-router-dom';
 import { check_logged_in } from '../helper';
 import { modal_enum, set, set_summons } from '../redux/reducers/r_modals';
 import { inc_item } from '../redux/reducers/r_inventory';
+import ModalSummons from '../components/modals/modal_summons';
 export default function(props)
 {
     const history = useHistory();
@@ -62,6 +63,7 @@ export default function(props)
         check_logged_in(history);
     },[]);
     return <div id='summons' className='pseudo-body'>
+        <ModalSummons/>
         <Carousel>
             <Carousel.Item>
                 <img
@@ -83,8 +85,8 @@ export default function(props)
                             <span>
                                 {
                                     inventory?.scrolls >= 1 ? 
-                                    [<span className='icon scroll-icon' key={0}></span>,'1'] : 
-                                    [<span className='icon gems-icon' key={0}></span>,'300']
+                                    [<span className='icon scroll-icon' key={'scrolls-icon-single'}></span>,'1'] : 
+                                    [<span className='icon gems-icon' key={'gems-icon-single'}></span>,'300']
                                 }
                             </span>
                         </div>
@@ -95,8 +97,8 @@ export default function(props)
                             <span>
                                 {
                                     inventory?.scrolls >= 10 ? 
-                                    [<span className='icon scroll-icon' key={0}></span>, '10'] : 
-                                    [<span className='icon gems-icon' key={0}></span>,'2700']
+                                    [<span className='icon scroll-icon' key={'scrolls-icon-multiple'}></span>, '10'] : 
+                                    [<span className='icon gems-icon' key={'gems-icon-multiple'}></span>,'2700']
                                 }
                             </span>
                         </div>

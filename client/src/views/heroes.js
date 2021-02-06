@@ -1,7 +1,8 @@
 import React, {
     useEffect,
     useCallback,
-    useState
+    useState,
+    useMemo
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { get_heroes } from '../api/routes/user';
@@ -12,6 +13,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { modal_enum,set } from '../redux/reducers/r_modals';
 import { set_info } from '../redux/reducers/r_hero_info';
 import image_configs from '../sprites/config';
+import HeroInfo from '../components/hero_info';
 
 function AscendCard(props)
 {
@@ -24,14 +26,27 @@ function AscendCard(props)
     )
 }
 
-export default function ViewHeroes(props)
+function ViewHeroes()
 {
     const history = useHistory();
     const dispatch = useDispatch();
     const heroes = useSelector(state => state.heroes);
     const [ascend_fodder,set_ascend_fodder] = useState([null,null,null]);
     const [ascend,set_ascend] = useState(false);
-    const [filtered,set_filtered] = useState(heroes || []);
+    const filtered = useMemo(() => heroes?.filter(
+            elem => (
+                elem.tier !== 3 &&
+                (ascend_fodder[0] ? (
+                    ascend_fodder[0].name === elem.name &&
+                    ascend_fodder[0]._id !== elem._id &&
+                    ascend_fodder[0].tier === elem.tier
+                ) : true) &&
+                (ascend_fodder[1] ? ascend_fodder[1]._id !== elem._id : true) &&
+                (ascend_fodder[2] ? ascend_fodder[2]._id !== elem._id : true)
+            )
+        ) || [],
+        [heroes,ascend_fodder]
+    );
     const handle_open_hero_info = useCallback(throttle(async (id) => {
         try
         {
@@ -50,25 +65,21 @@ export default function ViewHeroes(props)
             dispatch(set_tier({index: id, value: tier}));
             dispatch(remove(fodder[0]));
             dispatch(remove(fodder[1]));
-            reset_filter();
         }
         catch(err)
         {
             set_ascend_fodder([null,null,null]);
-            reset_filter();
         }
     }
     const handle_remove_fodder = i => {
         if (i === 0)
         {
-            reset_filter();
             set_ascend_fodder([null,null,null]);
             return;
         }
         let _tmp = ascend_fodder;
         _tmp[i] = null;
-        set_ascend_fodder(_tmp);
-        filter_ascend_list(_tmp);
+        set_ascend_fodder([..._tmp]);
     }
     const handle_set_fodder = hero => {
         if (hero.tier > 2 || (
@@ -86,8 +97,7 @@ export default function ViewHeroes(props)
             index = 2;
         let _tmp = ascend_fodder;
         _tmp[index] = hero;
-        set_ascend_fodder(_tmp);
-        filter_ascend_list(_tmp);
+        set_ascend_fodder([..._tmp]);
         if (
             ascend_fodder[0] &&
             ascend_fodder[1] &&
@@ -95,22 +105,6 @@ export default function ViewHeroes(props)
         )
             handle_ascend_hero();
     }
-    const filter_ascend_list = (fodder) => set_filtered(
-        heroes?.filter(
-            elem => (
-                elem.tier !== 3 &&
-                (fodder[0] ? (
-                    fodder[0].name === elem.name &&
-                    fodder[0]._id !== elem._id &&
-                    fodder[0].tier === elem.tier
-                ) : true) &&
-                (fodder[1] ? fodder[1]._id !== elem._id : true) &&
-                (fodder[2] ? fodder[2]._id !== elem._id : true)
-            )
-        )
-    );
-    const reset_filter = () => set_filtered(heroes ? heroes.filter(elem => elem.tier !== 3) : []);
-    useEffect(() => filter_ascend_list(ascend_fodder),[heroes]);
     useEffect(function()
     {
         check_logged_in(history, async () => {
@@ -122,6 +116,7 @@ export default function ViewHeroes(props)
         });
     },[]);
     return <div id='heroes' className='pseudo-body'>
+        <HeroInfo/>
         <div className={'heroes-bar ' + (ascend ? 'ascend' : '')}>
             <div className={'c-ascend ' + (ascend ? 'pressed' : '')} onClick={() => set_ascend(!ascend)}>
                 <span className='border-light-shadow shadow'>ASCEND</span>
@@ -144,9 +139,9 @@ export default function ViewHeroes(props)
         </div>
         <div className={'c-heroes ' + (ascend ? 'ascend' : '')}>
             {
-                heroes && (ascend ? filtered : heroes).map((hero,i) => {
+                heroes && (ascend ? filtered : heroes).map(hero => {
                     let image_conf = image_configs[hero.name];
-                    return <div key={i} onClick={ascend ? () => handle_set_fodder(hero) : () => handle_open_hero_info(hero._id)}>
+                    return <div key={hero._id} onClick={ascend ? () => handle_set_fodder(hero) : () => handle_open_hero_info(hero._id)}>
                         <span className={'image-container tier-' + hero.tier}>
                             <span className='level'>{hero.level}</span>
                             <img src={image_conf?.src} alt={image_conf.src + "hero icon."}/>
@@ -160,3 +155,6 @@ export default function ViewHeroes(props)
         </div>
     </div>
 }
+
+
+export default ViewHeroes;

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
 import { string_to_number_formatter } from '../helper';
 import {set,modal_enum} from '../redux/reducers/r_modals';
-export default function NavbarTop(props)
+function NavbarTop()
 {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
@@ -27,3 +27,5 @@ export default function NavbarTop(props)
         </ul>
     </nav>
 }
+
+export default memo(NavbarTop);

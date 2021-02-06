@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { close,modal_enum, set, set_recap,set_arena_loot } from '../../redux/reducers/r_modals';
 import image_configs from '../../sprites/config'; 
@@ -37,11 +37,11 @@ export default function ModalEnemyView(props)
                     {
                         arena.enemy_view?.team?.map((hero,i) => {
                             if (!hero)
-                                return <li key={i} className='empty'>
+                                return <li key={hero._id} className='empty'>
                                     <span className='image-container empty tier-none'></span>
                                     <span className='level border-light-shadow'>none</span>
                                 </li>
-                            return <li key={i}>
+                            return <li key={hero._id}>
                                 <div>
                                     <span className={'image-container tier-' + hero.tier}>
                                         <img src={image_configs[hero.name]?.src} alt={hero.name + "hero icon."}/>

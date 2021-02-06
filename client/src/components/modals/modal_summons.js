@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import {useSelector,useDispatch} from 'react-redux';
 import {close,modal_enum} from '../../redux/reducers/r_modals';
 import sprite_configs from '../../sprites/config';
@@ -13,7 +13,7 @@ export default function ModalSummons(props)
             <h3 style={{textAlign: 'center'}}>SUMMONS</h3>
             <div className='item-list'>
                 {
-                    summons?.length ? summons.map((hero,i) => <div key={i}>
+                    summons?.length ? summons.map((hero,i) => <div key={hero._id}>
                             <span className={'image-container tier-' + hero.tier }>
                                 <img src={sprite_configs[hero.name]?.src} alt={hero.name + "hero icon."}/>
                             </span>

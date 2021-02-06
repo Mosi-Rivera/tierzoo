@@ -1,8 +1,11 @@
-import React, {useEffect,useState} from 'react';
+import React, {useEffect,useState,memo} from 'react';
 import {useHistory} from 'react-router-dom';
 import { login, signup,is_logged_in } from '../api/routes/auth';
 import { save_user } from '../helper';
-import {Container,Col, Row, Modal} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
 
 const get_form_data = (e) => {
     let fd = new FormData(e.target);
@@ -66,7 +69,7 @@ function AuthModal(props)
     );
   }
 
-export default function ViewLanding (props)
+function ViewLanding ()
 {
     const history = useHistory();
     const [merchant_class,set_merchant_class] = useState('');
@@ -117,3 +120,5 @@ export default function ViewLanding (props)
         <AuthModal show={show_auth} onHide={() => set_show_auth(false)}/>
     </Container>
 }
+
+export default memo(ViewLanding);

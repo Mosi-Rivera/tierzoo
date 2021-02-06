@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { close,modal_enum,set_arena_loot } from '../../redux/reducers/r_modals';
 import {string_to_number_formatter} from '../../helper';

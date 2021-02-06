@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Table from 'react-bootstrap/Table';
 import { useSelector, useDispatch } from 'react-redux';
 import { close,modal_enum,set } from '../../redux/reducers/r_modals';
-import {Table} from 'react-bootstrap';
 import sprite_configs from '../../sprites/config';
 export default function ModalBattleRecap(props)
 {

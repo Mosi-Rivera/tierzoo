@@ -56,7 +56,7 @@ export default function UserTeam(props)
                             </li>
                         return <li 
                                 onClick={() => handle_remove(i,hero)}
-                                key={i}
+                                key={hero._id}
                                 >
                             <div>
                                 <span className={'image-container tier-' + hero.tier}>

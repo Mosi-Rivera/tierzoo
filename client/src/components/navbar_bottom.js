@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{memo} from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {collect_idle_rewards, get_inventory} from '../api/routes/user';
 import {useSelector,useDispatch} from 'react-redux';
@@ -7,7 +7,7 @@ import {set,modal_enum, set_rewards} from '../redux/reducers/r_modals';
 import {set_collect_timer} from '../redux/reducers/r_idle';
 import { collect_secs_to_str } from '../helper';
 
-export default function NavbarBottom(props)
+function NavbarBottom()
 {
     const dispatch = useDispatch();
     const idle = useSelector(state => state.idle);
@@ -64,21 +64,7 @@ export default function NavbarBottom(props)
                 </Link>    
             </li>
         </ul>
-        {/* <div className='icon collect-icon hover' onClick={handle_rewards}>
-            <span>collect</span>
-            <span className='collect-timer'>{collect_secs_to_str(idle.timer)}</span>
-        </div>
-        <ul>
-            <li className={'icon hero-icon hover ' + get_button_classname('/heroes')}>
-                <Link to='/heroes'>
-                    <span>heroes</span>
-                </Link>
-            </li>
-            <li className={'icon arena-icon hover ' + get_button_classname('/arena')}>
-                <Link to='arena'>
-                    <span>arena</span>
-                </Link>    
-            </li>
-        </ul> */}
     </nav>;
 }
+
+export default memo(NavbarBottom);

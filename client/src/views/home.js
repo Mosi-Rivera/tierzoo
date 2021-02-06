@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { get_heroes } from '../api/routes/user';
 import { get_opponents } from '../api/routes/arena';
-import {Col,Row} from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import UserTeam from '../components/user_team';
 import {useDispatch,useSelector} from 'react-redux';
 import { modal_enum,set } from '../redux/reducers/r_modals';
@@ -11,6 +12,9 @@ import { check_logged_in } from '../helper';
 import { set_team } from '../redux/reducers/r_team';
 import { set_all } from '../redux/reducers/r_heroes';
 import {set_enemy} from '../redux/reducers/r_arena';
+import ModalArenaLoot from '../components/modals/modal_arena_loot';
+import ModalBattleRecap from '../components/modals/modal_battle_recap';
+import ModalEnemyView from '../components/modals/modal_enemy_view';
 export default function ViewHome (props)
 {
     const history = useHistory();
@@ -35,6 +39,9 @@ export default function ViewHome (props)
         },true)
     },[]);
     return <div className='pseudo-body'>
+        <ModalArenaLoot/>
+        <ModalBattleRecap/>
+        <ModalEnemyView/>
         <Row>
             <Col md={5}>
                 <UserTeam/>
@@ -50,7 +57,7 @@ export default function ViewHome (props)
                     <div className='c-opponents'>
                         <Row>
                             {
-                                arena?.opponents.map((opp,i) => <Col key={i} sm={6}>
+                                arena?.opponents.map(opp => <Col key={opp._id} sm={6}>
                                     <div onClick={
                                         () => {
                                             dispatch(set_enemy(opp));
