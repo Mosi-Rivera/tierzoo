@@ -1,4 +1,4 @@
-import React, { useEffect,memo } from 'react';
+import { useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tab from 'react-bootstrap/Tab';
@@ -124,4 +124,4 @@ function HeroInfo()
     </div>
 }
 
-export default memo(HeroInfo);
+export default HeroInfo;

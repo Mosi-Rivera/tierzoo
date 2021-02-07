@@ -1,4 +1,4 @@
-import React, {useEffect,useState,memo} from 'react';
+import {useEffect,useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import { login, signup,is_logged_in } from '../api/routes/auth';
 import { save_user } from '../helper';
@@ -121,4 +121,4 @@ function ViewLanding ()
     </Container>
 }
 
-export default memo(ViewLanding);
+export default ViewLanding;

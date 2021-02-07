@@ -67,4 +67,4 @@ function NavbarBottom()
     </nav>;
 }
 
-export default memo(NavbarBottom);
+export default NavbarBottom;

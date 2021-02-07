@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth_routes');
 const userRoutes = require('./routes/user_routes');
 const heroRoutes = require('./routes/hero_routes');
 const arenaRoutes = require('./routes/arena_routes');
+const compression = require('compression');
 require('./configs/db');
 var app = express();
 require('./configs/passport')(app);
@@ -22,6 +23,7 @@ app.use('/auth',authRoutes);
 app.use('/user',userRoutes);
 app.use('/hero',heroRoutes);
 app.use('/arena',arenaRoutes);
+app.use(compression());
 
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
