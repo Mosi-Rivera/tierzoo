@@ -17,7 +17,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(function (req, res, next) {
+    if (req.method == 'GET') 
+        res.set('Cache-control', 'public, max-age=31536000');
+    else
+        res.set('Cache-control', `no-store`);
+    next()
+},
+express.static(path.join(__dirname, 'build')));
 
 app.use('/auth',authRoutes);
 app.use('/user',userRoutes);
