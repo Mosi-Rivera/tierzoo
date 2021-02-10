@@ -1,9 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { close, set, set_recap,set_arena_loot } from '../../redux/reducers/r_modals';
 import modal_enum from '../../redux/other/modal_enum';
-import {battle, get_opponents} from '../../api/routes/arena';
-import {set_elo, set_opponents} from '../../redux/reducers/r_arena';
-import { inc_item } from '../../redux/reducers/r_inventory';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 
@@ -15,9 +11,13 @@ export default function ModalEnemyView(props)
     const handle_battle = async () => {
         try
         {
+            const {battle,get_opponents} = await import('../../api/routes/arena');
+            const {set,set_recap,set_arena_loot} = await import('../../redux/reducers/r_modals');
+            const {set_elo,set_opponents} = await import('../../redux/reducers/r_arena');
             let result = await battle(arena.enemy_view?._id);
             if (result.loot)
             {
+                const {inc_item} = await import('../../redux/reducers/r_inventory');
                 dispatch(inc_item({key: 'gems',value: result.loot}));
                 dispatch(set_arena_loot(result.loot));
             }
@@ -28,7 +28,8 @@ export default function ModalEnemyView(props)
         }
         catch(err){}
     }
-    return <Modal show={active === modal_enum.enemy_view} onHide={() => dispatch(close())} centered>
+    const handle_close = () => import('../../redux/reducers/r_modals').then(res => dispatch(res.close()));
+    return <Modal show={active === modal_enum.enemy_view} onHide={handle_close} centered>
         <ModalBody className='border-light-shadow'>
             <h3 style={{textAlign: 'center'}}>{arena.enemy_view?.username}</h3>
             <span style={{textAlign: 'center', display: 'block'}} className='elo'><span className='icon elo-icon'></span>{arena.enemy_view?.arena?.elo}</span>

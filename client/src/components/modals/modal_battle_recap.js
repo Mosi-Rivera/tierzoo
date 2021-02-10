@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
 import modal_enum from '../../redux/other/modal_enum';
-import { close,set } from '../../redux/reducers/r_modals';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -9,7 +8,15 @@ export default function ModalBattleRecap(props)
 {
     const dispatch = useDispatch();
     const modals = useSelector(state => state.modals);
-    const handle_close = () => modals.arena_loot ? dispatch(set(modal_enum.arena_loot)) : dispatch(close());
+    const handle_close = () => (
+        modals.arena_loot ?
+            import('../../redux/reducers/r_modals').then(
+                res => dispatch(res.set(modal_enum.arena_loot))
+            ) :
+            import('../../redux/reducers/r_modals').then(
+                res => dispatch(res.close())
+            )
+    );
     return <Modal show={modals.active === modal_enum.battle_recap} onHide={handle_close} centered>
         <ModalBody className='border-light-shadow'>
             <div className='modal-recap'>

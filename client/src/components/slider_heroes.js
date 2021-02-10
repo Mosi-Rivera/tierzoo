@@ -1,7 +1,7 @@
 import {useEffect,useState} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import {close} from '../redux/reducers/r_modals';
 import modal_enum from '../redux/other/modal_enum';
+
 export default function SliderHeroes(props)
 {
     const dispatch = useDispatch();
@@ -9,6 +9,7 @@ export default function SliderHeroes(props)
     const heroes = useSelector(state => state.heroes);
     const active = useSelector(state => state.modals.active);
     const [filtered_heroes,set_filtered_heroes] = useState(heroes);
+    const handle_close = () => import('../redux/reducers/r_modals').then(res => dispatch(res.close()));
     useEffect(function(){
         heroes ? set_filtered_heroes(heroes.filter(hero => {
             let id = hero._id;
@@ -25,7 +26,7 @@ export default function SliderHeroes(props)
     return <div>
         <div 
         className={'backdrop ' + (active === modal_enum.heroes ? 'show' : '')} 
-        onClick={() => dispatch(close())}
+        onClick={handle_close}
         ></div>
         <div 
         className={'slider-bottom slider-heroes ' + (active === modal_enum.heroes ? 'show' : '')}

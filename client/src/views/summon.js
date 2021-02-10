@@ -1,16 +1,7 @@
 import {useEffect,lazy,Suspense} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import {
-    summon_multiple_gems,
-    summon_multiple_scrolls,
-    summon_single_gems,
-    summon_single_scrolls
-} from '../api/routes/hero';
 import {useHistory} from 'react-router-dom';
-import { check_logged_in } from '../helper';
 import modal_enum from '../redux/other/modal_enum';
-import { set, set_summons } from '../redux/reducers/r_modals';
-import { inc_item } from '../redux/reducers/r_inventory';
 
 const Carousel          = lazy(() => import("react-bootstrap/Carousel"));
 const CarouselCaption   = lazy(() => import("react-bootstrap/CarouselCaption"));
@@ -27,16 +18,21 @@ export default function(props)
             let result;
             if (inventory?.scrolls >= 1)
             {
+                const {summon_single_scrolls} = await import('../api/routes/hero');
+                const {inc_item} = await import('../redux/reducers/r_inventory');
                 result = await summon_single_scrolls();
                 dispatch(inc_item({key: 'scrolls', value: -1}));
             }
             else if (inventory?.gems >= 300)
             {
+                const {summon_single_gems} = await import('../api/routes/hero');
+                const {inc_item} = await import('../redux/reducers/r_inventory');
                 result = await summon_single_gems();
                 dispatch(inc_item({key: 'gems', value: -300}));
             }
             else
                 return;
+            const {set,set_summons} = await import('../redux/reducers/r_modals');
             dispatch(set_summons(result));
             dispatch(set(modal_enum.summons));
         }
@@ -46,26 +42,30 @@ export default function(props)
         try
         {
             let result;
+            const {inc_item} = await import('../redux/reducers/r_inventory');
             if (inventory?.scrolls >= 10)
             {
+                const {summon_multiple_scrolls} = await import('../api/routes/hero');
+                const {inc_item} = await import('../redux/reducers/r_inventory');
                 result = await summon_multiple_scrolls();
                 dispatch(inc_item({key: 'scrolls', value: -10}));
             }
             else if (inventory?.gems >= 2700)
             {
+                const {summon_multiple_gems} = await import('../api/routes/hero');
+                const {inc_item} = await import('../redux/reducers/r_inventory');
                 result = await summon_multiple_gems();
                 dispatch(inc_item({key: 'gems', value: -2700}));
             }
             else
                 return;
+            const {set,set_summons} = await import('../redux/reducers/r_modals');
             dispatch(set_summons(result));
             dispatch(set(modal_enum.summons));
         }
         catch(err){}
     }
-    useEffect(() => {
-        check_logged_in(history);
-    },[]);
+    useEffect(() => import('../helper').then(res => res.check_logged_in(history)),[]);
     return <div id='summons' className='pseudo-body'>
         <Suspense fallback={<div>loading</div>}>
             <ModalSummons/>

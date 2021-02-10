@@ -1,5 +1,4 @@
 import {useSelector,useDispatch} from 'react-redux';
-import {close} from '../../redux/reducers/r_modals';
 import modal_enum from '../../redux/other/modal_enum';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
@@ -8,8 +7,9 @@ export default function ModalSummons(props)
 {
     const dispatch = useDispatch();
     const modals = useSelector(state => state.modals);
-    let summons = modals.summons;
-    return <Modal show={modals.active === modal_enum.summons} onHide={() => dispatch(close())} centered>
+    const handle_close = () => import('../../redux/reducers/r_modals').then(res => dispatch(res.close()));
+    const summons = modals.summons;
+    return <Modal show={modals.active === modal_enum.summons} onHide={handle_close} centered>
             <ModalBody className='border-light-shadow'>
                 <h3 style={{textAlign: 'center'}}>SUMMONS</h3>
                 <div className='item-list'>

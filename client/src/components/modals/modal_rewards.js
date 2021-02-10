@@ -1,5 +1,4 @@
 import {useSelector,useDispatch} from 'react-redux';
-import {close} from '../../redux/reducers/r_modals';
 import modal_enum from '../../redux/other/modal_enum';
 import string_to_number_formatter from '../../string_number_formatter';
 import Modal from 'react-bootstrap/Modal';
@@ -10,7 +9,8 @@ export default function ModalRewards(props)
   const dispatch = useDispatch();
   const modals = useSelector(state => state.modals);
   let rewards = modals.rewards;
-    return <Modal show={modals.active === modal_enum.reward} onHide={() => dispatch(close())} centered>
+  const handle_close = () => import('../../redux/reducers/r_modals').then(res => dispatch(res.close()));
+    return <Modal show={modals.active === modal_enum.reward} onHide={handle_close} centered>
         <ModalBody className='border-light-shadow'>
           <h3 style={{textAlign: 'center'}}>IDLE REWARDS</h3>
           <ul className='item-list'>

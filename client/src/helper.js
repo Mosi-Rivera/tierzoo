@@ -23,14 +23,12 @@ export function check_logged_in(history,cb,get_team = false)
     .then(res => save_user(res,cb))
     .catch((err) => history.push('/'))
 }
-
-export function collect_secs_to_str(mins)
-{
-    let hours = Math.floor(mins / 60);
-    if (hours > 12)
-        return 'max';
-    let minutes = Math.floor(mins - (hours * 60));
-    return (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes); 
+export const get_form_data = (e) => {
+    let fd = new FormData(e.target);
+    return {
+        username: fd.get('username'),
+        password: fd.get('password'),
+    }
 }
 
 export const exponential_growth = (base,growth,power) => base * Math.pow(( 1 + growth),power);

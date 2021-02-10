@@ -1,11 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import {collect_idle_rewards, get_inventory} from '../api/routes/user';
 import {useSelector,useDispatch} from 'react-redux';
-import {inc_item, set_inventory} from '../redux/reducers/r_inventory';
-import {set, set_rewards} from '../redux/reducers/r_modals';
 import modal_enum from '../redux/other/modal_enum';
-import {set_collect_timer} from '../redux/reducers/r_idle';
-import { collect_secs_to_str } from '../helper';
+import collect_secs_to_str from '../collect_secs_to_str';
 
 function NavbarBottom()
 {
@@ -20,6 +16,10 @@ function NavbarBottom()
     const handle_rewards = async (e) => {
         try 
         {
+            const {inc_item} = await import('../redux/reducers/r_inventory');
+            const {set_rewards,set} = await import('../redux/reducers/r_modals');
+            const {set_collect_timer} = await import('../redux/reducers/r_idle');
+            const {collect_idle_rewards} = await import('../api/routes/user');
             let rewards = await collect_idle_rewards();
             dispatch(set_collect_timer(0));
             let keys = Object.keys(rewards);
@@ -33,6 +33,9 @@ function NavbarBottom()
     const handle_inventory = async (e) => {
         try
         {
+            const {set} = await import('../redux/reducers/r_modals');
+            const {get_inventory} = await import('../api/routes/user');
+            const {set_inventory} = await import('../redux/reducers/r_inventory');
             dispatch(set_inventory(await get_inventory()));
             dispatch(set(modal_enum.inventory));
         }

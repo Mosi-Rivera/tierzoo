@@ -1,9 +1,6 @@
 import { lazy, Suspense, useState } from 'react';
-import { set_team_position,remove_team_position } from '../api/routes/arena';
 import {useSelector,useDispatch} from 'react-redux';
 import modal_enum from '../redux/other/modal_enum';
-import {set, close} from '../redux/reducers/r_modals';
-import {set_hero,remove_hero} from '../redux/reducers/r_team';
 
 const SliderHeroes = lazy(() => import("../components/slider_heroes"));
 
@@ -16,6 +13,9 @@ export default function UserTeam(props)
         let index = selected_index;
         try
         {
+            const {close} = await import('../redux/reducers/r_modals');
+            const {set_team_position} = await import('../api/routes/arena');
+            const {set_hero} = await import('../redux/reducers/r_team');
             dispatch(set_hero({
                 index,
                 hero: data
@@ -25,18 +25,22 @@ export default function UserTeam(props)
         }
         catch(err)
         {
-            dispatch(remove_hero(index));
+            import('../redux/reducers/r_team')
+            .then(res => dispatch(res.remove_hero(index)));
         }
     }
     const handle_remove = async (i,data) => {
         try
         {
+            const {remove_hero} = await import('../redux/reducers/r_team');
+            const {remove_team_position} = await import('../api/routes/arena');
             dispatch(remove_hero(i));
             await remove_team_position(i);
         }
         catch(err)
         {
-            dispatch(set_hero({index: i, data}));
+            import('../redux/reducers/r_team')
+            .then(res => dispatch(res.set_hero({index: i, data})));
         }
     }
     return <div>
@@ -50,7 +54,8 @@ export default function UserTeam(props)
                         if (!hero)
                             return <li onClick={() => {
                                 set_selected_index(i);
-                                dispatch(set(modal_enum.heroes));
+                                import('../redux/reducers/r_modals')
+                                .then(res => dispatch(res.set(modal_enum.heroes)));
                             }} key={i} className='empty'>
                                 <span className='image-container empty tier-none'>
                                     <span className='question-none'>?</span>

@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { close,set_arena_loot } from '../../redux/reducers/r_modals';
 import modal_enum from '../../redux/other/modal_enum';
 import string_to_number_formatter from '../../string_number_formatter';
 import Modal from 'react-bootstrap/Modal';
@@ -9,7 +8,15 @@ export default function ModalArenaLoot(props)
 {
     const dispatch = useDispatch();
     const modals = useSelector(state => state.modals);
-    const handle_close = () => {dispatch(close()); dispatch(set_arena_loot(null));}
+    const handle_close = async () => {
+        try
+        {
+            const {close,set_arena_loot} = await import('../../redux/reducers/r_modals');
+            dispatch(close());
+            dispatch(set_arena_loot(null));
+        }
+        catch(err){}
+    }
     return <Modal show={modals.active === modal_enum.arena_loot} onHide={handle_close} size="sm" centered>
         <ModalBody className='border-light-shadow arena-loot'>
             <h3 style={{textAlign: 'center'}}>ARENA LOOT</h3>

@@ -1,37 +1,35 @@
 import {useState} from 'react';
 import { useHistory } from "react-router-dom";
-import { save_user } from '../../helper';
-import { login, signup } from '../../api/routes/auth';
 import ModalBody    from 'react-bootstrap/ModalBody';
 import Modal        from 'react-bootstrap/Modal';
-
-const get_form_data = (e) => {
-    let fd = new FormData(e.target);
-    return {
-        username: fd.get('username'),
-        password: fd.get('password'),
-    }
-}
 
 export default function AuthModal(props)
 {
     const history = useHistory();
     const [show_signup,set_show_signup] = useState(true);
     const toggle_show_signup = () => set_show_signup(!show_signup);
-    const handle_signup = (e) => {
+    const handle_signup = async (e) => {
         e.preventDefault();
-        signup(get_form_data(e))
-        .then(() => history.push('/home'))
-        .catch(err => {});
-    }
-    const handle_login = (e) => {
-        e.preventDefault();
-        login(get_form_data(e))
-        .then(res => {
-            save_user(res);
+        try
+        {
+            const {signup} = await import('../../api/routes/auth');
+            const {get_form_data} = await import('../../helper');
+            await signup(get_form_data(e));
             history.push('/home');
-        })
-        .catch(err => {});
+        }
+        catch(err){}
+    }
+    const handle_login = async (e) => {
+        e.preventDefault();
+        try
+        {
+            const {login} = await import('../../api/routes/auth');
+            const {save_user,get_form_data} = await import('../../helper');
+            save_user(await login(get_form_data(e)));
+            history.push('/home');
+
+        }
+        catch(err){}
     }
     return (<Modal
             {...props}
