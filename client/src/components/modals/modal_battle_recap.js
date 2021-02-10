@@ -1,21 +1,17 @@
-import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import modal_enum from '../../redux/other/modal_enum';
+import { close,set } from '../../redux/reducers/r_modals';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
-import { useSelector, useDispatch } from 'react-redux';
-import { close,modal_enum,set } from '../../redux/reducers/r_modals';
-import sprite_configs from '../../sprites/config';
+import ModalBody from 'react-bootstrap/ModalBody';
+
 export default function ModalBattleRecap(props)
 {
     const dispatch = useDispatch();
     const modals = useSelector(state => state.modals);
-    const handle_close = () => {
-        if (modals.arena_loot)
-            dispatch(set(modal_enum.arena_loot));
-        else
-            dispatch(close());
-    }
+    const handle_close = () => modals.arena_loot ? dispatch(set(modal_enum.arena_loot)) : dispatch(close());
     return <Modal show={modals.active === modal_enum.battle_recap} onHide={handle_close} centered>
-        <Modal.Body className='border-light-shadow'>
+        <ModalBody className='border-light-shadow'>
             <div className='modal-recap'>
                 <h3>{modals.battle_recap?.winner === 0 ? 'VICTORY!' : 'DEFEAT'}</h3>
                 <h3>
@@ -36,7 +32,7 @@ export default function ModalBattleRecap(props)
                         {
                             modals.battle_recap?.record.ally.map((stats,i) => <tr>
                                 <td><span className='image-container'>
-                                    <img src={sprite_configs[stats.name]?.src} alt={stats.name + "hero_icon"}/></span></td>
+                                    <img src={`assets/${stats.name}/icon.png`} alt={stats.name + "hero_icon"}/></span></td>
                                 <td>{stats.dealt}</td>
                                 <td>{stats.taken}</td>
                                 <td>{stats.healing_done}</td>
@@ -45,6 +41,6 @@ export default function ModalBattleRecap(props)
                     </tbody>
                 </Table>
             </div>
-        </Modal.Body>
+        </ModalBody>
     </Modal>
 }

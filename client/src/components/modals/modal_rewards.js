@@ -1,8 +1,9 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import {useSelector,useDispatch} from 'react-redux';
-import {close,modal_enum} from '../../redux/reducers/r_modals';
-import {string_to_number_formatter} from '../../helper';
+import {close} from '../../redux/reducers/r_modals';
+import modal_enum from '../../redux/other/modal_enum';
+import string_to_number_formatter from '../../string_number_formatter';
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
 
 export default function ModalRewards(props)
 {
@@ -10,7 +11,7 @@ export default function ModalRewards(props)
   const modals = useSelector(state => state.modals);
   let rewards = modals.rewards;
     return <Modal show={modals.active === modal_enum.reward} onHide={() => dispatch(close())} centered>
-        <Modal.Body className='border-light-shadow'>
+        <ModalBody className='border-light-shadow'>
           <h3 style={{textAlign: 'center'}}>IDLE REWARDS</h3>
           <ul className='item-list'>
             {
@@ -27,6 +28,6 @@ export default function ModalRewards(props)
               })
             }
           </ul>
-        </Modal.Body>
+        </ModalBody>
       </Modal>
 }

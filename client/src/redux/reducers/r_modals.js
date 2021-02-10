@@ -5,17 +5,6 @@ export const set_rewards    = createAction('set_rewards');
 export const set_summons    = createAction('set_summons');
 export const set_recap      = createAction('set_recap');
 export const set_arena_loot = createAction('set_arena_loot');
-export const modal_enum = {
-    info: 1,
-    inventory: 2,
-    reward: 3,
-    summons: 4,
-    profile: 5,
-    heroes: 6,
-    enemy_view: 7,
-    battle_recap: 8,
-    arena_loot: 9
-}
 const state = {
     active: 0,
     rewards: null,

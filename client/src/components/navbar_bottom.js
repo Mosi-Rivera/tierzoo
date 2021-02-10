@@ -1,9 +1,9 @@
-import React,{memo} from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {collect_idle_rewards, get_inventory} from '../api/routes/user';
 import {useSelector,useDispatch} from 'react-redux';
 import {inc_item, set_inventory} from '../redux/reducers/r_inventory';
-import {set,modal_enum, set_rewards} from '../redux/reducers/r_modals';
+import {set, set_rewards} from '../redux/reducers/r_modals';
+import modal_enum from '../redux/other/modal_enum';
 import {set_collect_timer} from '../redux/reducers/r_idle';
 import { collect_secs_to_str } from '../helper';
 

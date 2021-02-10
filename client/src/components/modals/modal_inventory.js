@@ -1,8 +1,9 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import {useSelector,useDispatch} from 'react-redux';
-import { string_to_number_formatter } from '../../helper';
-import {close,modal_enum} from '../../redux/reducers/r_modals';
+import string_to_number_formatter from '../../string_number_formatter';
+import {close} from '../../redux/reducers/r_modals';
+import modal_enum from '../../redux/other/modal_enum';
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
 
 export default function ModalInventory(props)
 {
@@ -10,7 +11,7 @@ export default function ModalInventory(props)
   const inventory = useSelector(state => state.inventory);
   const active = useSelector(state => state.modals.active);
     return <Modal show={active === modal_enum.inventory} onHide={() => dispatch(close())} centered>
-        <Modal.Body className='border-light-shadow'>
+        <ModalBody className='border-light-shadow'>
         <h3 style={{textAlign: 'center'}}>INVENTORY</h3>
           <ul className='item-list'>
             {
@@ -27,6 +28,6 @@ export default function ModalInventory(props)
               })
             }
           </ul>
-        </Modal.Body>
+        </ModalBody>
       </Modal>
 }

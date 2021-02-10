@@ -1,26 +1,24 @@
-import React, {
+import {
     useEffect,
     useCallback,
     useState,
-    useMemo
+    useMemo,
+    lazy,
+    Suspense
 } from 'react';
-import { useHistory } from 'react-router-dom';
-import { get_heroes } from '../api/routes/user';
-import { ascend_hero, hero_info } from '../api/routes/hero';
-import { check_logged_in,throttle } from '../helper';
-import { remove, set_all, set_tier } from '../redux/reducers/r_heroes';
 import { useSelector,useDispatch } from 'react-redux';
-import { modal_enum,set } from '../redux/reducers/r_modals';
-import { set_info } from '../redux/reducers/r_hero_info';
-import image_configs from '../sprites/config';
-import HeroInfo from '../components/hero_info';
+import { useHistory } from 'react-router-dom';
+import modal_enum from '../redux/other/modal_enum';
+import {throttle} from '../debounce_throttle';
+
+const HeroInfo = lazy(() => import("../components/hero_info"));
 
 function AscendCard(props)
 {
     return ( 
         props.hero ?  
         <span onClick={props.handle_remove} className={'image-container tier-' + props.hero.tier}>
-            <img src={image_configs[props.hero.name]?.src} alt={props.hero.name + "hero icon."}/>
+            <img src={`assets/${props.hero.name}/icon.png`} alt={props.hero.name + "hero icon."}/>
         </span> :
         <span className={'image-container tier-none'}></span>
     )
@@ -50,8 +48,14 @@ function ViewHeroes()
     const handle_open_hero_info = useCallback(throttle(async (id) => {
         try
         {
-            dispatch(set_info(await hero_info(id)));
-            dispatch(set(modal_enum.info));
+            import('../redux/reducers/r_hero_info').then(
+                async res => {
+                    const {hero_info} = await import('../api/routes/hero');
+                    const {set_info} = await import('../redux/reducers/r_hero_info');
+                    dispatch(set_info(await hero_info(id))); 
+                }
+            );
+            import('../redux/reducers/r_modals').then(res => dispatch(res.set(modal_enum.info)));
         }
         catch(err){}
     },1000),[]);
@@ -61,10 +65,13 @@ function ViewHeroes()
             let id = ascend_fodder[0]._id;
             let fodder = [ascend_fodder[1]._id,ascend_fodder[2]._id];
             set_ascend_fodder([null,null,null]);
-            let tier = (await ascend_hero({id,fodder})).tier;
-            dispatch(set_tier({index: id, value: tier}));
-            dispatch(remove(fodder[0]));
-            dispatch(remove(fodder[1]));
+            const {ascend_hero} = await import('../api/routes/hero');
+            let {tier} = (await ascend_hero({id,fodder}));
+            import('../redux/reducers/r_heroes').then(res => {
+                dispatch(res.remove(fodder[0]));
+                dispatch(res.remove(fodder[1]));
+                dispatch(res.set_tier({index: id, value: tier}));
+            });
         }
         catch(err)
         {
@@ -107,16 +114,20 @@ function ViewHeroes()
     }
     useEffect(function()
     {
-        check_logged_in(history, async () => {
+        import('../helper').then(res => res.check_logged_in(history, async () => {
             try
             {
+                const {get_heroes} = await import('../api/routes/user');
+                const {set_all} = await import('../redux/reducers/r_heroes');
                 dispatch(set_all(await get_heroes()));
             }
             catch(err){}
-        });
+        }));
     },[]);
     return <div id='heroes' className='pseudo-body'>
-        <HeroInfo/>
+        <Suspense fallback={<div>loading</div>}>
+            <HeroInfo/>
+        </Suspense>
         <div className={'heroes-bar ' + (ascend ? 'ascend' : '')}>
             <div className={'c-ascend ' + (ascend ? 'pressed' : '')} onClick={() => set_ascend(!ascend)}>
                 <span className='border-light-shadow shadow'>ASCEND</span>
@@ -140,11 +151,10 @@ function ViewHeroes()
         <div className={'c-heroes ' + (ascend ? 'ascend' : '')}>
             {
                 heroes && (ascend ? filtered : heroes).map(hero => {
-                    let image_conf = image_configs[hero.name];
                     return <div key={hero._id} onClick={ascend ? () => handle_set_fodder(hero) : () => handle_open_hero_info(hero._id)}>
                         <span className={'image-container tier-' + hero.tier}>
                             <span className='level'>{hero.level}</span>
-                            <img src={image_conf?.src} alt={image_conf.src + "hero icon."}/>
+                            <img src={`assets/${hero.name}/icon.png`} alt={hero.name + " hero icon."}/>
                         </span>
                         <span className='name'>
                             <span>{hero.name}</span>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { set_team_position,remove_team_position } from '../api/routes/arena';
-import SliderHeroes from '../components/slider_heroes';
-import image_configs from '../sprites/config';
 import {useSelector,useDispatch} from 'react-redux';
-import {set,modal_enum, close} from '../redux/reducers/r_modals';
+import modal_enum from '../redux/other/modal_enum';
+import {set, close} from '../redux/reducers/r_modals';
 import {set_hero,remove_hero} from '../redux/reducers/r_team';
+
+const SliderHeroes = lazy(() => import("../components/slider_heroes"));
 
 export default function UserTeam(props)
 {
@@ -39,7 +40,9 @@ export default function UserTeam(props)
         }
     }
     return <div>
-        <SliderHeroes on_select={on_select}/>
+        <Suspense fallback={<div>loading</div>}>
+            <SliderHeroes on_select={on_select}/>
+        </Suspense>
         <div className='c-c-team'>
             <ul className='c-team'>
                 {
@@ -60,7 +63,7 @@ export default function UserTeam(props)
                                 >
                             <div>
                                 <span className={'image-container tier-' + hero.tier}>
-                                    <img src={image_configs[hero.name]?.src} alt={hero.name + " hero icon."}/>
+                                    <img src={`assets/${hero.name}/icon.png`} alt={hero.name + " hero icon."}/>
                                 </span>
                                 <span className='level border-light-shadow'>Lv. {hero.level}</span>
                             </div>

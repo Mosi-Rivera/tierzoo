@@ -1,6 +1,7 @@
 import {useSelector,useDispatch} from 'react-redux';
-import { string_to_number_formatter } from '../helper';
-import {set,modal_enum} from '../redux/reducers/r_modals';
+import string_to_number_formatter from '../string_number_formatter';
+import {set} from '../redux/reducers/r_modals';
+import modal_enum from '../redux/other/modal_enum';
 function NavbarTop()
 {
     const dispatch = useDispatch();

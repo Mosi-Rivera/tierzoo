@@ -1,10 +1,11 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import {useSelector,useDispatch} from 'react-redux';
-import {close,modal_enum} from '../../redux/reducers/r_modals';
+import {close} from '../../redux/reducers/r_modals';
+import modal_enum from '../../redux/other/modal_enum';
 import { USER_LOGOUT } from '../../redux/store';
 import {useHistory} from 'react-router-dom';
 import {logout} from '../../api/routes/auth';
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
 
 export default function ModalProfile(props)
 {
@@ -13,7 +14,7 @@ export default function ModalProfile(props)
   const user = useSelector(state => state.user);
   const active = useSelector(state => state.modals.active);
     return <Modal show={active === modal_enum.profile} onHide={() => dispatch(close())} size={'sm'} centered>
-        <Modal.Body>
+        <ModalBody>
           <div style={{textAlign: 'center', marginBottom: '.5rem'}}>
             <h3>{user?.username}</h3>
             <span><span className='icon elo-icon' style={{padding: '.8rem'}}></span> {user?.arena.elo}</span>
@@ -25,6 +26,6 @@ export default function ModalProfile(props)
             })
             .catch(err => {})
           } className='button reverse-border-light-shadow'><span>logout</span></span>
-        </Modal.Body>
+        </ModalBody>
       </Modal>
 }

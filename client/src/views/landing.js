@@ -1,73 +1,11 @@
-import {useEffect,useState} from 'react';
+import {Suspense, lazy, useEffect,useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import { login, signup,is_logged_in } from '../api/routes/auth';
-import { save_user } from '../helper';
-import Modal from 'react-bootstrap/Modal';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
+import { is_logged_in } from '../api/routes/auth';
+import Col          from 'react-bootstrap/Col';
+import Row          from 'react-bootstrap/Row';
+import Container    from 'react-bootstrap/Container';
 
-const get_form_data = (e) => {
-    let fd = new FormData(e.target);
-    return {
-        username: fd.get('username'),
-        password: fd.get('password'),
-    }
-}
-
-function AuthModal(props)
-{
-    const history = useHistory();
-    const [show_signup,set_show_signup] = useState(true);
-    const toggle_show_signup = () => set_show_signup(!show_signup);
-    const handle_signup = (e) => {
-        e.preventDefault();
-        signup(get_form_data(e))
-        .then(() => history.push('/home'))
-        .catch(err => {});
-    }
-    const handle_login = (e) => {
-        e.preventDefault();
-        login(get_form_data(e))
-        .then(res => {
-            save_user(res);
-            history.push('/home');
-        })
-        .catch(err => {});
-    }
-    return (
-      <Modal
-        {...props}
-        size="sm"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Body className='border-light-shadow'>
-          <div className='c-form'>
-                {
-                    show_signup ? <form onSubmit={handle_signup}>
-                        <div>
-                            <h3>Sign Up</h3>
-                            <input className='reverse-border-light-shadow' type='text' name='username' placeholder='username'/>
-                            <input className='reverse-border-light-shadow' type='password' name='password' placeholder='password'/>
-                            <input className='button reverse-border-light-shadow' type='submit' value='Sign Up'/>
-                            <span onClick={toggle_show_signup}>Already have an account?</span>
-                        </div>
-                    </form> : <form onSubmit={handle_login}>
-                        <div>
-                            <h3>Log In</h3>
-                            <input className='reverse-border-light-shadow' type='text' name='username' placeholder='username'/>
-                            <input className='reverse-border-light-shadow' type='password' name='password' placeholder='password'/>
-                            <input className='button reverse-border-light-shadow' type='submit' value='Log In'/>
-                            <span onClick={toggle_show_signup}>Don't have an account?</span>
-                        </div>
-                    </form>
-                }
-            </div>
-        </Modal.Body>
-      </Modal>
-    );
-  }
+const AuthModal = lazy(() => import("../components/modals/modal_auth"));
 
 function ViewLanding ()
 {
@@ -91,34 +29,38 @@ function ViewLanding ()
             clearTimeout(to_2);
         }
     },[]);
-    return <Container fluid>
-        <nav id='navbar-top' className='shadow'>
-            <h5>AFK ASSAULT</h5>
-        </nav>
-        <div id='landing' className='pseudo-body'>
-            <div className='c-cta'>
-                <Row>
-                    <Col md={6}>
-                        <div className='title'>
-                            <h1>DON'T BE A <span>NORMIE</span>!</h1>
-                            <p>The most competitive idle game ever! Gain rewards by challenging players in the PvP arena, climb the rankings to get improved idle rewards and summon heroes to build an undefeated team.</p>
-                        </div>
-                    </Col>
-                    <Col md={6}>
-                        <span className='image-container'>
-                            <span className={merchant_class}></span>
-                        </span>
-                    </Col>
-                </Row>
+    return (
+        <Container fluid>
+            <nav id='navbar-top' className='shadow'>
+                <h5>AFK ASSAULT</h5>
+            </nav>
+            <div id='landing' className='pseudo-body'>
+                <div className='c-cta'>
+                    <Row>
+                        <Col md={6}>
+                            <div className='title'>
+                                <h1>DON'T BE A <span>NORMIE</span>!</h1>
+                                <p>The most competitive idle game ever! Gain rewards by challenging players in the PvP arena, climb the rankings to get improved idle rewards and summon heroes to build an undefeated team.</p>
+                            </div>
+                        </Col>
+                        <Col md={6}>
+                            <span className='image-container'>
+                                <span className={merchant_class}></span>
+                            </span>
+                        </Col>
+                    </Row>
+                </div>
             </div>
-        </div>
-        <nav id='navbar-bottom' className='shadow'>
-            <span onClick={() => set_show_auth(true)} className='button border-light-shadow'>
-                <span>PLAY NOW!</span>
-            </span>
-        </nav>
-        <AuthModal show={show_auth} onHide={() => set_show_auth(false)}/>
-    </Container>
+            <nav id='navbar-bottom' className='shadow'>
+                <span onClick={() => set_show_auth(true)} className='button border-light-shadow'>
+                    <span>PLAY NOW!</span>
+                </span>
+            </nav>
+            <Suspense fallback={<div>loading</div>}>
+                <AuthModal show={show_auth} onHide={() => set_show_auth(false)}/>
+            </Suspense>
+        </Container>
+    )
 }
 
 export default ViewLanding;

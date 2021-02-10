@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
+import {useEffect,lazy,Suspense} from 'react';
 import {useSelector,useDispatch} from 'react-redux';
-import Carousel from 'react-bootstrap/Carousel';
 import {
     summon_multiple_gems,
     summon_multiple_scrolls,
@@ -9,9 +8,14 @@ import {
 } from '../api/routes/hero';
 import {useHistory} from 'react-router-dom';
 import { check_logged_in } from '../helper';
-import { modal_enum, set, set_summons } from '../redux/reducers/r_modals';
+import modal_enum from '../redux/other/modal_enum';
+import { set, set_summons } from '../redux/reducers/r_modals';
 import { inc_item } from '../redux/reducers/r_inventory';
-import ModalSummons from '../components/modals/modal_summons';
+
+const Carousel          = lazy(() => import("react-bootstrap/Carousel"));
+const CarouselCaption   = lazy(() => import("react-bootstrap/CarouselCaption"));
+const CarouselItem      = lazy(() => import("react-bootstrap/CarouselItem"));
+const ModalSummons      = lazy(() => import('../components/modals/modal_summons'));
 export default function(props)
 {
     const history = useHistory();
@@ -63,51 +67,55 @@ export default function(props)
         check_logged_in(history);
     },[]);
     return <div id='summons' className='pseudo-body'>
-        <ModalSummons/>
-        <Carousel>
-            <Carousel.Item>
-                <img
-                className="d-block w-100"
-                src="assets/shield_droid/Police Shielder.gif"
-                alt="First Summon Banner"
-                />
-                <Carousel.Caption className='header'>
-                    <h3 className='message'>
-                        NEW epic hero <span className='epic'>Shield Droid</span>
-                    </h3>
-                </Carousel.Caption>
-                <Carousel.Caption>
-                    <div className='c-summon-button'>
-                        <div>
-                            <div onClick={handle_single_summon}>
-                                <span>single-summon</span>
+        <Suspense fallback={<div>loading</div>}>
+            <ModalSummons/>
+        </Suspense>
+        <Suspense fallback={<div>loading</div>}>
+            <Carousel>
+                <CarouselItem>
+                    <img
+                    className="d-block w-100"
+                    src="assets/shield_droid/Police Shielder.gif"
+                    alt="First Summon Banner"
+                    />
+                    <CarouselCaption className='header'>
+                        <h3 className='message'>
+                            NEW epic hero <span className='epic'>Shield Droid</span>
+                        </h3>
+                    </CarouselCaption>
+                    <CarouselCaption>
+                        <div className='c-summon-button'>
+                            <div>
+                                <div onClick={handle_single_summon}>
+                                    <span>single-summon</span>
+                                </div>
+                                <span>
+                                    {
+                                        inventory?.scrolls >= 1 ? 
+                                        [<span className='icon scroll-icon' key={'scrolls-icon-single'}></span>,'1'] : 
+                                        [<span className='icon gems-icon' key={'gems-icon-single'}></span>,'300']
+                                    }
+                                </span>
                             </div>
-                            <span>
-                                {
-                                    inventory?.scrolls >= 1 ? 
-                                    [<span className='icon scroll-icon' key={'scrolls-icon-single'}></span>,'1'] : 
-                                    [<span className='icon gems-icon' key={'gems-icon-single'}></span>,'300']
-                                }
-                            </span>
-                        </div>
-                        <div className='summon-button'>
-                            <div onClick={handle_multiple_sumon}>
-                                <span>multi-summon</span>
+                            <div className='summon-button'>
+                                <div onClick={handle_multiple_sumon}>
+                                    <span>multi-summon</span>
+                                </div>
+                                <span>
+                                    {
+                                        inventory?.scrolls >= 10 ? 
+                                        [<span className='icon scroll-icon' key={'scrolls-icon-multiple'}></span>, '10'] : 
+                                        [<span className='icon gems-icon' key={'gems-icon-multiple'}></span>,'2700']
+                                    }
+                                </span>
                             </div>
-                            <span>
-                                {
-                                    inventory?.scrolls >= 10 ? 
-                                    [<span className='icon scroll-icon' key={'scrolls-icon-multiple'}></span>, '10'] : 
-                                    [<span className='icon gems-icon' key={'gems-icon-multiple'}></span>,'2700']
-                                }
-                            </span>
                         </div>
-                    </div>
-                    <div className='summon-info'>
-                        Produces <span className='common'>Common</span> and <span className='epic'>Epic</span> heroes
-                    </div>
-                </Carousel.Caption>
-            </Carousel.Item>
-        </Carousel>
+                        <div className='summon-info'>
+                            Produces <span className='common'>Common</span> and <span className='epic'>Epic</span> heroes
+                        </div>
+                    </CarouselCaption>
+                </CarouselItem>
+            </Carousel>
+        </Suspense>
     </div>
 }

@@ -1,11 +1,11 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { close,modal_enum, set, set_recap,set_arena_loot } from '../../redux/reducers/r_modals';
-import image_configs from '../../sprites/config'; 
+import { close, set, set_recap,set_arena_loot } from '../../redux/reducers/r_modals';
+import modal_enum from '../../redux/other/modal_enum';
 import {battle, get_opponents} from '../../api/routes/arena';
 import {set_elo, set_opponents} from '../../redux/reducers/r_arena';
 import { inc_item } from '../../redux/reducers/r_inventory';
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
 
 export default function ModalEnemyView(props)
 {
@@ -29,7 +29,7 @@ export default function ModalEnemyView(props)
         catch(err){}
     }
     return <Modal show={active === modal_enum.enemy_view} onHide={() => dispatch(close())} centered>
-        <Modal.Body className='border-light-shadow'>
+        <ModalBody className='border-light-shadow'>
             <h3 style={{textAlign: 'center'}}>{arena.enemy_view?.username}</h3>
             <span style={{textAlign: 'center', display: 'block'}} className='elo'><span className='icon elo-icon'></span>{arena.enemy_view?.arena?.elo}</span>
             <div className='c-c-team'>
@@ -44,7 +44,7 @@ export default function ModalEnemyView(props)
                             return <li key={hero._id}>
                                 <div>
                                     <span className={'image-container tier-' + hero.tier}>
-                                        <img src={image_configs[hero.name]?.src} alt={hero.name + "hero icon."}/>
+                                        <img src={`assets/${hero.name}/icon.png`} alt={hero.name + "hero icon."}/>
                                     </span>
                                     <span className='level border-light-shadow'>Lv. {hero.level}</span>
                                 </div>
@@ -54,6 +54,6 @@ export default function ModalEnemyView(props)
                 </ul>
             </div>
             <span className='button reverse-border-light-shadow' onClick={handle_battle}><span>BATTLE!</span></span>
-        </Modal.Body>
+        </ModalBody>
     </Modal>
 }
